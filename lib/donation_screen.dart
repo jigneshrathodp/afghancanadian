@@ -1,0 +1,23 @@
+import 'package:flutter/material.dart';
+import 'widgets/custom_app_bar.dart';
+
+class DonationScreen extends StatelessWidget {
+  const DonationScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: CustomAppBar(),
+      body: const Center(
+        child: Text(
+          'Donation Screen',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 20,
+            color: Color(0xFF2D5016),
+          ),
+        ),
+      ),
+    );
+  }
+}
