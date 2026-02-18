@@ -14,7 +14,7 @@ class AboutScreen extends StatelessWidget {
       drawer: CustomDrawer(),
       body: const Center(
         child: Text(
-          'About Screen',
+          'About Screen About Screen About Screen About Screen',
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 20,
