@@ -1,3 +1,4 @@
+import 'package:afghancanadian/Auth/signup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'bottom_nav_screen.dart';
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
         ),
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: BottomNavScreen(),
+      home: Signup(),
       useInheritedMediaQuery: true, // Required for DevicePreview
       //locale: DevicePreview.locale(context), // Required for DevicePreview
      // builder: DevicePreview.appBuilder, // Required for DevicePreview
