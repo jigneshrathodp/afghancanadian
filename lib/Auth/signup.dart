@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'signin.dart';
 import '../widgets/custom_widgets.dart';
 
@@ -42,13 +41,8 @@ class _SignupState extends State<Signup> {
     }
 
     try {
-      final prefs = await SharedPreferences.getInstance();
-
-      // Store user data
-      await prefs.setString('username', _userNameController.text);
-      await prefs.setString('email', _emailController.text);
-      await prefs.setString('password', _passwordController.text);
-      await prefs.setBool('isRegistered', true);
+      // UI-only: simulate registration
+      await Future.delayed(const Duration(milliseconds: 600));
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -101,7 +95,6 @@ class _SignupState extends State<Signup> {
                 physics: const AlwaysScrollableScrollPhysics(),
                 keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                 padding: EdgeInsets.only(
-                  top: headerHeight,
                   bottom: isKeyboardOpen ? (20.0 + devicePreviewPadding) : 0.0,
                 ),
                 child: ConstrainedBox(
@@ -111,6 +104,16 @@ class _SignupState extends State<Signup> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
+                      // Header image is now inside the scrollable content so it scrolls away
+                      SizedBox(
+                        width: double.infinity,
+                        height: headerHeight,
+                        child: Image.asset(
+                          'assets/Group.png',
+                          fit: BoxFit.fill,
+                          semanticLabel: 'App Logo',
+                        ),
+                      ),
                       Container(
                         padding: EdgeInsets.all(
                           isSmallScreen
@@ -271,21 +274,6 @@ class _SignupState extends State<Signup> {
                   ),
                 ));
             },
-          ),
-          // Header image painted above the scroll so form widgets never appear on top of it while scrolling
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: SizedBox(
-              width: double.infinity,
-              height: headerHeight,
-              child: Image.asset(
-                'assets/Group.png',
-                fit: BoxFit.fill,
-                semanticLabel: 'App Logo',
-              ),
-            ),
           ),
         ],
       ),

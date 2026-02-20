@@ -1,137 +1,112 @@
 import 'package:flutter/material.dart';
-class CustomDrawer extends StatelessWidget {
 
+class CustomDrawer extends StatelessWidget {
   const CustomDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      child: Column(
+      // Use ListView so the header image and the menu items all scroll together
+      child: ListView(
+        padding: EdgeInsets.zero,
         children: [
           // ===== HEADER =====
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.only(top: 50, bottom: 20),
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Color(0xFF0F6B2E), Color(0xFF4CAF50)],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
+            height: 280,
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
             ),
-            child: Column(
-              children: const [
-                Icon(Icons.mosque, color: Colors.white, size: 60),
-                SizedBox(height: 10),
-                Text(
-                  "Hameed Zarabi",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 5),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  child: Text(
-                    "Welcome to Afghan Canadian Islamic Community",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white70,
-                      fontSize: 13,
-                    ),
-                  ),
-                ),
-              ],
+            child: Image.asset(
+              'assets/drawer.png',
+              fit: BoxFit.cover,
+              width: double.infinity,
+              height: 300,
             ),
           ),
 
           // ===== MENU ITEMS =====
-          Expanded(
-            child: ListView(
-              padding: EdgeInsets.zero,
-              children: [
+          _buildTile(
+            icon: Icons.home,
+            title: "Home",
+            onTap: () {},
+          ),
 
-                _buildTile(
-                  icon: Icons.home,
-                  title: "Home",
-                  onTap: () {},
-                ),
+          // About section with submenu items
+          ExpansionTile(
+            leading: const Icon(Icons.info, color: Colors.green),
+            title: const Text("About"),
+            children: [
+              _subTile("Our History"),
+              _subTile("Board Of Directors"),
+              _subTile("Former Board Members"),
+            ],
+          ),
 
-                _buildTile(
-                  icon: Icons.info,
-                  title: "About",
-                  onTap: () {},
-                ),
+          // Expandable Services
+          ExpansionTile(
+            leading: const Icon(Icons.handshake, color: Colors.green),
+            title: const Text("Services"),
+            children: [
+              _subTile("Education Services"),
+              _subTile("Funeral Services"),
+              _subTile("Cultural Services"),
+              _subTile("Women Services"),
+              _subTile("Youth Services"),
+              _subTile("Library"),
+            ],
+          ),
 
-                // Expandable Services
-                ExpansionTile(
-                  leading: const Icon(Icons.handshake, color: Colors.green),
-                  title: const Text("Services"),
-                  children: [
-                    _subTile("Education Services"),
-                    _subTile("Funeral Services"),
-                    _subTile("Cultural Services"),
-                    _subTile("Women Services"),
-                    _subTile("Youth Services"),
-                    _subTile("Library"),
-                  ],
-                ),
+          _buildTile(
+            icon: Icons.card_membership,
+            title: "Membership",
+            onTap: () {},
+          ),
 
-                _buildTile(
-                  icon: Icons.card_membership,
-                  title: "Membership",
-                  onTap: () {},
-                ),
+          _buildTile(
+            icon: Icons.store,
+            title: "Marketplace",
+            onTap: () {},
+          ),
 
-                _buildTile(
-                  icon: Icons.store,
-                  title: "Marketplace",
-                  onTap: () {},
-                ),
+          _buildTile(
+            icon: Icons.book,
+            title: "Publication",
+            onTap: () {},
+          ),
 
-                _buildTile(
-                  icon: Icons.book,
-                  title: "Publication",
-                  onTap: () {},
-                ),
+          _buildTile(
+            icon: Icons.phone,
+            title: "Contact",
+            onTap: () {},
+          ),
 
-                _buildTile(
-                  icon: Icons.phone,
-                  title: "Contact",
-                  onTap: () {},
-                ),
+          _buildTile(
+            icon: Icons.attach_money,
+            title: "Donation",
+            onTap: () {},
+          ),
 
-                _buildTile(
-                  icon: Icons.attach_money,
-                  title: "Donation",
-                  onTap: () {},
-                ),
+          _buildTile(
+            icon: Icons.privacy_tip,
+            title: "Privacy Policy",
+            onTap: () {},
+          ),
 
-                _buildTile(
-                  icon: Icons.privacy_tip,
-                  title: "Privacy Policy",
-                  onTap: () {},
-                ),
+          _buildTile(
+            icon: Icons.description,
+            title: "Terms & Condition",
+            onTap: () {},
+          ),
 
-                _buildTile(
-                  icon: Icons.description,
-                  title: "Terms & Condition",
-                  onTap: () {},
-                ),
+          const Divider(),
 
-                const Divider(),
-
-                _buildTile(
-                  icon: Icons.logout,
-                  title: "Logout",
-                  iconColor: Colors.red,
-                  textColor: Colors.red,
-                  onTap: () {},
-                ),
-              ],
-            ),
+          _buildTile(
+            icon: Icons.logout,
+            title: "Logout",
+            iconColor: Colors.red,
+            textColor: Colors.red,
+            onTap: () {},
           ),
         ],
       ),

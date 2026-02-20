@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'widgets/custom_app_bar.dart';
 import 'widgets/custom_drawer.dart';
 
@@ -96,6 +97,7 @@ class _HomescreenState extends State<Homescreen> {
                         color: Colors.white70,
                       ),
                     ),
+                    // replaced Icon stack with SVG image
                     Align(
                       alignment: Alignment.bottomRight,
                       child: Container(
@@ -113,11 +115,12 @@ class _HomescreenState extends State<Homescreen> {
                                 shape: BoxShape.circle,
                               ),
                             ),
-                            // Mosque icon
-                            Icon(
-                              Icons.mosque,
-                              size: 60 * widthScale,
-                              color: const Color(0xFFFFD700),
+                            // SVG on top replacing the mosque icon
+                            SvgPicture.asset(
+                              'assets/1409156sd 1.svg',
+                              width: 60 * widthScale,
+                              height: 60 * widthScale,
+                              fit: BoxFit.contain,
                             ),
                           ],
                         ),

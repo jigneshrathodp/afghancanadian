@@ -128,7 +128,6 @@ class _ResetPasswordState extends State<ResetPassword> {
                 physics: const AlwaysScrollableScrollPhysics(),
                 keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                 padding: EdgeInsets.only(
-                  top: headerHeight,
                   bottom: isKeyboardOpen ? (20.0 + devicePreviewPadding) : 0.0,
                 ),
                 child: ConstrainedBox(
@@ -138,6 +137,15 @@ class _ResetPasswordState extends State<ResetPassword> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
+                      SizedBox(
+                        width: double.infinity,
+                        height: headerHeight,
+                        child: Image.asset(
+                          'assets/Group.png',
+                          fit: BoxFit.fill,
+                          semanticLabel: 'App Logo',
+                        ),
+                      ),
                       Container(
                         padding: EdgeInsets.all(
                           isSmallScreen
@@ -247,21 +255,6 @@ class _ResetPasswordState extends State<ResetPassword> {
                   ),
                 ));
             },
-          ),
-          // Header image painted above the scroll so form widgets never appear on top of it while scrolling
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: SizedBox(
-              width: double.infinity,
-              height: headerHeight,
-              child: Image.asset(
-                'assets/Group.png',
-                fit: BoxFit.fill,
-                semanticLabel: 'App Logo',
-              ),
-            ),
           ),
         ],
       ),

@@ -1,6 +1,8 @@
 import 'package:afghancanadian/Auth/signup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+
+import 'CustomCalendar.dart';
 import 'bottom_nav_screen.dart';
 
 void main() {
@@ -31,12 +33,15 @@ class MyApp extends StatelessWidget {
             TargetPlatform.iOS: NoTransitionsBuilder(),
           },
         ),
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        // Make app background white for all screens by default
+        scaffoldBackgroundColor: Colors.white,
+        // Ensure color scheme surface is white as well (background is deprecated)
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple).copyWith(
+          surface: Colors.white,
+        ),
       ),
-      home: Signup(),
-      useInheritedMediaQuery: true, // Required for DevicePreview
-      //locale: DevicePreview.locale(context), // Required for DevicePreview
-     // builder: DevicePreview.appBuilder, // Required for DevicePreview
+      home: CustomCalendar(),
+      // DevicePreview builder and locale are commented out; nothing else needed here
     );
 
   }

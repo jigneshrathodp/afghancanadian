@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../bottom_nav_screen.dart';
+import '../homescreen.dart';
 import 'signup.dart';
 import 'forget_password.dart';
 import '../widgets/custom_widgets.dart';
@@ -34,79 +35,45 @@ class _SigninState extends State<Signin> {
     });
 
     try {
-      final prefs = await SharedPreferences.getInstance();
+      // UI-only simulated login
+      await Future.delayed(const Duration(milliseconds: 700));
 
-      // Get stored user data
-      final storedEmail = prefs.getString('email');
-      final storedPassword = prefs.getString('password');
-      final isRegistered = prefs.getBool('isRegistered') ?? false;
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
 
-      if (!isRegistered) {
-        if (mounted) {
-          setState(() {
-            _isLoading = false;
-          });
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('User not registered. Please sign up first.'),
-              backgroundColor: Colors.orange,
-            ),
-          );
-        }
-        return;
-      }
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Login successful!'),
+            backgroundColor: Colors.green,
+          ),
+        );
 
-      // Check if credentials match
-      if (_emailController.text.trim() == storedEmail &&
-          _passwordController.text == storedPassword) {
-        if (mounted) {
-          setState(() {
-            _isLoading = false;
-          });
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Login successful!'),
-              backgroundColor: Colors.green,
-            ),
-          );
-
-          // Save login state
-          await prefs.setBool('isLoggedIn', true);
-          if (mounted) {
-            showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: const Text('Success'),
-                  content: const Text('Login successful!'),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        // Navigate to home screen
-                        // Navigator.pushReplacementNamed(context, '/home');
-                      },
-                      child: const Text('OK'),
-                    ),
-                  ],
-                );
-              },
+        // Optionally navigate away or close dialog
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Success'),
+              content: const Text('Login successful!'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute<void>(
+                        builder: (context) => const BottomNavScreen(),
+                      ),
+                    );
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
             );
-          }
-        }
-      } else {
-        if (mounted) {
-          setState(() {
-            _isLoading = false;
-          });
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Invalid email or password!'),
-              backgroundColor: Colors.red,
-            ),
-          );
-        }
+          },
+        );
       }
     } catch (e) {
       if (mounted) {
@@ -151,7 +118,6 @@ class _SigninState extends State<Signin> {
                 physics: const AlwaysScrollableScrollPhysics(),
                 keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                 padding: EdgeInsets.only(
-                  top: headerHeight,
                   bottom: isKeyboardOpen ? (20.0 + devicePreviewPadding) : 0.0,
                 ),
                 child: ConstrainedBox(
@@ -161,6 +127,15 @@ class _SigninState extends State<Signin> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
+                      SizedBox(
+                        width: double.infinity,
+                        height: headerHeight,
+                        child: Image.asset(
+                          'assets/Group.png',
+                          fit: BoxFit.fill,
+                          semanticLabel: 'App Logo',
+                        ),
+                      ),
                       Container(
                         padding: EdgeInsets.all(
                           isSmallScreen
@@ -301,21 +276,6 @@ class _SigninState extends State<Signin> {
                   ),
                 ));
             },
-          ),
-          // Header image painted above the scroll so form widgets never appear on top of it while scrolling
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: SizedBox(
-              width: double.infinity,
-              height: headerHeight,
-              child: Image.asset(
-                'assets/Group.png',
-                fit: BoxFit.fill,
-                semanticLabel: 'App Logo',
-              ),
-            ),
           ),
         ],
       ),

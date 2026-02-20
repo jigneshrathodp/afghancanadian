@@ -35,7 +35,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                       Scaffold.of(context).openDrawer();
                     }
                   },
-                  icon: Icon(Icons.menu, color: const Color(0xFF2D5016), size: 24 * widthScale),
+                  icon: Image.asset(
+                    'assets/menu.png',
+                    height: 24 * widthScale,
+                    width: 24 * widthScale,
+                    // tint the png to match previous icon color (may not work on complex PNGs)
+                    color: const Color(0xFF2D5016),
+                    colorBlendMode: BlendMode.srcIn,
+                  ),
                 );
               },
             )
@@ -52,28 +59,21 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           : Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset('assets/logo.png', height: 40 * widthScale),
-                SizedBox(width: 8 * widthScale),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Afghan Canadian ',
-                      style: TextStyle(fontSize: 12 * widthScale, fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      'Islamic Community',
-                      style: TextStyle(fontSize: 10 * widthScale, fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
+                // Use PNG logo instead of SVG
+                Image.asset('assets/appbarlogo.png', height: 40 * widthScale),
               ],
             ),
       actions: showProfile
           ? [
               IconButton(
                 onPressed: onProfilePressed ?? () {},
-                icon: Icon(Icons.person_outline_outlined, color: const Color(0xFF2D5016), size: 24 * widthScale),
+                icon: Image.asset(
+                  'assets/profile.png',
+                  height: 24 * widthScale,
+                  width: 24 * widthScale,
+                  color: const Color(0xFF2D5016),
+                  colorBlendMode: BlendMode.srcIn,
+                ),
               ),
             ]
           : null,
