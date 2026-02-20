@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'Auth/signin.dart';
+import 'bottom_nav_screen.dart';
 
 class FinalImageAnimation extends StatefulWidget {
   const FinalImageAnimation({super.key});
@@ -35,7 +36,7 @@ class _FinalImageAnimationState extends State<FinalImageAnimation>
           Navigator.push(
             context,
             MaterialPageRoute<void>(
-              builder: (context) => const Signin(),
+              builder: (context) => const BottomNavScreen(),
             ),
           );
         }

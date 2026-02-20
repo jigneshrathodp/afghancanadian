@@ -94,33 +94,14 @@ class _HomescreenState extends State<Homescreen> {
                         color: Colors.white70,
                       ),
                     ),
-                    // replaced Icon stack with SVG image
+                    // Welcome image
                     Align(
                       alignment: Alignment.bottomRight,
-                      child: Container(
-                        width: 80 * widthScale,
-                        height: 80 * widthScale,
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            // Yellow glow background
-                            Container(
-                              width: 70 * widthScale,
-                              height: 70 * widthScale,
-                              decoration: BoxDecoration(
-                                color: Colors.yellow.withOpacity(0.3),
-                                shape: BoxShape.circle,
-                              ),
-                            ),
-                            // SVG on top replacing the mosque icon
-                            SvgPicture.asset(
-                              'assets/1409156sd 1.svg',
-                              width: 60 * widthScale,
-                              height: 60 * widthScale,
-                              fit: BoxFit.contain,
-                            ),
-                          ],
-                        ),
+                      child: Image.asset(
+                        'assets/welcome.png',
+                        width: 100 * widthScale,
+                        height: 100 * widthScale,
+                        fit: BoxFit.contain,
                       ),
                     ),
                   ],
