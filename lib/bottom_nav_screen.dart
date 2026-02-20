@@ -16,7 +16,6 @@ class BottomNavScreen extends StatefulWidget {
 }
 
 class _BottomNavScreenState extends State<BottomNavScreen> {
-  int _selectedTabIndex = 0;
   int _selectedBottomNavIndex = 2; // Home tab is index 2
 
   @override
@@ -46,124 +45,6 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
     );
   }
 
-  Widget _buildDrawer(double widthScale) {
-    return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          DrawerHeader(
-            decoration: BoxDecoration(
-              color: const Color(0xFF2D5016),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Image.asset(
-                  'assets/logo.png',
-                  height: 60,
-                  width: 60,
-                ),
-                const SizedBox(height: 10),
-                const Text(
-                  'Afghan Canadian',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const Text(
-                  'Islamic Community',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          ListTile(
-            leading: const Icon(Icons.home, color: Color(0xFF2D5016)),
-            title: const Text('Home'),
-            onTap: () {
-              setState(() {
-                _selectedBottomNavIndex = 2; // Home index
-              });
-              Navigator.pop(context); // Close drawer
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.info_outline, color: Color(0xFF2D5016)),
-            title: const Text('About Us'),
-            onTap: () {
-              setState(() {
-                _selectedBottomNavIndex = 0; // About index
-              });
-              Navigator.pop(context); // Close drawer
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.event, color: Color(0xFF2D5016)),
-            title: const Text('Events Calendar'),
-            onTap: () {
-              setState(() {
-                _selectedBottomNavIndex = 1; // Calendar index
-              });
-              Navigator.pop(context); // Close drawer
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.miscellaneous_services_outlined, color: Color(0xFF2D5016)),
-            title: const Text('Our Services'),
-            onTap: () {
-              setState(() {
-                _selectedBottomNavIndex = 3; // Services index
-              });
-              Navigator.pop(context); // Close drawer
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.contact_phone_outlined, color: Color(0xFF2D5016)),
-            title: const Text('Contact Us'),
-            onTap: () {
-              setState(() {
-                _selectedBottomNavIndex = 4; // Contact index
-              });
-              Navigator.pop(context); // Close drawer
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.volunteer_activism_outlined, color: Color(0xFF2D5016)),
-            title: const Text('Donations'),
-            onTap: () {
-              setState(() {
-                _selectedBottomNavIndex = 5; // Donation index
-              });
-              Navigator.pop(context); // Close drawer
-            },
-          ),
-          const Divider(),
-          ListTile(
-            leading: const Icon(Icons.settings, color: Color(0xFF2D5016)),
-            title: const Text('Settings'),
-            onTap: () {
-              // Handle settings navigation
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.logout, color: Color(0xFF2D5016)),
-            title: const Text('Logout'),
-            onTap: () {
-              // Handle logout navigation
-              Navigator.pop(context);
-            },
-          ),
-        ],
-      ),
-    );
-  }
 
   Widget _buildBottomNavigationBar(double widthScale) {
     return ConvexAppBar(

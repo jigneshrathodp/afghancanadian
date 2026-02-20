@@ -1,9 +1,7 @@
-import 'package:afghancanadian/Auth/signup.dart';
+import 'package:afghancanadian/splashscreen.dart';
+import 'package:afghancanadian/Auth/signin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-
-import 'CustomCalendar.dart';
-import 'bottom_nav_screen.dart';
 
 void main() {
   runApp(const MyApp());}
@@ -33,15 +31,15 @@ class MyApp extends StatelessWidget {
             TargetPlatform.iOS: NoTransitionsBuilder(),
           },
         ),
-        // Make app background white for all screens by default
         scaffoldBackgroundColor: Colors.white,
-        // Ensure color scheme surface is white as well (background is deprecated)
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple).copyWith(
           surface: Colors.white,
         ),
       ),
-      home: CustomCalendar(),
-      // DevicePreview builder and locale are commented out; nothing else needed here
+      home: const FinalImageAnimation(),
+      routes: {
+        '/signin': (context) => const Signin(),
+      },
     );
 
   }

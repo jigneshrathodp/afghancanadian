@@ -16,12 +16,9 @@ class _HomescreenState extends State<Homescreen> {
   @override
   Widget build(BuildContext context) {
 
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-    
+
     // Calculate responsive scaling factors
-    final widthScale = (screenWidth / 414).clamp(0.8, 1.2); // iPhone 14 Pro Max width as base
-    
+
     return Scaffold(
       appBar: CustomAppBar(
         drawer: CustomDrawer(),

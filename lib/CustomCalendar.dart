@@ -9,7 +9,6 @@ class CustomCalendar extends StatefulWidget {
 
 class _CustomCalendarState extends State<CustomCalendar> {
   // Fixed to February 2026 as per SVG
-  final String _month = "February 2026";
   final int _highlightedDay = 6; // Day 6 highlighted in SVG
 
   // February 2026 data - exactly as shown in SVG
