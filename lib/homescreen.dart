@@ -332,10 +332,12 @@ class _HomescreenState extends State<Homescreen> {
   Widget _buildUpcomingEvents(double widthScale, double heightScale) {
     return Container(
       padding: EdgeInsets.all(20 * widthScale),
-      child: Center(
-        child: Text(
-          'No upcoming events',
-          style: TextStyle(color: Colors.grey, fontSize: 14 * widthScale),
+      child: Center(child: Card(
+        color: Color(0xFF2D5016),
+          child: Text(
+            'No upcoming events',
+            style: TextStyle(color: Colors.grey, fontSize: 14 * widthScale),
+          ),
         ),
       ),
     );

@@ -1,3 +1,5 @@
+import 'package:afghancanadian/widgets/custom_app_bar.dart';
+import 'package:afghancanadian/widgets/custom_drawer.dart';
 import 'package:flutter/material.dart';
 
 class CustomCalendar extends StatefulWidget {
@@ -30,7 +32,10 @@ class _CustomCalendarState extends State<CustomCalendar> {
     final height = size.height;
 
     return Scaffold(
-      backgroundColor: Colors.green[900],
+      appBar: CustomAppBar(
+        drawer: CustomDrawer(),
+      ),
+      drawer: CustomDrawer(),
       body: SafeArea(
         child: Center(
           child: Container(

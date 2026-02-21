@@ -40,7 +40,10 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
     final widthScale = (screenWidth / 414).clamp(0.8, 1.2);
 
     return Scaffold(
-      body: pages[_selectedBottomNavIndex],
+      body: Padding(
+        padding: const EdgeInsets.only(bottom: 26),
+        child: pages[_selectedBottomNavIndex],
+      ),
       bottomNavigationBar: _buildBottomNavigationBar(widthScale),
     );
   }

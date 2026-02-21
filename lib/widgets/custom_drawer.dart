@@ -108,6 +108,8 @@ class CustomDrawer extends StatelessWidget {
             textColor: Colors.red,
             onTap: () {},
           ),
+
+          const Divider(color: Colors.black),
         ],
       ),
     );

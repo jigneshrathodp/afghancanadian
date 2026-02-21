@@ -196,7 +196,7 @@ class ContactScreen extends StatelessWidget {
 
             // Map Section (unchanged)
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
               child: Container(
                 width: cardWidth,
                 decoration: BoxDecoration(
@@ -207,8 +207,8 @@ class ContactScreen extends StatelessWidget {
                   borderRadius: const BorderRadius.vertical(
                     top: Radius.circular(12),
                   ),
-                  child: Image.asset(
-                    "assets/map.png",
+                  child: Image.network(
+                    "https://maps.googleapis.com/maps/api/staticmap?center=22+Hobson+Ave,North+York,ON+M4A+1Y2&zoom=15&size=600x300&maptype=roadmap&markers=color:red%7C22+Hobson+Ave,North+York,ON+M4A+1Y2&key=YOUR_API_KEY",
                     height: isTablet ? 300 : 200,
                     width: double.infinity,
                     fit: BoxFit.cover,
@@ -216,6 +216,8 @@ class ContactScreen extends StatelessWidget {
                 ),
               ),
             ),
+
+            const SizedBox(height: 30),
           ],
         ),
       ),
@@ -263,7 +265,7 @@ class ContactScreen extends StatelessWidget {
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
                 borderSide:
-                const BorderSide(color: Color(0xFF2D5016), width: 1.5),
+                    const BorderSide(color: Color(0xFF2D5016), width: 1.5),
               ),
             ),
             style: TextStyle(
