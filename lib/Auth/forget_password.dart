@@ -1,3 +1,4 @@
+import 'package:afghancanadian/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'reset_password.dart';
 import '../widgets/custom_widgets.dart';
@@ -201,7 +202,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                                                 ? 11.0
                                                 : (screenWidth < 414 ? 12.5 : 14.0),
                                             fontWeight: FontWeight.bold,
-                                            color: const Color(0xFF2D5016),
+                                            color: AppColors.textPrimary,
                                           ),
                                         ),
                                       ),

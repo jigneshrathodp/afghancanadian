@@ -1,3 +1,4 @@
+import 'package:afghancanadian/app_colors.dart';
 import 'package:flutter/material.dart';
 
 /// Reusable styled text used for headings and important labels.
@@ -19,10 +20,14 @@ class StyledText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final widthScale = (screenWidth / 414).clamp(0.8, 1.2);
+    final isTablet = screenWidth > 600;
+    
     final defaultStyle = TextStyle(
-      fontSize: 32,
+      fontSize: isTablet ? 36 : (32 * widthScale),
       fontWeight: FontWeight.bold,
-      color: const Color(0xFF2D5016),
+      color: AppColors.textPrimary,
     );
 
     return Text(
@@ -64,6 +69,7 @@ class CustomTextFormField extends StatefulWidget {
 
 class _CustomTextFormFieldState extends State<CustomTextFormField> {
   late bool _obscure;
+  String? _errorText;
 
   @override
   void initState() {
@@ -73,14 +79,14 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
 
   @override
   Widget build(BuildContext context) {
-    final iconColor = widget.suffixIconColor ?? const Color(0xFF2D5016);
+    final iconColor = widget.suffixIconColor ?? AppColors.iconPrimary;
     final screenWidth = MediaQuery.of(context).size.width;
-    
+
     // Responsive text field sizing
     final isVerySmallScreen = screenWidth < 360;
     final fieldHeight = isVerySmallScreen ? 45.0 : 50.0;
     final fontSize = isVerySmallScreen ? 14.0 : 16.0;
-    final padding = isVerySmallScreen 
+    final padding = isVerySmallScreen
         ? const EdgeInsets.symmetric(horizontal: 12, vertical: 10)
         : const EdgeInsets.symmetric(horizontal: 16, vertical: 12);
 
@@ -98,41 +104,79 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       );
     }
 
-    return SizedBox(
-      height: fieldHeight,
-      child: TextFormField(
-        controller: widget.controller,
-        obscureText: _obscure,
-        keyboardType: widget.keyboardType,
-        textInputAction: widget.textInputAction,
-        validator: widget.validator,
-        autocorrect: false,
-        enableSuggestions: false,
-        style: TextStyle(
-          fontSize: fontSize,
-        ),
-        decoration: InputDecoration(
-          hintText: widget.hintText,
-          hintStyle: TextStyle(
-            color: const Color(0xFFB0B0B0),
-            fontSize: fontSize,
-          ),
-          contentPadding: padding,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: Color(0xFFE8E8E8)),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: Color(0xFFE8E8E8)),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: Color(0xFF2D5016), width: 2),
-          ),
-          suffixIcon: suffix,
-        ),
-      ),
+    return FormField<String>(
+      initialValue: widget.controller.text,
+      validator: widget.validator,
+      builder: (field) {
+        // Update error text when field has error
+        _errorText = field.errorText;
+        final hasError = _errorText != null;
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              height: fieldHeight,
+              child: TextFormField(
+                controller: widget.controller,
+                obscureText: _obscure,
+                keyboardType: widget.keyboardType,
+                textInputAction: widget.textInputAction,
+                autocorrect: false,
+                enableSuggestions: false,
+                onChanged: (value) {
+                  field.didChange(value);
+                },
+                style: TextStyle(
+                  fontSize: fontSize,
+                ),
+                decoration: InputDecoration(
+                  hintText: widget.hintText,
+                  hintStyle: TextStyle(
+                    color: AppColors.textHint,
+                    fontSize: fontSize,
+                  ),
+                  contentPadding: padding,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: const BorderSide(color: AppColors.borderLight),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: const BorderSide(color: AppColors.borderLight),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: const BorderSide(color: AppColors.borderPrimary, width: 2),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: const BorderSide(color: Colors.red, width: 1),
+                  ),
+                  focusedErrorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: const BorderSide(color: Colors.red, width: 2),
+                  ),
+                  errorStyle: const TextStyle(height: 0, fontSize: 0),
+                  suffixIcon: suffix,
+                ),
+              ),
+            ),
+            if (hasError)
+              Padding(
+                padding: const EdgeInsets.only(top: 4, left: 4),
+                child: Text(
+                  _errorText!,
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontSize: isVerySmallScreen ? 11 : 12,
+                  ),
+                ),
+              ),
+          ],
+        );
+      },
     );
   }
 }
@@ -158,7 +202,7 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bg = backgroundColor ?? const Color(0xFF2D5016);
+    final bg = backgroundColor ?? AppColors.buttonPrimary;
     final screenWidth = MediaQuery.of(context).size.width;
     final isVerySmallScreen = screenWidth < 360;
     

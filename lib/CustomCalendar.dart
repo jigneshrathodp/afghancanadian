@@ -1,3 +1,4 @@
+import 'package:afghancanadian/app_colors.dart';
 import 'package:afghancanadian/widgets/custom_app_bar.dart';
 import 'package:afghancanadian/widgets/custom_drawer.dart';
 import 'package:flutter/material.dart';
@@ -97,7 +98,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
                               margin: const EdgeInsets.symmetric(horizontal: 1),
                               decoration: BoxDecoration(
                                 color: day != null
-                                    ? (isHighlighted ? Colors.lightGreen : const Color(0xFF9E9E9E))
+                                    ? (isHighlighted ? AppColors.accentGreen : AppColors.textMuted)
                                     : Colors.transparent,
                                 borderRadius: BorderRadius.circular(4),
                               ),

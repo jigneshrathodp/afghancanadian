@@ -1,3 +1,4 @@
+import 'package:afghancanadian/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'widgets/custom_app_bar.dart';
 
@@ -19,7 +20,7 @@ class DonationScreen extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 20,
-                  color: Color(0xFF2D5016),
+                  color: AppColors.textPrimary,
                 ),
               ),
             ),

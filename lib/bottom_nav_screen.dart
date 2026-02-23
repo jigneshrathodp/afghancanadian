@@ -1,3 +1,4 @@
+import 'package:afghancanadian/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 
@@ -50,8 +51,12 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
 
 
   Widget _buildBottomNavigationBar(double widthScale) {
-    return ConvexAppBar(
-      items: [
+    return Container(
+      color: AppColors.navBackground,
+      child: Padding(
+        padding: EdgeInsets.only(left: 8 * widthScale, right: 8 * widthScale, bottom: 8),
+        child: ConvexAppBar(
+        items: [
         TabItem(icon: Icons.info_outline, title: 'About'),
         TabItem(icon: Icons.calendar_today_outlined, title: 'Calendar'),
         TabItem(icon: Icons.home, title: 'Home'),
@@ -66,10 +71,11 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
         });
       },
       height: 55,
-      backgroundColor: const Color(0xFF2D5016), // Dark green for unselected items
-      color: Colors.white,
-      activeColor: Colors.lightGreen,
-      elevation: 5,
-    );
-  }
+      backgroundColor: AppColors.navBackground,
+      color: AppColors.navUnselected,
+      activeColor: AppColors.navSelected,
+      ),
+    ),
+  );
+}
 }

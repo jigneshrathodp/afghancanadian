@@ -1,3 +1,4 @@
+import 'package:afghancanadian/app_colors.dart';
 import 'package:afghancanadian/widgets/custom_app_bar.dart';
 import 'package:afghancanadian/widgets/custom_drawer.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ class ContactScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final isTablet = screenWidth > 600;
+    final widthScale = (screenWidth / 414).clamp(0.8, 1.2);
 
     // Responsive padding and spacing
     final horizontalPadding = isTablet ? screenWidth * 0.1 : 16.0;
@@ -35,7 +37,7 @@ class ContactScreen extends StatelessWidget {
                     style: TextStyle(
                       fontSize: isTablet ? 32 : 24,
                       fontWeight: FontWeight.bold,
-                      color: const Color(0xFF2D5016),
+                      color: AppColors.textPrimary,
                       letterSpacing: 1.2,
                     ),
                   ),
@@ -56,7 +58,7 @@ class ContactScreen extends StatelessWidget {
                     _buildInputField("Email Address", isTablet, isRequired: true),
                     _buildInputField("Subject", isTablet),
                     _buildInputField("Message", isTablet, maxLines: 4),
-                    _buildCaptchaField(isTablet),
+                    _buildCaptchaField(isTablet, widthScale),
                     const SizedBox(height: 20),
 
                     // Submit Button
@@ -65,7 +67,7 @@ class ContactScreen extends StatelessWidget {
                       height: isTablet ? 55 : 45,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF2D5016),
+                          backgroundColor: AppColors.buttonPrimary,
                           foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(25),
@@ -98,7 +100,7 @@ class ContactScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: const Color(0xFF2D5016)),
+                  border: Border.all(color: AppColors.borderPrimary),
                 ),
                 child: Column(
                   children: [
@@ -108,7 +110,7 @@ class ContactScreen extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.all(10),
                           decoration: const BoxDecoration(
-                            color: Color(0xFF6CBD45),
+                            color: AppColors.primaryLight,
                             shape: BoxShape.circle,
                           ),
                           child: Icon(
@@ -129,7 +131,7 @@ class ContactScreen extends StatelessWidget {
                       ],
                     ),
 
-                    const Divider(color: Color(0xFF2D5016), thickness: 1),
+                    const Divider(color: AppColors.divider, thickness: 1),
                     const SizedBox(height: 20),
 
                     // Email
@@ -138,7 +140,7 @@ class ContactScreen extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.all(10),
                           decoration: const BoxDecoration(
-                            color: Color(0xFF6CBD45),
+                            color: AppColors.primaryLight,
                             shape: BoxShape.circle,
                           ),
                           child: Icon(
@@ -159,7 +161,7 @@ class ContactScreen extends StatelessWidget {
                       ],
                     ),
 
-                    const Divider(color: Color(0xFF2D5016), thickness: 1),
+                    const Divider(color: AppColors.divider, thickness: 1),
                     const SizedBox(height: 20),
 
                     // Address
@@ -168,7 +170,7 @@ class ContactScreen extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.all(10),
                           decoration: const BoxDecoration(
-                            color: Color(0xFF6CBD45),
+                            color: AppColors.primaryLight,
                             shape: BoxShape.circle,
                           ),
                           child: Icon(
@@ -257,16 +259,16 @@ class ContactScreen extends StatelessWidget {
               ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(color: Color(0xFF2D5016)),
+                borderSide: const BorderSide(color: AppColors.borderPrimary),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(color: Color(0xFF2D5016)),
+                borderSide: const BorderSide(color: AppColors.borderPrimary),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
                 borderSide:
-                const BorderSide(color: Color(0xFF2D5016), width: 2),
+                const BorderSide(color: AppColors.borderPrimary, width: 2),
               ),
             ),
             style: TextStyle(
@@ -278,7 +280,7 @@ class ContactScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCaptchaField(bool isTablet) {
+  Widget _buildCaptchaField(bool isTablet, double widthScale) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Column(
@@ -297,20 +299,20 @@ class ContactScreen extends StatelessWidget {
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
-              color: const Color(0xFFE8F5E9),
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: const Color(0xFF2D5016)),
+              color: AppColors.lightGreenBackground,
+              borderRadius: BorderRadius.circular(8 * widthScale),
+              border: Border.all(color: AppColors.borderPrimary),
             ),
             child: Row(
               children: [
-                const Icon(Icons.security, color: Color(0xFF2D5016)),
+                const Icon(Icons.security, color: AppColors.iconPrimary),
                 const SizedBox(width: 12),
                 Text(
                   "X8K9P2",
                   style: TextStyle(
                     fontSize: isTablet ? 22 : 20,
                     fontWeight: FontWeight.bold,
-                    color: const Color(0xFF2D5016),
+                    color: AppColors.textPrimary,
                     letterSpacing: 4,
                   ),
                 ),
@@ -318,7 +320,7 @@ class ContactScreen extends StatelessWidget {
                 IconButton(
                   onPressed: () {},
                   icon: const Icon(Icons.refresh,
-                      color: Color(0xFF2D5016)),
+                      color: AppColors.textPrimary),
                 ),
               ],
             ),
@@ -335,15 +337,15 @@ class ContactScreen extends StatelessWidget {
               ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(color: Color(0xFF2D5016)),
+                borderSide: const BorderSide(color: AppColors.borderPrimary),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(color: Color(0xFF2D5016)),
+                borderSide: const BorderSide(color: AppColors.borderPrimary),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(color: Color(0xFF2D5016), width: 2),
+                borderSide: const BorderSide(color: AppColors.borderPrimary, width: 2),
               ),
             ),
           ),

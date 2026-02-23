@@ -1,3 +1,4 @@
+import 'package:afghancanadian/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'widgets/custom_app_bar.dart';
 import 'widgets/custom_drawer.dart';
@@ -60,6 +61,11 @@ class _PremiumCalendarScreenState extends State<CalendarScreen> {
   @override
   Widget build(BuildContext context) {
     final days = _generateCalendarDays(focusedDate);
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final widthScale = (screenWidth / 414).clamp(0.8, 1.2);
+    final heightScale = (screenHeight / 896).clamp(0.8, 1.2);
+    final isTablet = screenWidth > 600;
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -68,29 +74,29 @@ class _PremiumCalendarScreenState extends State<CalendarScreen> {
       drawer: CustomDrawer(),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.all(16 * widthScale),
           child: Column(
             children: [
-              const SizedBox(height: 8),
+              SizedBox(height: 8 * heightScale),
 
-              const Text(
+              Text(
                 'CALENDER',
                 style: TextStyle(
-                  fontSize: 24,
+                  fontSize: isTablet ? 28 : (24 * widthScale),
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF1B5E20),
+                  color: AppColors.darkGreen,
                   letterSpacing: 1,
                 ),
               ),
 
-              const SizedBox(height: 16),
+              SizedBox(height: 16 * heightScale),
 
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.all(16),
+                padding: EdgeInsets.all(16 * widthScale),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF1B5E20),
-                  borderRadius: BorderRadius.circular(20),
+                  color: AppColors.darkGreen,
+                  borderRadius: BorderRadius.circular(20 * widthScale),
                 ),
                 child: Column(
                   children: [
@@ -104,9 +110,9 @@ class _PremiumCalendarScreenState extends State<CalendarScreen> {
                         ),
                         Text(
                           '${_monthName(focusedDate.month)} ${focusedDate.year}',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
+                          style: TextStyle(
+                            color: AppColors.navSelected,
+                            fontSize: isTablet ? 24 : (20 * widthScale),
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -118,7 +124,7 @@ class _PremiumCalendarScreenState extends State<CalendarScreen> {
                       ],
                     ),
 
-                    const SizedBox(height: 12),
+                    SizedBox(height: 12 * heightScale),
 
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -128,9 +134,9 @@ class _PremiumCalendarScreenState extends State<CalendarScreen> {
                           child: Center(
                             child: Text(
                               d,
-                              style: const TextStyle(
-                                color: Colors.white70,
-                                fontSize: 12,
+                              style: TextStyle(
+                                color: AppColors.textLightMuted,
+                                fontSize: isTablet ? 14 : (12 * widthScale),
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -140,17 +146,17 @@ class _PremiumCalendarScreenState extends State<CalendarScreen> {
                           .toList(),
                     ),
 
-                    const SizedBox(height: 10),
+                    SizedBox(height: 10 * heightScale),
 
                     GridView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: days.length,
                       gridDelegate:
-                      const SliverGridDelegateWithFixedCrossAxisCount(
+                      SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 7,
-                        mainAxisSpacing: 8,
-                        crossAxisSpacing: 8,
+                        mainAxisSpacing: 8 * heightScale,
+                        crossAxisSpacing: 8 * widthScale,
                         childAspectRatio: 1,
                       ),
                       itemBuilder: (context, index) {
@@ -172,9 +178,9 @@ class _PremiumCalendarScreenState extends State<CalendarScreen> {
                               color: date == null
                                   ? Colors.transparent
                                   : isSelected
-                                  ? const Color(0xFF8BC34A)
-                                  : const Color(0xFF2E7D32),
-                              borderRadius: BorderRadius.circular(8),
+                                  ? AppColors.accentGreen
+                                  : AppColors.mediumGreen,
+                              borderRadius: BorderRadius.circular(8 * widthScale),
                             ),
                             alignment: Alignment.center,
                             child: Text(
@@ -192,36 +198,45 @@ class _PremiumCalendarScreenState extends State<CalendarScreen> {
                 ),
               ),
 
-              const SizedBox(height: 24),
+              SizedBox(height: 24 * heightScale),
 
-              const Text(
+              Text(
                 'EVENTS',
                 style: TextStyle(
-                  fontSize: 22,
+                  fontSize: isTablet ? 26 : (22 * widthScale),
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF1B5E20),
+                  color: AppColors.darkGreen,
                 ),
               ),
 
-              const SizedBox(height: 12),
+              SizedBox(height: 12 * heightScale),
 
               _eventCard(
                 title: 'Ramadan',
                 subtitle: 'March 1 @ 5:23 am - March 23 @ 6:20 pm',
+                widthScale: widthScale,
+                heightScale: heightScale,
+                isTablet: isTablet,
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: 12 * heightScale),
               _eventCard(
                 title: 'Ramadan',
                 subtitle: 'March 25 @ 5:23 am - March 30 @ 6:20 pm',
-                backgroundColor: Colors.white,
+                backgroundColor: AppColors.background,
+                widthScale: widthScale,
+                heightScale: heightScale,
+                isTablet: isTablet,
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: 12 * heightScale),
               _eventCard(
                 title: 'Ramadan',
                 subtitle: 'March 25 @ 5:23 am - March 30 @ 6:20 pm',
-                backgroundColor: Colors.white,
+                backgroundColor: AppColors.background,
+                widthScale: widthScale,
+                heightScale: heightScale,
+                isTablet: isTablet,
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.05 > 60 ? 60 : MediaQuery.of(context).size.height * 0.05)
+              SizedBox(height: screenHeight * 0.05 > 60 ? 60 : screenHeight * 0.05)
             ],
           ),
         ),
@@ -229,31 +244,31 @@ class _PremiumCalendarScreenState extends State<CalendarScreen> {
     );
   }
 
-  Widget _eventCard({required String title, required String subtitle, Color? backgroundColor}) {
+  Widget _eventCard({required String title, required String subtitle, Color? backgroundColor, required double widthScale, required double heightScale, required bool isTablet}) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
+      padding: EdgeInsets.symmetric(vertical: 18 * heightScale, horizontal: 16 * widthScale),
       decoration: BoxDecoration(
-        color: backgroundColor ?? const Color(0xFFDDE5DE),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFF2E7D32)),
+        color: backgroundColor ?? AppColors.eventCardBackground,
+        borderRadius: BorderRadius.circular(16 * widthScale),
+        border: Border.all(color: AppColors.mediumGreen),
       ),
       child: Column(
         children: [
           Text(
             title,
-            style: const TextStyle(
-              fontSize: 20,
+            style: TextStyle(
+              fontSize: isTablet ? 24 : (20 * widthScale),
               fontWeight: FontWeight.bold,
-              color: Color(0xFF1B5E20),
+              color: AppColors.darkGreen,
             ),
           ),
-          const SizedBox(height: 6),
+          SizedBox(height: 6 * heightScale),
           Text(
             subtitle,
             textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 15,
+            style: TextStyle(
+              fontSize: isTablet ? 17 : (15 * widthScale),
               fontWeight: FontWeight.w500,
             ),
           ),

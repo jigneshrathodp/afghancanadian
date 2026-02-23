@@ -1,3 +1,4 @@
+import 'package:afghancanadian/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'widgets/custom_app_bar.dart';
@@ -60,10 +61,10 @@ class _HomescreenState extends State<Homescreen> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(16 * widthScale),
         child: Image.asset(
-          'assets/23.png',
-          width: double.infinity,
-          fit: BoxFit.cover,
-        ),
+        'assets/23.png',
+        width: double.infinity,
+        fit: BoxFit.cover,
+      ),
       ),
     );
   }
@@ -79,22 +80,22 @@ class _HomescreenState extends State<Homescreen> {
       ),
       width: double.infinity,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.background,
         borderRadius: BorderRadius.circular(20 * widthScale),
-        border: Border.all(color: const Color(0xFF2D5016), width: 1),
+        border: Border.all(color: AppColors.borderPrimary, width: 1),
       ),
       child: Column(
         children: [
           Text(
             '06/02/2026',
-            style: TextStyle(fontSize: 14 * widthScale, color: const Color(0xFF2D5016)),
+            style: TextStyle(fontSize: 14 * widthScale, color: AppColors.textPrimary),
           ),
           SizedBox(height: 8 * heightScale),
           Text(
             'NEXT ADHAAN',
             style: TextStyle(
               fontSize: 16 * widthScale,
-              color: const Color(0xFF2D5016),
+              color: AppColors.textPrimary,
             ),
           ),
           SizedBox(height: 5 * heightScale),
@@ -103,7 +104,7 @@ class _HomescreenState extends State<Homescreen> {
             style: TextStyle(
               fontSize: 40 * widthScale,
               fontWeight: FontWeight.bold,
-              color: Colors.black,
+              color: AppColors.textSecondary,
             ),
           ),
         ],
@@ -115,7 +116,7 @@ class _HomescreenState extends State<Homescreen> {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 20 * widthScale),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.background,
       ),
       child: Column(
         children: [
@@ -143,7 +144,7 @@ class _HomescreenState extends State<Homescreen> {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: (_selectedTabIndex == 0 ? 16 : 15) * widthScale,
-                        color: _selectedTabIndex == 0 ? const Color(0xFF2D5016) : Colors.grey,
+                        color: _selectedTabIndex == 0 ? AppColors.textPrimary : AppColors.textMuted,
                         fontWeight: _selectedTabIndex == 0 ? FontWeight.bold : FontWeight.normal,
                       ),
                     ),
@@ -152,7 +153,7 @@ class _HomescreenState extends State<Homescreen> {
                   Container(
                     height: 2 * heightScale,
                     width: 80 * widthScale,
-                    color: _selectedTabIndex == 0 ? const Color(0xFF2D5016) : Colors.transparent,
+                    color: _selectedTabIndex == 0 ? AppColors.borderPrimary : Colors.transparent,
                   ),
                 ],
               ),
@@ -170,7 +171,7 @@ class _HomescreenState extends State<Homescreen> {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: (_selectedTabIndex == 1 ? 16 : 15) * widthScale,
-                        color: _selectedTabIndex == 1 ? const Color(0xFF2D5016) : Colors.grey,
+                        color: _selectedTabIndex == 1 ? AppColors.textPrimary : AppColors.textMuted,
                         fontWeight: _selectedTabIndex == 1 ? FontWeight.bold : FontWeight.normal,
                       ),
                     ),
@@ -179,7 +180,7 @@ class _HomescreenState extends State<Homescreen> {
                   Container(
                     height: 2 * heightScale,
                     width: 80 * widthScale,
-                    color: _selectedTabIndex == 1 ? const Color(0xFF2D5016) : Colors.transparent,
+                    color: _selectedTabIndex == 1 ? AppColors.borderPrimary : Colors.transparent,
                   ),
                 ],
               ),
@@ -210,9 +211,9 @@ class _HomescreenState extends State<Homescreen> {
               padding: EdgeInsets.symmetric(vertical: 8 * heightScale),
               child: Container(
                 decoration: BoxDecoration(
-                  color: isFajr ? const Color(0xFF2D5016).withOpacity(0.1) : Colors.white,
+                  color: isFajr ? AppColors.primaryDark.withOpacity(0.1) : AppColors.background,
                   borderRadius: BorderRadius.circular(10 * widthScale),
-                  border: Border.all(color: const Color(0xFF2D5016), width: 1),
+                  border: Border.all(color: AppColors.borderPrimary, width: 1),
                 ),
                 child: Padding(
                   padding: EdgeInsets.all(12.0 * widthScale),
@@ -229,7 +230,7 @@ class _HomescreenState extends State<Homescreen> {
                           prayer['name'] as String,
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
-                            color: const Color(0xFF2D5016),
+                            color: AppColors.textPrimary,
                             fontSize: 14 * widthScale,
                           ),
                         ),
@@ -238,7 +239,7 @@ class _HomescreenState extends State<Homescreen> {
                         prayer['time'] as String,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: const Color(0xFF2D5016),
+                          color: AppColors.textPrimary,
                           fontSize: 14 * widthScale,
                         ),
                       ),
@@ -253,14 +254,14 @@ class _HomescreenState extends State<Homescreen> {
             width: double.infinity,
             padding: EdgeInsets.symmetric(vertical: 15 * heightScale),
             decoration: BoxDecoration(
-              color: const Color(0xFF2D5016),
+              color: AppColors.primaryDark,
               borderRadius: BorderRadius.circular(30 * widthScale),
             ),
             child: Text(
               'View Monthly Timings',
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: Colors.white,
+                color: AppColors.background,
                 fontWeight: FontWeight.bold,
                 fontSize: 16 * widthScale,
               ),
@@ -280,7 +281,7 @@ class _HomescreenState extends State<Homescreen> {
             margin: EdgeInsets.symmetric(horizontal: 20 * widthScale),
             padding: EdgeInsets.all(20 * widthScale),
             decoration: BoxDecoration(
-              color: const Color(0xFF2D5016),
+              color: AppColors.primaryDark,
               borderRadius: BorderRadius.circular(20 * widthScale),
             ),
             child: Center(
@@ -294,7 +295,7 @@ class _HomescreenState extends State<Homescreen> {
                       style: TextStyle(
                         fontSize: 24 * widthScale,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: AppColors.background,
                       ),
                     ),
                   ),
@@ -307,7 +308,7 @@ class _HomescreenState extends State<Homescreen> {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 13 * widthScale,
-                        color: Colors.white70,
+                        color: AppColors.textLightMuted,
                       ),
                     ),
                   ),
@@ -341,7 +342,7 @@ class _HomescreenState extends State<Homescreen> {
               style: TextStyle(
                 fontSize: 18 * widthScale,
                 fontWeight: FontWeight.bold,
-                color: const Color(0xFF2D5016),
+                color: AppColors.textPrimary,
               ),
             ),
           ),
@@ -359,11 +360,11 @@ class _HomescreenState extends State<Homescreen> {
             itemBuilder: (context, index) {
               return Container(
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.background,
                   borderRadius: BorderRadius.circular(15 * widthScale),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.withOpacity(0.2),
+                      color: AppColors.shadow,
                       spreadRadius: 1 * widthScale,
                       blurRadius: 5 * widthScale,
                       offset: const Offset(0, 2),

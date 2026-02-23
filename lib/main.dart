@@ -1,5 +1,6 @@
 import 'package:afghancanadian/splashscreen.dart';
 import 'package:afghancanadian/Auth/signin.dart';
+import 'package:afghancanadian/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -32,9 +33,9 @@ class MyApp extends StatelessWidget {
             TargetPlatform.iOS: NoTransitionsBuilder(),
           },
         ),
-        scaffoldBackgroundColor: Colors.white,
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple).copyWith(
-          surface: Colors.white,
+        scaffoldBackgroundColor: AppColors.background,
+        colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryDark).copyWith(
+          surface: AppColors.background,
         ),
         textTheme: GoogleFonts.robotoTextTheme(),
         fontFamily: GoogleFonts.roboto().fontFamily,

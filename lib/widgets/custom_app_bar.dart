@@ -1,3 +1,4 @@
+import 'package:afghancanadian/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -28,24 +29,21 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: Colors.white,
       elevation: 0,
       leading: showMenu
-          ? Builder(
-              builder: (context) {
-                return IconButton(
-                  onPressed: onMenuPressed ?? () {
-                    if (drawer != null) {
-                      Scaffold.of(context).openDrawer();
-                    }
-                  },
-                  icon: Container(
-                    padding: EdgeInsets.all(4 * widthScale),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF2D5016),
-                      borderRadius: BorderRadius.circular(8 * widthScale),
-                    ),
-                    child: Icon(Icons.menu_rounded, color: Colors.white),
-                  ),
-                );
+          ? IconButton(
+              onPressed: onMenuPressed ?? () {
+                final scaffoldState = Scaffold.maybeOf(context);
+                if (scaffoldState != null && scaffoldState.hasDrawer) {
+                  scaffoldState.openDrawer();
+                }
               },
+              icon: Container(
+                padding: EdgeInsets.all(4 * widthScale),
+                decoration: BoxDecoration(
+                  color: AppColors.primaryDark,
+                  borderRadius: BorderRadius.circular(8 * widthScale),
+                ),
+                child: Icon(Icons.menu_rounded, color: Colors.white),
+              ),
             )
           : null,
       title: title != null
@@ -54,7 +52,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               style: TextStyle(
                 fontSize: 18 * widthScale,
                 fontWeight: FontWeight.bold,
-                color: const Color(0xFF2D5016),
+                color: AppColors.textPrimary,
               ),
             )
           : Row(
@@ -72,7 +70,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   'assets/profile.png',
                   height: 24 * widthScale,
                   width: 24 * widthScale,
-                  color: const Color(0xFF2D5016),
+                  color: AppColors.iconPrimary,
                   colorBlendMode: BlendMode.srcIn,
                 ),
               ),

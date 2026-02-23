@@ -1,3 +1,4 @@
+import 'package:afghancanadian/app_colors.dart';
 import 'package:flutter/material.dart';
 import '../bottom_nav_screen.dart';
 import 'signup.dart';
@@ -259,7 +260,7 @@ class _SigninState extends State<Signin> {
                                                 ? 11.0
                                                 : (screenWidth < 414 ? 12.5 : 14.0),
                                             fontWeight: FontWeight.bold,
-                                            color: const Color(0xFF2D5016),
+                                            color: AppColors.textPrimary,
                                           ),
                                         ),
                                       ),
