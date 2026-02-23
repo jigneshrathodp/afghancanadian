@@ -1,6 +1,6 @@
-import 'package:afghancanadian/app_colors.dart';
+import 'package:afghancanadian/widgets/app_colors.dart';
 import 'package:flutter/material.dart';
-import '../bottom_nav_screen.dart';
+import '../widgets/bottom_nav_screen.dart';
 import 'signup.dart';
 import 'forget_password.dart';
 import '../widgets/custom_widgets.dart';

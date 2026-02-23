@@ -60,4 +60,9 @@ class AppColors {
   // Shadow
   static const Color shadow = Color(0x1F000000);
   static const Color shadowDark = Color(0x3F000000);
+
+  //text
+  static const Color customGold = Color(0xFFBD995F);
+
+
 }

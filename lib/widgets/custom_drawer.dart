@@ -1,8 +1,30 @@
-import 'package:afghancanadian/app_colors.dart';
+import 'package:afghancanadian/frontscreens/about_screen.dart';
+import 'package:afghancanadian/widgets/app_colors.dart';
+import 'package:afghancanadian/frontscreens/contact_screen.dart';
+import 'package:afghancanadian/services/cultural_service_screen.dart';
+import 'package:afghancanadian/frontscreens/donation_screen.dart';
+import 'package:afghancanadian/services/education_service_screen.dart';
+import 'package:afghancanadian/form.dart';
+import 'package:afghancanadian/services/funeral_service_screen.dart';
+import 'package:afghancanadian/frontscreens/homescreen.dart';
+import 'package:afghancanadian/services/library_service_screen.dart';
+import 'package:afghancanadian/membership.dart';
+import 'package:afghancanadian/privacypolicy.dart';
+import 'package:afghancanadian/frontscreens/services_screen.dart';
+import 'package:afghancanadian/termsandcondtions.dart';
+import 'package:afghancanadian/services/women_service_screen.dart';
+import 'package:afghancanadian/services/youth_service_screen.dart';
 import 'package:flutter/material.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({super.key});
+
+  void _navigateTo(BuildContext context, Widget screen) {
+    Navigator.of(context).pop();
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => screen),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +92,7 @@ class CustomDrawer extends StatelessWidget {
           _buildTile(
             icon: Icons.home,
             title: "Home",
-            onTap: () {},
+            onTap: () => _navigateTo(context, const Homescreen()),
             widthScale: widthScale,
             isTablet: isTablet,
           ),
@@ -81,7 +103,7 @@ class CustomDrawer extends StatelessWidget {
             leading: Icon(Icons.info, color: AppColors.iconPrimary, size: isTablet ? 28 : (24 * widthScale)),
             title: Text("About", style: TextStyle(fontSize: isTablet ? 18 : (16 * widthScale))),
             children: [
-              _subTile("Our History", widthScale, isTablet),
+              _subTile("Our History", widthScale, isTablet, onTap: () => _navigateTo(context, const AboutScreen())),
               _subTile("Board Of Directors", widthScale, isTablet),
               _subTile("Former Board Members", widthScale, isTablet),
             ],
@@ -93,12 +115,12 @@ class CustomDrawer extends StatelessWidget {
             leading: Icon(Icons.handshake, color: AppColors.iconPrimary, size: isTablet ? 28 : (24 * widthScale)),
             title: Text("Services", style: TextStyle(fontSize: isTablet ? 18 : (16 * widthScale))),
             children: [
-              _subTile("Education Services", widthScale, isTablet),
-              _subTile("Funeral Services", widthScale, isTablet),
-              _subTile("Cultural Services", widthScale, isTablet),
-              _subTile("Women Services", widthScale, isTablet),
-              _subTile("Youth Services", widthScale, isTablet),
-              _subTile("Library", widthScale, isTablet),
+              _subTile("Education Services", widthScale, isTablet, onTap: () => _navigateTo(context, const EducationServiceScreen())),
+              _subTile("Funeral Services", widthScale, isTablet, onTap: () => _navigateTo(context, const FuneralServiceScreen())),
+              _subTile("Cultural Services", widthScale, isTablet, onTap: () => _navigateTo(context, const CulturalServiceScreen())),
+              _subTile("Women Services", widthScale, isTablet, onTap: () => _navigateTo(context, const WomenServiceScreen())),
+              _subTile("Youth Services", widthScale, isTablet, onTap: () => _navigateTo(context, const YouthServiceScreen())),
+              _subTile("Library Services", widthScale, isTablet, onTap: () => _navigateTo(context, const Libraryservicescreen())),
             ],
           ),
           Divider(height: 1, indent: 16 * widthScale, endIndent: 16 * widthScale),
@@ -106,7 +128,7 @@ class CustomDrawer extends StatelessWidget {
           _buildTile(
             icon: Icons.card_membership,
             title: "Membership",
-            onTap: () {},
+            onTap: () => _navigateTo(context, const MembershipScreen()),
             widthScale: widthScale,
             isTablet: isTablet,
           ),
@@ -133,7 +155,7 @@ class CustomDrawer extends StatelessWidget {
           _buildTile(
             icon: Icons.phone,
             title: "Contact",
-            onTap: () {},
+            onTap: () => _navigateTo(context, const ContactScreen()),
             widthScale: widthScale,
             isTablet: isTablet,
           ),
@@ -142,7 +164,7 @@ class CustomDrawer extends StatelessWidget {
           _buildTile(
             icon: Icons.attach_money,
             title: "Donation",
-            onTap: () {},
+            onTap: () => _navigateTo(context, const DonationScreen()),
             widthScale: widthScale,
             isTablet: isTablet,
           ),
@@ -151,7 +173,7 @@ class CustomDrawer extends StatelessWidget {
           _buildTile(
             icon: Icons.privacy_tip,
             title: "Privacy Policy",
-            onTap: () {},
+            onTap: () => _navigateTo(context, const PrivacyPolicyScreen()),
             widthScale: widthScale,
             isTablet: isTablet,
           ),
@@ -160,7 +182,7 @@ class CustomDrawer extends StatelessWidget {
           _buildTile(
             icon: Icons.description,
             title: "Terms & Condition",
-            onTap: () {},
+            onTap: () => _navigateTo(context, const termsandcondtions()),
             widthScale: widthScale,
             isTablet: isTablet,
           ),
@@ -202,11 +224,11 @@ class CustomDrawer extends StatelessWidget {
   }
 
   // Sub Tile for Services
-  Widget _subTile(String title, double widthScale, bool isTablet) {
+  Widget _subTile(String title, double widthScale, bool isTablet, {VoidCallback? onTap}) {
     return ListTile(
       contentPadding: EdgeInsets.only(left: 72 * widthScale),
       title: Text(title, style: TextStyle(fontSize: isTablet ? 16 : (14 * widthScale))),
-      onTap: () {},
+      onTap: onTap ?? () {},
     );
   }
 }

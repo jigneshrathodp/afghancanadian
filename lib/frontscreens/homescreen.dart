@@ -1,8 +1,8 @@
-import 'package:afghancanadian/app_colors.dart';
+import 'package:afghancanadian/widgets/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'widgets/custom_app_bar.dart';
-import 'widgets/custom_drawer.dart';
+import '../widgets/custom_app_bar.dart';
+import '../widgets/custom_drawer.dart';
 
 class Homescreen extends StatefulWidget {
   const Homescreen({super.key});
@@ -21,9 +21,7 @@ class _HomescreenState extends State<Homescreen> {
     // Calculate responsive scaling factors
 
     return Scaffold(
-      appBar: CustomAppBar(
-      drawer: CustomDrawer(),
-    ),
+      appBar: CustomAppBar(),
       drawer: CustomDrawer(),
       body: _buildHomeContent(),
     );

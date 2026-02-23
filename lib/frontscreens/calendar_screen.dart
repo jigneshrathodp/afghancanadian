@@ -1,7 +1,7 @@
-import 'package:afghancanadian/app_colors.dart';
+import 'package:afghancanadian/widgets/app_colors.dart';
 import 'package:flutter/material.dart';
-import 'widgets/custom_app_bar.dart';
-import 'widgets/custom_drawer.dart';
+import '../widgets/custom_app_bar.dart';
+import '../widgets/custom_drawer.dart';
 //CalendarScreen
 
 
@@ -68,9 +68,7 @@ class _PremiumCalendarScreenState extends State<CalendarScreen> {
     final isTablet = screenWidth > 600;
 
     return Scaffold(
-      appBar: CustomAppBar(
-        drawer: CustomDrawer(),
-      ),
+      appBar: CustomAppBar(),
       drawer: CustomDrawer(),
       body: SafeArea(
         child: SingleChildScrollView(

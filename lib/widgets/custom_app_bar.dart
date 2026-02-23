@@ -1,4 +1,4 @@
-import 'package:afghancanadian/app_colors.dart';
+import 'package:afghancanadian/widgets/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -8,7 +8,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
   final bool showMenu;
   final bool showProfile;
-  final Widget? drawer;
 
   const CustomAppBar({
     super.key,
@@ -17,7 +16,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.title,
     this.showMenu = true,
     this.showProfile = true,
-    this.drawer,
   });
 
   @override

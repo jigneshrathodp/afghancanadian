@@ -1,4 +1,4 @@
-import 'package:afghancanadian/app_colors.dart';
+import 'package:afghancanadian/widgets/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'signin.dart';
 import '../widgets/custom_widgets.dart';

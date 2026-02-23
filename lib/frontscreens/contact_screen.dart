@@ -1,4 +1,4 @@
-import 'package:afghancanadian/app_colors.dart';
+import 'package:afghancanadian/widgets/app_colors.dart';
 import 'package:afghancanadian/widgets/custom_app_bar.dart';
 import 'package:afghancanadian/widgets/custom_drawer.dart';
 import 'package:flutter/material.dart';
@@ -17,9 +17,7 @@ class ContactScreen extends StatelessWidget {
     final cardWidth = isTablet ? screenWidth * 0.8 : screenWidth - 32;
 
     return Scaffold(
-      appBar: CustomAppBar(
-        drawer: CustomDrawer(),
-      ),
+      appBar: CustomAppBar(),
       drawer: CustomDrawer(),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(

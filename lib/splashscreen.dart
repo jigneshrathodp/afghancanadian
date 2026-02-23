@@ -1,5 +1,8 @@
-import 'package:afghancanadian/Auth/signin.dart';
+// import 'package:afghancanadian/Auth/signin.dart';
 import 'package:flutter/material.dart';
+
+import 'form.dart';
+import 'widgets/bottom_nav_screen.dart';
 // import 'bottom_nav_screen.dart';
 
 class FinalImageAnimation extends StatefulWidget {
@@ -36,7 +39,7 @@ class _FinalImageAnimationState extends State<FinalImageAnimation>
           Navigator.push(
             context,
             MaterialPageRoute<void>(
-              builder: (context) => const Signin(),
+              builder: (context) => const FormScreen(),
             ),
           );
         }

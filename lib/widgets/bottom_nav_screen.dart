@@ -1,13 +1,13 @@
-import 'package:afghancanadian/app_colors.dart';
+import 'package:afghancanadian/widgets/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 
-import 'homescreen.dart';
-import 'about_screen.dart';
-import 'calendar_screen.dart';
-import 'services_screen.dart';
-import 'contact_screen.dart';
-import 'donation_screen.dart';
+import '../frontscreens/homescreen.dart';
+import '../frontscreens/about_screen.dart';
+import '../frontscreens/calendar_screen.dart';
+import '../frontscreens/services_screen.dart';
+import '../frontscreens/contact_screen.dart';
+import '../frontscreens/donation_screen.dart';
 
 class BottomNavScreen extends StatefulWidget {
   const BottomNavScreen({super.key});

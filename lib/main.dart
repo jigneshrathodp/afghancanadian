@@ -1,6 +1,6 @@
 import 'package:afghancanadian/splashscreen.dart';
 import 'package:afghancanadian/Auth/signin.dart';
-import 'package:afghancanadian/app_colors.dart';
+import 'package:afghancanadian/widgets/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_fonts/google_fonts.dart';

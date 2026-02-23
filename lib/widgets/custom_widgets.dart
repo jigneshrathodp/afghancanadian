@@ -1,4 +1,4 @@
-import 'package:afghancanadian/app_colors.dart';
+import 'package:afghancanadian/widgets/app_colors.dart';
 import 'package:flutter/material.dart';
 
 /// Reusable styled text used for headings and important labels.
