@@ -2,6 +2,7 @@ import 'package:afghancanadian/splashscreen.dart';
 import 'package:afghancanadian/Auth/signin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   runApp(const MyApp());}
@@ -35,6 +36,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple).copyWith(
           surface: Colors.white,
         ),
+        textTheme: GoogleFonts.robotoTextTheme(),
+        fontFamily: GoogleFonts.roboto().fontFamily,
       ),
       home: const FinalImageAnimation(),
       routes: {

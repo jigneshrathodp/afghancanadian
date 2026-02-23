@@ -96,6 +96,8 @@ class _FinalImageAnimationState extends State<FinalImageAnimation>
 
   @override
   Widget build(BuildContext context) {
+    final mediaScreenHeight = MediaQuery.of(context).size.height;
+    
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -179,6 +181,16 @@ class _FinalImageAnimationState extends State<FinalImageAnimation>
                           Colors.red,
                           "RED",
                         ),
+                      ),
+                    ),
+                    
+                    // Bottom spacing
+                    Positioned(
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      child: SizedBox(
+                        height: mediaScreenHeight * 0.05 > 60 ? 60 : mediaScreenHeight * 0.05
                       ),
                     ),
                   ],

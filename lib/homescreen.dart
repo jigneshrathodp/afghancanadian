@@ -21,8 +21,8 @@ class _HomescreenState extends State<Homescreen> {
 
     return Scaffold(
       appBar: CustomAppBar(
-        drawer: CustomDrawer(),
-      ),
+      drawer: CustomDrawer(),
+    ),
       drawer: CustomDrawer(),
       body: _buildHomeContent(),
     );
@@ -48,71 +48,22 @@ class _HomescreenState extends State<Homescreen> {
           SizedBox(height: 15 * heightScale),
           _buildOurServicesSection(widthScale, heightScale),
           SizedBox(height: 20 * heightScale),
+          SizedBox(height: screenHeight * 0.05 > 60 ? 60 : screenHeight * 0.05)
         ],
       ),
     );
   }
-
   Widget _buildWelcomeSection(double widthScale, double heightScale) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 20 * widthScale),
-      padding: EdgeInsets.all(20 * widthScale),
-      decoration: BoxDecoration(
-        color: const Color(0xFF2D5016),
-        borderRadius: BorderRadius.circular(20 * widthScale),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 10 * heightScale),
-                Text(
-                  'Welcome',
-                  style: TextStyle(
-                    fontSize: 24 * widthScale,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-                SizedBox(height: 8 * heightScale),
-                Text(
-                  'Afghan Canadian Islamic Community',
-                  style: TextStyle(
-                    fontSize: 16 * widthScale,
-                    color: Colors.white,
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'where faith, culture, and community\ncome together.',
-                      style: TextStyle(
-                        fontSize: 12 * widthScale,
-                        color: Colors.white70,
-                      ),
-                    ),
-                    // Welcome image
-                    Align(
-                      alignment: Alignment.bottomRight,
-                      child: Image.asset(
-                        'assets/welcome.png',
-                        width: 100 * widthScale,
-                        height: 100 * widthScale,
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 10 * heightScale),
-              ],
-            ),
-          ),
-          // Mosque illustration
-
-        ],
+      margin: EdgeInsets.symmetric(horizontal: 16 * widthScale),
+      width: double.infinity,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(16 * widthScale),
+        child: Image.asset(
+          'assets/23.png',
+          width: double.infinity,
+          fit: BoxFit.cover,
+        ),
       ),
     );
   }
@@ -165,15 +116,6 @@ class _HomescreenState extends State<Homescreen> {
       margin: EdgeInsets.symmetric(horizontal: 20 * widthScale),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(20 * widthScale),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1 * widthScale,
-            blurRadius: 5 * widthScale,
-            offset: const Offset(0, 2),
-          ),
-        ],
       ),
       child: Column(
         children: [
@@ -250,12 +192,12 @@ class _HomescreenState extends State<Homescreen> {
 
   Widget _buildPrayerTimesList(double widthScale, double heightScale) {
     final prayers = [
-      {'name': 'Imsak', 'time': '06:00:00', 'icon': Icons.nights_stay_outlined},
-      {'name': 'Fajr', 'time': '06:05:00', 'icon': Icons.wb_twilight_outlined},
-      {'name': 'Sunrise', 'time': '07:32:00', 'icon': Icons.wb_sunny_outlined},
-      {'name': 'Dhuhr', 'time': '12:32:00', 'icon': Icons.wb_sunny_outlined},
-      {'name': 'Sunset', 'time': '05:32:00', 'icon': Icons.wb_twilight_outlined},
-      {'name': 'Maghrib', 'time': '05:47:00', 'icon': Icons.nights_stay_outlined},
+      {'name': 'Imsak', 'time': '06:00:00', 'svg': '5.svg'},
+      {'name': 'Fajr', 'time': '06:05:00', 'svg': '5.svg'},
+      {'name': 'Sunrise', 'time': '07:32:00', 'svg': '6.svg'},
+      {'name': 'Dhuhr', 'time': '12:32:00', 'svg': '7.svg'},
+      {'name': 'Sunset', 'time': '05:32:00', 'svg': '6.svg'},
+      {'name': 'Maghrib', 'time': '05:47:00', 'svg': '8.svg'},
     ];
 
     return Container(
@@ -276,10 +218,10 @@ class _HomescreenState extends State<Homescreen> {
                   padding: EdgeInsets.all(12.0 * widthScale),
                   child: Row(
                     children: [
-                      Icon(
-                        prayer['icon'] as IconData,
-                        size: 28 * widthScale,
-                        color: isFajr ? const Color(0xFF2D5016) : Colors.grey[600],
+                      SvgPicture.asset(
+                        'assets/${prayer['svg']}',
+                        width: 28 * widthScale,
+                        height: 28 * widthScale,
                       ),
                       SizedBox(width: 15 * widthScale),
                       Expanded(
@@ -287,7 +229,7 @@ class _HomescreenState extends State<Homescreen> {
                           prayer['name'] as String,
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
-                            color: isFajr ? const Color(0xFF2D5016) : Colors.black,
+                            color: const Color(0xFF2D5016),
                             fontSize: 14 * widthScale,
                           ),
                         ),
@@ -296,7 +238,7 @@ class _HomescreenState extends State<Homescreen> {
                         prayer['time'] as String,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: isFajr ? const Color(0xFF2D5016) : Colors.black,
+                          color: const Color(0xFF2D5016),
                           fontSize: 14 * widthScale,
                         ),
                       ),
@@ -331,26 +273,61 @@ class _HomescreenState extends State<Homescreen> {
 
   Widget _buildUpcomingEvents(double widthScale, double heightScale) {
     return Container(
-      padding: EdgeInsets.all(20 * widthScale),
-      child: Center(child: Card(
-        color: Color(0xFF2D5016),
-          child: Text(
-            'No upcoming events',
-            style: TextStyle(color: Colors.grey, fontSize: 14 * widthScale),
+      child: Column(
+        children: [
+          Container(
+            width: double.infinity,
+            margin: EdgeInsets.symmetric(horizontal: 20 * widthScale),
+            padding: EdgeInsets.all(20 * widthScale),
+            decoration: BoxDecoration(
+              color: const Color(0xFF2D5016),
+              borderRadius: BorderRadius.circular(20 * widthScale),
+            ),
+            child: Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      'Ramadan',
+                      style: TextStyle(
+                        fontSize: 24 * widthScale,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 6 * heightScale),
+                  Align(
+                    alignment: Alignment.center,
+
+                    child: Text(
+                      'March 1 @ 5:23 am - March 23 @ 6:20 pm',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 13 * widthScale,
+                        color: Colors.white70,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
 
   Widget _buildOurServicesSection(double widthScale, double heightScale) {
     final services = [
-      {'name': 'Cultural Services', 'icon': Icons.diversity_3_outlined},
-      {'name': 'Youth Programs', 'icon': Icons.groups_outlined},
-      {'name': 'Social Services', 'icon': Icons.support_outlined},
-      {'name': 'Maktab', 'icon': Icons.menu_book_outlined},
-      {'name': 'Social Services', 'icon': Icons.volunteer_activism_outlined},
-      {'name': 'Social Services', 'icon': Icons.handshake_outlined},
+      {'name': 'Cultural Services', 'svg': '1.svg'},
+      {'name': 'Youth Programs', 'svg': '2.svg'},
+      {'name': 'Social Services', 'svg': '3.svg'},
+      {'name': 'Maktab', 'svg': '4.svg'},
+      {'name': 'Social Services', 'svg': '21.svg'},
+      {'name': 'Social Services', 'svg': '22.svg'},
     ];
 
     return Container(
@@ -383,23 +360,30 @@ class _HomescreenState extends State<Homescreen> {
               return Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  border: Border.all(color: const Color(0xFF2D5016).withOpacity(0.3), width: 1),
                   borderRadius: BorderRadius.circular(15 * widthScale),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.2),
+                      spreadRadius: 1 * widthScale,
+                      blurRadius: 5 * widthScale,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(
-                      services[index]['icon'] as IconData,
-                      size: 22 * widthScale,
-                      color: Colors.grey[600],
+                    SvgPicture.asset(
+                      'assets/${services[index]['svg']}',
+                      width: 45 * widthScale,
+                      height: 45 * widthScale,
                     ),
                     SizedBox(height: 8 * heightScale),
                     Text(
                       services[index]['name'] as String,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 10 * widthScale,
+                        fontSize: 12 * widthScale,
                         fontWeight: FontWeight.w500,
                       ),
                     ),

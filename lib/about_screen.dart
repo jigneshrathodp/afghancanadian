@@ -7,20 +7,29 @@ class AboutScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    
     return Scaffold(
       appBar: CustomAppBar(
         drawer: CustomDrawer(),
       ),
       drawer: CustomDrawer(),
-      body: const Center(
-        child: Text(
-          'About Screen About Screen About Screen About Screen',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 20,
-            color: Color(0xFF2D5016),
+      body: Column(
+        children: [
+          Expanded(
+            child: const Center(
+              child: Text(
+                'About Screen About Screen About Screen About Screen',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Color(0xFF2D5016),
+                ),
+              ),
+            ),
           ),
-        ),
+          SizedBox(height: screenHeight * 0.05 > 60 ? 60 : screenHeight * 0.05)
+        ],
       ),
     );
   }

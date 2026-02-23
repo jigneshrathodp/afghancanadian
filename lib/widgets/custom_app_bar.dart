@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback? onMenuPressed;
@@ -35,13 +36,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                       Scaffold.of(context).openDrawer();
                     }
                   },
-                  icon: Image.asset(
-                    'assets/menu.png',
-                    height: 24 * widthScale,
-                    width: 24 * widthScale,
-                    // tint the png to match previous icon color (may not work on complex PNGs)
-                    color: const Color(0xFF2D5016),
-                    colorBlendMode: BlendMode.srcIn,
+                  icon: Container(
+                    padding: EdgeInsets.all(4 * widthScale),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF2D5016),
+                      borderRadius: BorderRadius.circular(8 * widthScale),
+                    ),
+                    child: Icon(Icons.menu_rounded, color: Colors.white),
                   ),
                 );
               },
@@ -60,7 +61,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 // Use PNG logo instead of SVG
-                Image.asset('assets/appbarlogo.png', height: 40 * widthScale),
+                Image.asset('assets/appbarlogo.png', height: 60 * widthScale),
               ],
             ),
       actions: showProfile

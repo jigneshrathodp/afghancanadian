@@ -62,7 +62,10 @@ class _PremiumCalendarScreenState extends State<CalendarScreen> {
     final days = _generateCalendarDays(focusedDate);
 
     return Scaffold(
-      backgroundColor: const Color(0xFFE9E9E9),
+      appBar: CustomAppBar(
+        drawer: CustomDrawer(),
+      ),
+      drawer: CustomDrawer(),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
@@ -73,7 +76,7 @@ class _PremiumCalendarScreenState extends State<CalendarScreen> {
               const Text(
                 'CALENDER',
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 24,
                   fontWeight: FontWeight.bold,
                   color: Color(0xFF1B5E20),
                   letterSpacing: 1,
@@ -88,13 +91,6 @@ class _PremiumCalendarScreenState extends State<CalendarScreen> {
                 decoration: BoxDecoration(
                   color: const Color(0xFF1B5E20),
                   borderRadius: BorderRadius.circular(20),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Colors.black26,
-                      blurRadius: 10,
-                      offset: Offset(0, 6),
-                    )
-                  ],
                 ),
                 child: Column(
                   children: [
@@ -201,7 +197,7 @@ class _PremiumCalendarScreenState extends State<CalendarScreen> {
               const Text(
                 'EVENTS',
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 22,
                   fontWeight: FontWeight.bold,
                   color: Color(0xFF1B5E20),
                 ),
@@ -217,12 +213,15 @@ class _PremiumCalendarScreenState extends State<CalendarScreen> {
               _eventCard(
                 title: 'Ramadan',
                 subtitle: 'March 25 @ 5:23 am - March 30 @ 6:20 pm',
+                backgroundColor: Colors.white,
               ),
               const SizedBox(height: 12),
               _eventCard(
                 title: 'Ramadan',
                 subtitle: 'March 25 @ 5:23 am - March 30 @ 6:20 pm',
+                backgroundColor: Colors.white,
               ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.05 > 60 ? 60 : MediaQuery.of(context).size.height * 0.05)
             ],
           ),
         ),
@@ -230,12 +229,12 @@ class _PremiumCalendarScreenState extends State<CalendarScreen> {
     );
   }
 
-  Widget _eventCard({required String title, required String subtitle}) {
+  Widget _eventCard({required String title, required String subtitle, Color? backgroundColor}) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
       decoration: BoxDecoration(
-        color: const Color(0xFFDDE5DE),
+        color: backgroundColor ?? const Color(0xFFDDE5DE),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: const Color(0xFF2E7D32)),
       ),
@@ -244,7 +243,7 @@ class _PremiumCalendarScreenState extends State<CalendarScreen> {
           Text(
             title,
             style: const TextStyle(
-              fontSize: 18,
+              fontSize: 20,
               fontWeight: FontWeight.bold,
               color: Color(0xFF1B5E20),
             ),
@@ -253,7 +252,10 @@ class _PremiumCalendarScreenState extends State<CalendarScreen> {
           Text(
             subtitle,
             textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 13),
+            style: const TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ],
       ),

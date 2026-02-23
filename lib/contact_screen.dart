@@ -96,7 +96,7 @@ class ContactScreen extends StatelessWidget {
                 width: cardWidth,
                 padding: EdgeInsets.all(isTablet ? 24 : 20),
                 decoration: BoxDecoration(
-                  color: const Color(0x142D5016), // ✅ lighter 10% green
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(color: const Color(0xFF2D5016)),
                 ),
@@ -108,8 +108,8 @@ class ContactScreen extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.all(10),
                           decoration: const BoxDecoration(
-                            color: Color(0xFF2D5016),
-                            shape: BoxShape.circle, // ✅ circular
+                            color: Color(0xFF6CBD45),
+                            shape: BoxShape.circle,
                           ),
                           child: Icon(
                             Icons.phone,
@@ -129,6 +129,7 @@ class ContactScreen extends StatelessWidget {
                       ],
                     ),
 
+                    const Divider(color: Color(0xFF2D5016), thickness: 1),
                     const SizedBox(height: 20),
 
                     // Email
@@ -137,8 +138,8 @@ class ContactScreen extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.all(10),
                           decoration: const BoxDecoration(
-                            color: Color(0xFF2D5016),
-                            shape: BoxShape.circle, // ✅ circular
+                            color: Color(0xFF6CBD45),
+                            shape: BoxShape.circle,
                           ),
                           child: Icon(
                             Icons.email,
@@ -158,6 +159,7 @@ class ContactScreen extends StatelessWidget {
                       ],
                     ),
 
+                    const Divider(color: Color(0xFF2D5016), thickness: 1),
                     const SizedBox(height: 20),
 
                     // Address
@@ -166,8 +168,8 @@ class ContactScreen extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.all(10),
                           decoration: const BoxDecoration(
-                            color: Color(0xFF2D5016),
-                            shape: BoxShape.circle, // ✅ circular
+                            color: Color(0xFF6CBD45),
+                            shape: BoxShape.circle,
                           ),
                           child: Icon(
                             Icons.location_on,
@@ -216,6 +218,7 @@ class ContactScreen extends StatelessWidget {
                 ),
               ),
             ),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.05 > 60 ? 60 : MediaQuery.of(context).size.height * 0.05)
           ],
         ),
       ),
@@ -247,23 +250,23 @@ class ContactScreen extends StatelessWidget {
                 color: Colors.grey.shade500,
               ),
               filled: true,
-              fillColor: Colors.grey.shade50,
+              fillColor: Colors.white,
               contentPadding: EdgeInsets.symmetric(
                 horizontal: 16,
                 vertical: maxLines > 1 ? 16 : 12,
               ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide.none,
+                borderSide: const BorderSide(color: Color(0xFF2D5016)),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(color: Colors.grey.shade200),
+                borderSide: const BorderSide(color: Color(0xFF2D5016)),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
                 borderSide:
-                const BorderSide(color: Color(0xFF2D5016), width: 1.5),
+                const BorderSide(color: Color(0xFF2D5016), width: 2),
               ),
             ),
             style: TextStyle(
@@ -325,9 +328,22 @@ class ContactScreen extends StatelessWidget {
             decoration: InputDecoration(
               hintText: "Enter Captcha",
               filled: true,
-              fillColor: Colors.grey.shade50,
+              fillColor: Colors.white,
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 12,
+              ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
+                borderSide: const BorderSide(color: Color(0xFF2D5016)),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: const BorderSide(color: Color(0xFF2D5016)),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: const BorderSide(color: Color(0xFF2D5016), width: 2),
               ),
             ),
           ),
