@@ -1,18 +1,18 @@
 // import 'package:afghancanadian/Auth/signin.dart';
+import 'package:afghancanadian/Auth/signin.dart';
 import 'package:flutter/material.dart';
 
-import 'form.dart';
-import 'widgets/bottom_nav_screen.dart';
+import 'new_bottomNavScreen.dart';
 // import 'bottom_nav_screen.dart';
 
-class FinalImageAnimation extends StatefulWidget {
-  const FinalImageAnimation({super.key});
+class Splashscreen extends StatefulWidget {
+  const Splashscreen({super.key});
 
   @override
-  State<FinalImageAnimation> createState() => _FinalImageAnimationState();
+  State<Splashscreen> createState() => _SplashscreenState();
 }
 
-class _FinalImageAnimationState extends State<FinalImageAnimation>
+class _SplashscreenState extends State<Splashscreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _blueMoveAnimation;
@@ -32,19 +32,22 @@ class _FinalImageAnimationState extends State<FinalImageAnimation>
 
     _controller.forward();
 
-    // Navigate to SignIn screen when animation completes
+    // Navigate to Home screen (BottomNavScreen) when animation completes
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         if (mounted) {
-          Navigator.push(
+          Navigator.pushReplacement(
             context,
             MaterialPageRoute<void>(
-              builder: (context) => const FormScreen(),
+              builder: (context) => const NewBottomNavScreen(),
             ),
           );
         }
       }
-    });
+    }
+    );
+
+
 
     _blueScaleAnimation = TweenSequence<double>([
       TweenSequenceItem(

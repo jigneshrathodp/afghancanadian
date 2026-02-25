@@ -1,4 +1,7 @@
+import 'package:afghancanadian/Auth/signin.dart';
+import 'package:afghancanadian/clientside/edit_profile_screen.dart';
 import 'package:afghancanadian/widgets/app_colors.dart';
+import 'package:afghancanadian/widgets/responsive_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -20,8 +23,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final widthScale = (screenWidth / 414).clamp(0.8, 1.2);
+    final widthScale = ResponsiveHelper.getWidthScale(context);
 
     return AppBar(
       backgroundColor: Colors.white,
@@ -63,7 +65,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: showProfile
           ? [
               IconButton(
-                onPressed: onProfilePressed ?? () {},
+                onPressed: onProfilePressed ?? () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const Signin(),
+                    ),
+                  );
+                },
                 icon: Image.asset(
                   'assets/profile.png',
                   height: 24 * widthScale,

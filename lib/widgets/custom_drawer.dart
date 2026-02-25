@@ -1,16 +1,16 @@
-import 'package:afghancanadian/frontscreens/about_screen.dart';
 import 'package:afghancanadian/widgets/app_colors.dart';
-import 'package:afghancanadian/frontscreens/contact_screen.dart';
+import 'package:afghancanadian/widgets/bottom_nav_screen.dart';
+import 'package:afghancanadian/widgets/responsive_helper.dart';
+import 'package:afghancanadian/widgets/service_detail_wrapper.dart';
 import 'package:afghancanadian/services/cultural_service_screen.dart';
-import 'package:afghancanadian/frontscreens/donation_screen.dart';
 import 'package:afghancanadian/services/education_service_screen.dart';
+import 'package:afghancanadian/boardofdirectoes_screen.dart';
 import 'package:afghancanadian/form.dart';
+import 'package:afghancanadian/formar_board_member_screen.dart';
 import 'package:afghancanadian/services/funeral_service_screen.dart';
-import 'package:afghancanadian/frontscreens/homescreen.dart';
 import 'package:afghancanadian/services/library_service_screen.dart';
 import 'package:afghancanadian/membership.dart';
 import 'package:afghancanadian/privacypolicy.dart';
-import 'package:afghancanadian/frontscreens/services_screen.dart';
 import 'package:afghancanadian/termsandcondtions.dart';
 import 'package:afghancanadian/services/women_service_screen.dart';
 import 'package:afghancanadian/services/youth_service_screen.dart';
@@ -19,80 +19,102 @@ import 'package:flutter/material.dart';
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({super.key});
 
-  void _navigateTo(BuildContext context, Widget screen) {
+  void _navigateToBottomNav(BuildContext context, int index) {
+    Navigator.of(context).pop();
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (context) => BottomNavScreen(initialIndex: index)),
+      (route) => false,
+    );
+  }
+
+  void _navigateToScreen(BuildContext context, Widget screen) {
     Navigator.of(context).pop();
     Navigator.of(context).push(
       MaterialPageRoute(builder: (context) => screen),
     );
   }
 
+  void _navigateToService(BuildContext context, Widget serviceScreen, String title) {
+    Navigator.of(context).pop();
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => ServiceDetailWrapper(
+          title: title,
+          currentNavIndex: 3, // Services tab
+          child: serviceScreen,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final scales = ResponsiveHelper.getScales(context);
+    final widthScale = scales.widthScale;
+    final heightScale = scales.heightScale;
+    final isTablet = ResponsiveHelper.isTablet(context);
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-    final widthScale = (screenWidth / 414).clamp(0.8, 1.2);
-    final heightScale = (screenHeight / 896).clamp(0.8, 1.2);
-    final isTablet = screenWidth > 600;
+    final drawerWidth = isTablet ? screenWidth * 0.5 : screenWidth * 0.75;
+
+    // Calculate image height based on drawer width to maintain aspect ratio
+    // Original image aspect ratio approximately 1.2:1 (width:height)
+    final imageHeight = drawerWidth / 1.2;
 
     return Drawer(
-      width: isTablet ? screenWidth * 0.5 : screenWidth * 0.75,
+      width: drawerWidth,
       // Use ListView so the header image and the menu items all scroll together
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
-          // ===== HEADER =====
-          Stack(
-            children: [
-              Container(
-                width: double.infinity,
-                height: isTablet ? 320 : (280 * heightScale),
-                decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                ),
-                child: Image.asset(
-                  'assets/drawer.png',
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                  height: isTablet ? 340 : (300 * heightScale),
-                ),
+        // ===== HEADER =====
+        Stack(
+          children: [
+            SizedBox(
+              width: double.infinity,
+              height: imageHeight,
+              child: Image.asset(
+                'assets/drawer.png',
+                fit: BoxFit.fill,
+                alignment: Alignment.topCenter,
               ),
-              // Close button in top right corner
-              Positioned(
-                top: 16 * heightScale,
-                right: 16 * widthScale,
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Container(
-                    width: isTablet ? 44 : (36 * widthScale),
-                    height: isTablet ? 44 : (36 * widthScale),
-                    decoration: BoxDecoration(
-                      color: AppColors.closeButtonBackground,
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppColors.shadowDark,
-                          blurRadius: 4 * widthScale,
-                          offset: Offset(0, 2 * heightScale),
-                        ),
-                      ],
-                    ),
-                    child: Icon(
-                      Icons.close,
-                      color: AppColors.closeButtonIcon,
-                      size: isTablet ? 24 : (20 * widthScale),
-                    ),
+            ),
+            // Close button in top right corner
+            Positioned(
+              top: MediaQuery.of(context).padding.top + 8,
+              right: 16,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
+                child: Container(
+                  width: isTablet ? 44 : 36,
+                  height: isTablet ? 44 : 36,
+                  decoration: BoxDecoration(
+                    color: AppColors.closeButtonBackground,
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.shadowDark,
+                        blurRadius: 4,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Icon(
+                    Icons.close,
+                    color: AppColors.closeButtonIcon,
+                    size: isTablet ? 24 : 20,
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
+        ),
 
           // ===== MENU ITEMS =====
           _buildTile(
             icon: Icons.home,
             title: "Home",
-            onTap: () => _navigateTo(context, const Homescreen()),
+            onTap: () => _navigateToBottomNav(context, 2), // Home tab index
             widthScale: widthScale,
             isTablet: isTablet,
           ),
@@ -103,9 +125,9 @@ class CustomDrawer extends StatelessWidget {
             leading: Icon(Icons.info, color: AppColors.iconPrimary, size: isTablet ? 28 : (24 * widthScale)),
             title: Text("About", style: TextStyle(fontSize: isTablet ? 18 : (16 * widthScale))),
             children: [
-              _subTile("Our History", widthScale, isTablet, onTap: () => _navigateTo(context, const AboutScreen())),
-              _subTile("Board Of Directors", widthScale, isTablet),
-              _subTile("Former Board Members", widthScale, isTablet),
+              _subTile("Our History", widthScale, isTablet, onTap: () => _navigateToBottomNav(context, 0)), // About tab index
+              _subTile("Board Of Directors", widthScale, isTablet, onTap: () => _navigateToScreen(context, const BoardOfDirectorsScreen())),
+              _subTile("Former Board Members", widthScale, isTablet, onTap: () => _navigateToScreen(context, const DropdownScreen())),
             ],
           ),
           Divider(height: 1, indent: 16 * widthScale, endIndent: 16 * widthScale),
@@ -115,12 +137,12 @@ class CustomDrawer extends StatelessWidget {
             leading: Icon(Icons.handshake, color: AppColors.iconPrimary, size: isTablet ? 28 : (24 * widthScale)),
             title: Text("Services", style: TextStyle(fontSize: isTablet ? 18 : (16 * widthScale))),
             children: [
-              _subTile("Education Services", widthScale, isTablet, onTap: () => _navigateTo(context, const EducationServiceScreen())),
-              _subTile("Funeral Services", widthScale, isTablet, onTap: () => _navigateTo(context, const FuneralServiceScreen())),
-              _subTile("Cultural Services", widthScale, isTablet, onTap: () => _navigateTo(context, const CulturalServiceScreen())),
-              _subTile("Women Services", widthScale, isTablet, onTap: () => _navigateTo(context, const WomenServiceScreen())),
-              _subTile("Youth Services", widthScale, isTablet, onTap: () => _navigateTo(context, const YouthServiceScreen())),
-              _subTile("Library Services", widthScale, isTablet, onTap: () => _navigateTo(context, const Libraryservicescreen())),
+              _subTile("Education Services", widthScale, isTablet, onTap: () => _navigateToService(context, const EducationServiceScreen(), 'Education Services')),
+              _subTile("Funeral Services", widthScale, isTablet, onTap: () => _navigateToService(context, const FuneralServiceScreen(), 'Funeral Services')),
+              _subTile("Cultural Services", widthScale, isTablet, onTap: () => _navigateToService(context, const CulturalServiceScreen(), 'Cultural Services')),
+              _subTile("Women Services", widthScale, isTablet, onTap: () => _navigateToService(context, const WomenServiceScreen(), 'Women Services')),
+              _subTile("Youth Services", widthScale, isTablet, onTap: () => _navigateToService(context, const YouthServiceScreen(), 'Youth Programs')),
+              _subTile("Library Services", widthScale, isTablet, onTap: () => _navigateToService(context, const Libraryservicescreen(), 'Library Services')),
             ],
           ),
           Divider(height: 1, indent: 16 * widthScale, endIndent: 16 * widthScale),
@@ -128,7 +150,7 @@ class CustomDrawer extends StatelessWidget {
           _buildTile(
             icon: Icons.card_membership,
             title: "Membership",
-            onTap: () => _navigateTo(context, const MembershipScreen()),
+            onTap: () => _navigateToScreen(context, const MembershipScreen()),
             widthScale: widthScale,
             isTablet: isTablet,
           ),
@@ -155,7 +177,7 @@ class CustomDrawer extends StatelessWidget {
           _buildTile(
             icon: Icons.phone,
             title: "Contact",
-            onTap: () => _navigateTo(context, const ContactScreen()),
+            onTap: () => _navigateToBottomNav(context, 4), // Contact tab index
             widthScale: widthScale,
             isTablet: isTablet,
           ),
@@ -164,7 +186,7 @@ class CustomDrawer extends StatelessWidget {
           _buildTile(
             icon: Icons.attach_money,
             title: "Donation",
-            onTap: () => _navigateTo(context, const DonationScreen()),
+            onTap: () => _navigateToBottomNav(context, 5), // Donation tab index
             widthScale: widthScale,
             isTablet: isTablet,
           ),
@@ -173,7 +195,7 @@ class CustomDrawer extends StatelessWidget {
           _buildTile(
             icon: Icons.privacy_tip,
             title: "Privacy Policy",
-            onTap: () => _navigateTo(context, const PrivacyPolicyScreen()),
+            onTap: () => _navigateToScreen(context, const PrivacyPolicyScreen()),
             widthScale: widthScale,
             isTablet: isTablet,
           ),
@@ -182,7 +204,7 @@ class CustomDrawer extends StatelessWidget {
           _buildTile(
             icon: Icons.description,
             title: "Terms & Condition",
-            onTap: () => _navigateTo(context, const termsandcondtions()),
+            onTap: () => _navigateToScreen(context, const termsandcondtions()),
             widthScale: widthScale,
             isTablet: isTablet,
           ),
@@ -198,8 +220,8 @@ class CustomDrawer extends StatelessWidget {
             isTablet: isTablet,
           ),
           Divider(height: 1, indent: 16 * widthScale, endIndent: 16 * widthScale),
-        ],
-      ),
+          ],
+        ),
     );
   }
 

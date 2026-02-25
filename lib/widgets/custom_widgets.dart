@@ -1,4 +1,5 @@
 import 'package:afghancanadian/widgets/app_colors.dart';
+import 'package:afghancanadian/widgets/responsive_helper.dart';
 import 'package:flutter/material.dart';
 
 /// Reusable styled text used for headings and important labels.
@@ -20,9 +21,8 @@ class StyledText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final widthScale = (screenWidth / 414).clamp(0.8, 1.2);
-    final isTablet = screenWidth > 600;
+    final widthScale = ResponsiveHelper.getWidthScale(context);
+    final isTablet = ResponsiveHelper.isTablet(context);
     
     final defaultStyle = TextStyle(
       fontSize: isTablet ? 36 : (32 * widthScale),

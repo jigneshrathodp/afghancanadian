@@ -1,4 +1,6 @@
 import 'package:afghancanadian/widgets/app_colors.dart';
+import 'package:afghancanadian/widgets/bottom_nav_screen.dart';
+import 'package:afghancanadian/widgets/responsive_helper.dart';
 import 'package:flutter/material.dart';
 import 'widgets/custom_app_bar.dart';
 import 'widgets/custom_drawer.dart';
@@ -24,6 +26,7 @@ class termsandcondtions extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppBar(),
       drawer: CustomDrawer(),
+      drawerEnableOpenDragGesture: false,
       body: Column(
         children: [
           Expanded(
@@ -325,7 +328,60 @@ class termsandcondtions extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: screenHeight * 0.05 > 60 ? 60 : screenHeight * 0.05)
+        ],
+      ),
+      bottomNavigationBar: _buildBottomNavigationBar(context),
+    );
+  }
+
+  Widget _buildBottomNavigationBar(BuildContext context) {
+    final widthScale = ResponsiveHelper.getWidthScale(context);
+
+    return Container(
+      height: 55 * widthScale,
+      color: AppColors.navBackground,
+      child: Padding(
+        padding: EdgeInsets.only(left: 8 * widthScale, right: 8 * widthScale, bottom: 8 * widthScale),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            _buildNavItem(Icons.info_outline, 'About', 0, context, widthScale),
+            _buildNavItem(Icons.calendar_today_outlined, 'Calendar', 1, context, widthScale),
+            _buildNavItem(Icons.home, 'Home', 2, context, widthScale),
+            _buildNavItem(Icons.miscellaneous_services_outlined, 'Services', 3, context, widthScale),
+            _buildNavItem(Icons.contact_phone_outlined, 'Contact', 4, context, widthScale),
+            _buildNavItem(Icons.volunteer_activism_outlined, 'Donation', 5, context, widthScale),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNavItem(IconData icon, String label, int index, BuildContext context, double widthScale) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (_) => BottomNavScreen(initialIndex: index),
+          ),
+        );
+      },
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            icon,
+            color: AppColors.navUnselected,
+            size: 24 * widthScale,
+          ),
+          Text(
+            label,
+            style: TextStyle(
+              color: AppColors.navUnselected,
+              fontSize: 10 * widthScale,
+            ),
+          ),
         ],
       ),
     );

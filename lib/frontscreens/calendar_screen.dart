@@ -1,4 +1,5 @@
 import 'package:afghancanadian/widgets/app_colors.dart';
+import 'package:afghancanadian/widgets/responsive_helper.dart';
 import 'package:flutter/material.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/custom_drawer.dart';
@@ -61,15 +62,15 @@ class _PremiumCalendarScreenState extends State<CalendarScreen> {
   @override
   Widget build(BuildContext context) {
     final days = _generateCalendarDays(focusedDate);
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-    final widthScale = (screenWidth / 414).clamp(0.8, 1.2);
-    final heightScale = (screenHeight / 896).clamp(0.8, 1.2);
-    final isTablet = screenWidth > 600;
+    final scales = ResponsiveHelper.getScales(context);
+    final widthScale = scales.widthScale;
+    final heightScale = scales.heightScale;
+    final isTablet = ResponsiveHelper.isTablet(context);
 
     return Scaffold(
       appBar: CustomAppBar(),
       drawer: CustomDrawer(),
+      drawerEnableOpenDragGesture: false,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: EdgeInsets.all(16 * widthScale),
@@ -234,7 +235,7 @@ class _PremiumCalendarScreenState extends State<CalendarScreen> {
                 heightScale: heightScale,
                 isTablet: isTablet,
               ),
-              SizedBox(height: screenHeight * 0.05 > 60 ? 60 : screenHeight * 0.05)
+              SizedBox(height: MediaQuery.of(context).size.height * 0.05 > 60 ? 60 : MediaQuery.of(context).size.height * 0.05)
             ],
           ),
         ),

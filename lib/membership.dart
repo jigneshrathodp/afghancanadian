@@ -1,4 +1,5 @@
 import 'package:afghancanadian/widgets/app_colors.dart';
+import 'package:afghancanadian/widgets/responsive_helper.dart';
 import 'package:flutter/material.dart';
 import 'widgets/custom_app_bar.dart';
 import 'widgets/custom_drawer.dart';
@@ -24,6 +25,7 @@ class MembershipScreen extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppBar(),
       drawer: CustomDrawer(),
+      drawerEnableOpenDragGesture: false,
       body: Column(
         children: [
           Expanded(
@@ -268,7 +270,6 @@ class MembershipScreen extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: screenHeight * 0.05 > 60 ? 60 : screenHeight * 0.05)
         ],
       ),
     );

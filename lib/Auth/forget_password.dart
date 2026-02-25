@@ -102,7 +102,9 @@ class _ForgetPasswordState extends State<ForgetPassword> {
     // Additional padding for device preview virtual keyboard
     final devicePreviewPadding = isKeyboardOpen ? 30.0 : 0.0;
 
-    final headerHeight = screenHeight * 0.35;
+    // Adjust header height for tablets - larger height for better visibility
+    final isTablet = screenWidth >= 600;
+    final headerHeight = isTablet ? screenHeight * 0.45 : screenHeight * 0.35;
 
     return Scaffold(
       backgroundColor: Colors.white,

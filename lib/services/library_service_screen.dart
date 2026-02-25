@@ -24,6 +24,7 @@ class Libraryservicescreen extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppBar(),
       drawer: CustomDrawer(),
+      drawerEnableOpenDragGesture: false,
       body: Column(
         children: [
           Expanded(
@@ -117,7 +118,6 @@ class Libraryservicescreen extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: screenHeight * 0.05 > 60 ? 60 : screenHeight * 0.05)
         ],
       ),
     );

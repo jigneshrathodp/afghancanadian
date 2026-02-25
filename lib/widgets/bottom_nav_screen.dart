@@ -1,4 +1,5 @@
 import 'package:afghancanadian/widgets/app_colors.dart';
+import 'package:afghancanadian/widgets/responsive_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 
@@ -10,14 +11,22 @@ import '../frontscreens/contact_screen.dart';
 import '../frontscreens/donation_screen.dart';
 
 class BottomNavScreen extends StatefulWidget {
-  const BottomNavScreen({super.key});
+  final int initialIndex;
+  
+  const BottomNavScreen({super.key, this.initialIndex = 2});
 
   @override
   State<BottomNavScreen> createState() => _BottomNavScreenState();
 }
 
 class _BottomNavScreenState extends State<BottomNavScreen> {
-  int _selectedBottomNavIndex = 2; // Home tab is index 2
+  late int _selectedBottomNavIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedBottomNavIndex = widget.initialIndex;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,8 +46,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
       const DonationScreen(),
     ];
 
-    final screenWidth = MediaQuery.of(context).size.width;
-    final widthScale = (screenWidth / 414).clamp(0.8, 1.2);
+    final widthScale = ResponsiveHelper.getWidthScale(context);
 
     return Scaffold(
       body: Padding(

@@ -1,6 +1,7 @@
 import 'package:afghancanadian/widgets/app_colors.dart';
 import 'package:afghancanadian/widgets/custom_app_bar.dart';
 import 'package:afghancanadian/widgets/custom_drawer.dart';
+import 'package:afghancanadian/widgets/responsive_helper.dart';
 import 'package:flutter/material.dart';
 
 class ContactScreen extends StatelessWidget {
@@ -8,9 +9,9 @@ class ContactScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final widthScale = ResponsiveHelper.getWidthScale(context);
+    final isTablet = ResponsiveHelper.isTablet(context);
     final screenWidth = MediaQuery.of(context).size.width;
-    final isTablet = screenWidth > 600;
-    final widthScale = (screenWidth / 414).clamp(0.8, 1.2);
 
     // Responsive padding and spacing
     final horizontalPadding = isTablet ? screenWidth * 0.1 : 16.0;
@@ -19,6 +20,7 @@ class ContactScreen extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppBar(),
       drawer: CustomDrawer(),
+      drawerEnableOpenDragGesture: false,
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(

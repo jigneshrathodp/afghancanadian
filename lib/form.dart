@@ -36,6 +36,7 @@ class FormScreen extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppBar(),
       drawer: CustomDrawer(),
+      drawerEnableOpenDragGesture: false,
       backgroundColor: Colors.white,
       body: Column(
         children: [

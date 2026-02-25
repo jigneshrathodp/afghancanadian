@@ -1,6 +1,6 @@
 import 'package:afghancanadian/widgets/app_colors.dart';
 import 'package:flutter/material.dart';
-import '../widgets/bottom_nav_screen.dart';
+import '../new_bottomNavScreen.dart';
 import 'signup.dart';
 import 'forget_password.dart';
 import '../widgets/custom_widgets.dart';
@@ -61,11 +61,12 @@ class _SigninState extends State<Signin> {
               actions: [
                 TextButton(
                   onPressed: () {
-                    Navigator.push(
+                    Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute<void>(
-                        builder: (context) => const BottomNavScreen(),
+                        builder: (context) => const NewBottomNavScreen(),
                       ),
+                      (route) => false,
                     );
                   },
                   child: const Text('OK'),
@@ -104,7 +105,9 @@ class _SigninState extends State<Signin> {
     // Additional padding for device preview virtual keyboard
     final devicePreviewPadding = isKeyboardOpen ? 30.0 : 0.0;
 
-    final headerHeight = screenHeight * 0.35;
+    // Adjust header height for tablets - larger height for better visibility
+    final isTablet = screenWidth >= 600;
+    final headerHeight = isTablet ? screenHeight * 0.45 : screenHeight * 0.35;
 
     return Scaffold(
       backgroundColor: Colors.white,

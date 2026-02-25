@@ -1,10 +1,12 @@
 import 'package:afghancanadian/widgets/app_colors.dart';
+import 'package:afghancanadian/widgets/responsive_helper.dart';
 import 'package:afghancanadian/services/cultural_service_screen.dart';
 import 'package:afghancanadian/services/education_service_screen.dart';
 import 'package:afghancanadian/services/funeral_service_screen.dart';
 import 'package:afghancanadian/services/library_service_screen.dart';
 import 'package:afghancanadian/services/women_service_screen.dart';
 import 'package:afghancanadian/services/youth_service_screen.dart';
+import 'package:afghancanadian/widgets/service_detail_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../widgets/custom_app_bar.dart';
@@ -48,16 +50,14 @@ class ServicesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width;
-
-    // Calculate responsive scaling factors
-    final widthScale = (screenWidth / 414).clamp(0.8, 1.2);
-    final heightScale = (screenHeight / 896).clamp(0.8, 1.2);
+    final scales = ResponsiveHelper.getScales(context);
+    final widthScale = scales.widthScale;
+    final heightScale = scales.heightScale;
 
     return Scaffold(
       appBar: CustomAppBar(),
       drawer: CustomDrawer(),
+      drawerEnableOpenDragGesture: false,
       body: Column(
         children: [
           Expanded(
@@ -95,46 +95,38 @@ class ServicesScreen extends StatelessWidget {
                         onTap: () {
                           if (hasScreen) {
                             final screenName = service['screen'] as String;
+                            Widget? serviceScreen;
+                            String serviceTitle = '';
+                            
                             if (screenName == 'CulturalServiceScreen') {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const CulturalServiceScreen(),
-                                ),
-                              );
+                              serviceScreen = const CulturalServiceScreen();
+                              serviceTitle = 'Cultural Services';
                             } else if (screenName == 'EducationServiceScreen') {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const EducationServiceScreen(),
-                                ),
-                              );
+                              serviceScreen = const EducationServiceScreen();
+                              serviceTitle = 'Education Services';
                             } else if (screenName == 'FuneralServiceScreen') {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const FuneralServiceScreen(),
-                                ),
-                              );
+                              serviceScreen = const FuneralServiceScreen();
+                              serviceTitle = 'Funeral Services';
                             } else if (screenName == 'YouthServiceScreen') {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const YouthServiceScreen(),
-                                ),
-                              );
+                              serviceScreen = const YouthServiceScreen();
+                              serviceTitle = 'Youth Programs';
                             } else if (screenName == 'WomenServiceScreen') {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const WomenServiceScreen(),
-                                ),
-                              );
+                              serviceScreen = const WomenServiceScreen();
+                              serviceTitle = 'Women Services';
                             } else if (screenName == 'LibraryScreen') {
+                              serviceScreen = const Libraryservicescreen();
+                              serviceTitle = 'Library Services';
+                            }
+                            
+                            if (serviceScreen != null) {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const Libraryservicescreen(),
+                                  builder: (context) => ServiceDetailWrapper(
+                                    title: serviceTitle,
+                                    currentNavIndex: 3, // Services tab
+                                    child: serviceScreen!,
+                                  ),
                                 ),
                               );
                             }
@@ -181,7 +173,7 @@ class ServicesScreen extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: screenHeight * 0.05 > 60 ? 60 : screenHeight * 0.05)
+          SizedBox(height: MediaQuery.of(context).size.height * 0.05 > 60 ? 60 : MediaQuery.of(context).size.height * 0.05)
         ],
       ),
     );

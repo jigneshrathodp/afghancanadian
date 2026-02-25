@@ -1,6 +1,15 @@
 import 'package:afghancanadian/widgets/app_colors.dart';
+import 'package:afghancanadian/widgets/responsive_helper.dart';
+import 'package:afghancanadian/services/cultural_service_screen.dart';
+import 'package:afghancanadian/services/education_service_screen.dart';
+import 'package:afghancanadian/services/funeral_service_screen.dart';
+import 'package:afghancanadian/services/library_service_screen.dart';
+import 'package:afghancanadian/services/women_service_screen.dart';
+import 'package:afghancanadian/services/youth_service_screen.dart';
+import 'package:afghancanadian/widgets/service_detail_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import '../newcustomdrawer.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/custom_drawer.dart';
 
@@ -23,18 +32,17 @@ class _HomescreenState extends State<Homescreen> {
     return Scaffold(
       appBar: CustomAppBar(),
       drawer: CustomDrawer(),
+      drawerEnableOpenDragGesture: false,
       body: _buildHomeContent(),
     );
   }
 
   Widget _buildHomeContent() {
-    final screenWidth = MediaQuery.of(context).size.width;
+    final scales = ResponsiveHelper.getScales(context);
+    final widthScale = scales.widthScale;
+    final heightScale = scales.heightScale;
     final screenHeight = MediaQuery.of(context).size.height;
-    
-    // Calculate responsive scaling factors
-    final widthScale = (screenWidth / 414).clamp(0.8, 1.2);
-    final heightScale = (screenHeight / 896).clamp(0.8, 1.2);
-    
+
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -321,12 +329,12 @@ class _HomescreenState extends State<Homescreen> {
 
   Widget _buildOurServicesSection(double widthScale, double heightScale) {
     final services = [
-      {'name': 'Cultural Services', 'svg': '1.svg'},
-      {'name': 'Youth Programs', 'svg': '2.svg'},
-      {'name': 'Social Services', 'svg': '3.svg'},
-      {'name': 'Maktab', 'svg': '4.svg'},
-      {'name': 'Social Services', 'svg': '21.svg'},
-      {'name': 'Social Services', 'svg': '22.svg'},
+      {'name': 'Cultural Services', 'svg': '1.svg', 'screen': const CulturalServiceScreen(), 'title': 'Cultural Services'},
+      {'name': 'Youth Programs', 'svg': '2.svg', 'screen': const YouthServiceScreen(), 'title': 'Youth Programs'},
+      {'name': 'Women Services', 'svg': '3.svg', 'screen': const WomenServiceScreen(), 'title': 'Women Services'},
+      {'name': 'Maktab', 'svg': '4.svg', 'screen': const EducationServiceScreen(), 'title': 'Education Services'},
+      {'name': 'Funeral Service', 'svg': '21.svg', 'screen': const FuneralServiceScreen(), 'title': 'Funeral Services'},
+      {'name': 'Library', 'svg': '22.svg', 'screen': const Libraryservicescreen(), 'title': 'Library Services'},
     ];
 
     return Container(
@@ -356,37 +364,52 @@ class _HomescreenState extends State<Homescreen> {
             ),
             itemCount: services.length,
             itemBuilder: (context, index) {
-              return Container(
-                decoration: BoxDecoration(
-                  color: AppColors.background,
-                  borderRadius: BorderRadius.circular(15 * widthScale),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.shadow,
-                      spreadRadius: 1 * widthScale,
-                      blurRadius: 5 * widthScale,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset(
-                      'assets/${services[index]['svg']}',
-                      width: 45 * widthScale,
-                      height: 45 * widthScale,
-                    ),
-                    SizedBox(height: 8 * heightScale),
-                    Text(
-                      services[index]['name'] as String,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 12 * widthScale,
-                        fontWeight: FontWeight.w500,
+              final service = services[index];
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ServiceDetailWrapper(
+                        title: service['title'] as String,
+                        currentNavIndex: 2, // Home tab
+                        child: service['screen'] as Widget,
                       ),
                     ),
-                  ],
+                  );
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: AppColors.background,
+                    borderRadius: BorderRadius.circular(15 * widthScale),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.shadow,
+                        spreadRadius: 1 * widthScale,
+                        blurRadius: 5 * widthScale,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(
+                        'assets/${service['svg']}',
+                        width: 45 * widthScale,
+                        height: 45 * widthScale,
+                      ),
+                      SizedBox(height: 8 * heightScale),
+                      Text(
+                        service['name'] as String,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 12 * widthScale,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               );
             },

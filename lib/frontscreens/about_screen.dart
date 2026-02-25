@@ -23,6 +23,7 @@ class AboutScreen extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppBar(),
       drawer: CustomDrawer(),
+      drawerEnableOpenDragGesture: false,
       body: Column(
         children: [
           Expanded(
