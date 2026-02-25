@@ -17,6 +17,7 @@ import 'clientside/contact_payment_screen.dart';
 import 'clientside/credit_card_on_file_screen.dart';
 import 'clientside/credit_change_password_screen.dart';
 import 'clientside/dashboard_screen.dart';
+import 'house.dart';
 
 void main() {
   runApp(
@@ -61,7 +62,7 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.robotoTextTheme(),
         fontFamily: GoogleFonts.roboto().fontFamily,
       ),
-      home: const Splashscreen(),
+      home: const BottomNavScreen(),
     );
 
   }
