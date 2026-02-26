@@ -7,6 +7,8 @@ import '../newcustomdrawer.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/custom_drawer.dart';
 import '../services/auth_manager.dart';
+import '../widgets/bottom_nav_screen.dart';
+import '../new_bottomNavScreen.dart';
 
 class Homescreen extends StatefulWidget {
   const Homescreen({super.key});
@@ -24,11 +26,66 @@ class _HomescreenState extends State<Homescreen> {
 
     // Calculate responsive scaling factors
 
+    final scales = ResponsiveHelper.getScales(context);
+    
     return Scaffold(
       appBar: CustomAppBar(),
       drawer: AuthManager().isLoggedIn ? NewCustomDrawer() : CustomDrawer(),
       drawerEnableOpenDragGesture: false,
       body: _buildHomeContent(),
+      bottomNavigationBar: AuthManager().isLoggedIn 
+        ? NewCustomBottomBar(
+            selectedIndex: 2, // Home
+            onIndexChanged: (index) {
+              switch (index) {
+                case 0:
+                  AppRoutes.goToClientHome(context);
+                  break;
+                case 1:
+                  AppRoutes.goToContactMembership(context);
+                  break;
+                case 2:
+                  AppRoutes.goToHome(context);
+                  break;
+                case 3:
+                  AppRoutes.goToContactInvoice(context);
+                  break;
+                case 4:
+                  AppRoutes.goToContact(context);
+                  break;
+                case 5:
+                  AppRoutes.goToContactDonation(context);
+                  break;
+              }
+            },
+            scales: scales,
+          )
+        : CustomBottomBar(
+            selectedIndex: 2, // Home
+            onIndexChanged: (index) {
+              switch (index) {
+                case 0:
+                  AppRoutes.goToAbout(context);
+                  break;
+                case 1:
+                  AppRoutes.goToCalendar(context);
+                  break;
+                case 2:
+                  AppRoutes.goToHome(context);
+                  break;
+                case 3:
+                  AppRoutes.goToServices(context);
+                  break;
+                case 4:
+                  AppRoutes.goToContact(context);
+                  break;
+                case 5:
+                  AppRoutes.goToDonation(context);
+                  break;
+              }
+            },
+            scales: scales,
+          ),
     );
   }
 

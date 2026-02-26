@@ -2,6 +2,7 @@ import 'package:afghancanadian/widgets/custom_app_bar.dart';
 import 'package:afghancanadian/newcustomdrawer.dart';
 import 'package:afghancanadian/widgets/responsive_helper.dart';
 import 'package:afghancanadian/widgets/app_routes.dart';
+import 'package:afghancanadian/new_bottomNavScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -76,7 +77,7 @@ class _ContactInvoiceRecordPaymentScreenState
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 16 * widthScale),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: 12 * heightScale),
 
@@ -477,6 +478,32 @@ class _ContactInvoiceRecordPaymentScreenState
             ),
           ),
         ),
+      ),
+      bottomNavigationBar: NewCustomBottomBar(
+        selectedIndex: -1, // No selection for record payment screen
+        onIndexChanged: (index) {
+          switch (index) {
+            case 0:
+              AppRoutes.goToClientHome(context);
+              break;
+            case 1:
+              AppRoutes.goToContactMembership(context);
+              break;
+            case 2:
+              AppRoutes.goToHome(context);
+              break;
+            case 3:
+              AppRoutes.goToContactInvoice(context);
+              break;
+            case 4:
+              AppRoutes.goToContact(context);
+              break;
+            case 5:
+              AppRoutes.goToContactDonation(context);
+              break;
+          }
+        },
+        scales: scales,
       ),
     );
   }

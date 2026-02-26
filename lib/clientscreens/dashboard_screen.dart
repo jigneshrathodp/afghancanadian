@@ -3,6 +3,7 @@ import 'package:afghancanadian/widgets/custom_app_bar.dart';
 import 'package:afghancanadian/newcustomdrawer.dart';
 import 'package:afghancanadian/widgets/responsive_helper.dart';
 import 'package:afghancanadian/widgets/app_routes.dart';
+import 'package:afghancanadian/new_bottomNavScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -41,9 +42,34 @@ class _DashboardScreenState extends State<DashboardScreen> {
             SizedBox(height: 16 * heightScale),
             // Pending Invoices Section
             _buildPendingInvoicesSection(widthScale, heightScale),
-            SizedBox(height: 80 * heightScale),
+            SizedBox(height: 20 * heightScale),
           ],
         ),
+      ),
+      bottomNavigationBar: NewCustomBottomBar(
+        selectedIndex: 0, // Dashboard
+        onIndexChanged: (index) {
+          if (index != 0) { // Don't navigate if already on dashboard
+            switch (index) {
+              case 1:
+                AppRoutes.goToContactMembership(context);
+                break;
+              case 2:
+                AppRoutes.goToHome(context);
+                break;
+              case 3:
+                AppRoutes.goToContactInvoice(context);
+                break;
+              case 4:
+                AppRoutes.goToContact(context);
+                break;
+              case 5:
+                AppRoutes.goToContactDonation(context);
+                break;
+            }
+          }
+        },
+        scales: scales,
       ),
     );
   }

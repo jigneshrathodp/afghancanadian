@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../widgets/app_routes.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/custom_drawer.dart';
+import '../widgets/bottom_nav_screen.dart';
 
 class ServicesScreen extends StatelessWidget {
   const ServicesScreen({super.key});
@@ -130,6 +131,32 @@ class ServicesScreen extends StatelessWidget {
           ),
           SizedBox(height: MediaQuery.of(context).size.height * 0.05 > 60 ? 60 : MediaQuery.of(context).size.height * 0.05)
         ],
+      ),
+      bottomNavigationBar: CustomBottomBar(
+        selectedIndex: 3, // Services
+        onIndexChanged: (index) {
+          switch (index) {
+            case 0:
+              AppRoutes.goToAbout(context);
+              break;
+            case 1:
+              AppRoutes.goToCalendar(context);
+              break;
+            case 2:
+              AppRoutes.goToHome(context);
+              break;
+            case 3:
+              AppRoutes.goToServices(context);
+              break;
+            case 4:
+              AppRoutes.goToContact(context);
+              break;
+            case 5:
+              AppRoutes.goToDonation(context);
+              break;
+          }
+        },
+        scales: scales,
       ),
     );
   }

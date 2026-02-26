@@ -1,4 +1,3 @@
-import 'package:afghancanadian/widgets/app_colors.dart';
 import 'package:afghancanadian/widgets/custom_app_bar.dart';
 import 'package:afghancanadian/widgets/custom_drawer.dart';
 import 'package:afghancanadian/widgets/responsive_helper.dart';
@@ -27,7 +26,6 @@ class ServiceDetailWrapper extends StatefulWidget {
 class _ServiceDetailWrapperState extends State<ServiceDetailWrapper> {
   @override
   Widget build(BuildContext context) {
-    final widthScale = ResponsiveHelper.getWidthScale(context);
 
     return Scaffold(
       appBar: CustomAppBar(),

@@ -93,6 +93,27 @@ class _SigninState extends State<Signin> {
     return Scaffold(
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: true,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        actions: [
+          TextButton(
+            onPressed: () {
+              // Skip login - navigate to home without authentication
+              AppRoutes.goToHome(context);
+            },
+            child: const Text(
+              'Skip',
+              style: TextStyle(
+                color: Colors.black87,
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ),
+          ),
+          const SizedBox(width: 16),
+        ],
+      ),
       body: Stack(
         children: [
           // Scrollable form placed below header space

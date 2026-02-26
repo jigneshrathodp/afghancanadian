@@ -3,6 +3,7 @@ import 'package:afghancanadian/widgets/custom_app_bar.dart';
 import 'package:afghancanadian/newcustomdrawer.dart';
 import 'package:afghancanadian/widgets/responsive_helper.dart';
 import 'package:afghancanadian/widgets/app_routes.dart';
+import 'package:afghancanadian/new_bottomNavScreen.dart';
 import 'package:flutter/material.dart';
 
 class ContactDonationScreen extends StatefulWidget {
@@ -242,6 +243,31 @@ class _ContactDonationScreenState extends State<ContactDonationScreen>
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: NewCustomBottomBar(
+        selectedIndex: 5, // Donation
+        onIndexChanged: (index) {
+          if (index != 5) { // Don't navigate if already on donation
+            switch (index) {
+              case 0:
+                AppRoutes.goToClientHome(context);
+                break;
+              case 1:
+                AppRoutes.goToContactMembership(context);
+                break;
+              case 2:
+                AppRoutes.goToHome(context);
+                break;
+              case 3:
+                AppRoutes.goToContactInvoice(context);
+                break;
+              case 4:
+                AppRoutes.goToContact(context);
+                break;
+            }
+          }
+        },
+        scales: scales,
       ),
     );
   }

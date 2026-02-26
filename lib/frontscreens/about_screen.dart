@@ -1,10 +1,11 @@
 import 'package:afghancanadian/widgets/app_colors.dart';
 import 'package:flutter/material.dart';
-import '../widgets/app_routes.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/custom_drawer.dart';
-//CustomBottomBar ==== About, Calendar,Home,Services,Contact,Donation
-//NewCustomBottomBar ==== Dashboard, Membership,Home,Invoice,Contact,Donation
+import '../widgets/responsive_helper.dart';
+import '../widgets/app_routes.dart';
+import '../widgets/bottom_nav_screen.dart';
+
 class AboutScreen extends StatelessWidget {
   const AboutScreen({super.key});
 
@@ -22,6 +23,8 @@ class AboutScreen extends StatelessWidget {
     final headingFontSize = screenWidth * 0.05 > 22 ? 22.0 : screenWidth * 0.05;
     final bodyFontSize = screenWidth * 0.04 > 16 ? 16.0 : screenWidth * 0.04;
 
+    final scales = ResponsiveHelper.getScales(context);
+    
     return Scaffold(
       appBar: CustomAppBar(),
       drawer: CustomDrawer(),
@@ -116,6 +119,32 @@ class AboutScreen extends StatelessWidget {
           ),
           SizedBox(height: screenHeight * 0.05 > 60 ? 60 : screenHeight * 0.05)
         ],
+      ),
+      bottomNavigationBar: CustomBottomBar(
+        selectedIndex: 0, // About
+        onIndexChanged: (index) {
+          switch (index) {
+            case 0:
+              AppRoutes.goToAbout(context);
+              break;
+            case 1:
+              AppRoutes.goToCalendar(context);
+              break;
+            case 2:
+              AppRoutes.goToHome(context);
+              break;
+            case 3:
+              AppRoutes.goToServices(context);
+              break;
+            case 4:
+              AppRoutes.goToContact(context);
+              break;
+            case 5:
+              AppRoutes.goToDonation(context);
+              break;
+          }
+        },
+        scales: scales,
       ),
     );
   }

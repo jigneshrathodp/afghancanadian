@@ -30,20 +30,15 @@ class _SplashscreenState extends State<Splashscreen>
 
     _controller.forward();
 
-    // Navigate based on login state when animation completes
+    // Navigate to sign in screen when animation completes
     _controller.addStatusListener((status) async {
       if (status == AnimationStatus.completed) {
         if (mounted) {
           // Initialize auth manager
           await AuthManager().init();
           
-          // For now, navigate to home screen for both cases
-          // You can uncomment the login check when you want to implement the two flows
-          // if (AuthManager().isLoggedIn) {
-          //   AppRoutes.goToClientHome(context);
-          // } else {
-            AppRoutes.goToHome(context);
-          // }
+          // Navigate to sign in screen
+          AppRoutes.goToSignin(context);
         }
       }
     });

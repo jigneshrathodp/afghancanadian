@@ -1,9 +1,10 @@
 import 'package:afghancanadian/widgets/app_colors.dart';
 import 'package:afghancanadian/widgets/responsive_helper.dart';
 import 'package:flutter/material.dart';
-import '../widgets/app_routes.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/custom_drawer.dart';
+import '../widgets/app_routes.dart';
+import '../widgets/bottom_nav_screen.dart';
 //CalendarScreen
 
 
@@ -240,6 +241,32 @@ class _PremiumCalendarScreenState extends State<CalendarScreen> {
             ],
           ),
         ),
+      ),
+      bottomNavigationBar: CustomBottomBar(
+        selectedIndex: 1, // Calendar
+        onIndexChanged: (index) {
+          switch (index) {
+            case 0:
+              AppRoutes.goToAbout(context);
+              break;
+            case 1:
+              AppRoutes.goToCalendar(context);
+              break;
+            case 2:
+              AppRoutes.goToHome(context);
+              break;
+            case 3:
+              AppRoutes.goToServices(context);
+              break;
+            case 4:
+              AppRoutes.goToContact(context);
+              break;
+            case 5:
+              AppRoutes.goToDonation(context);
+              break;
+          }
+        },
+        scales: scales,
       ),
     );
   }

@@ -4,10 +4,6 @@ import 'package:afghancanadian/widgets/app_colors.dart';
 import 'package:afghancanadian/widgets/custom_app_bar.dart';
 import 'package:afghancanadian/widgets/custom_drawer.dart';
 import 'package:afghancanadian/widgets/responsive_helper.dart';
-import '../widgets/app_routes.dart';
-
-// Reference the User class from boardofdirectoes_screen.dart instead of redefining it
-// The User class is imported via the RouteArguments mechanism
 
 class BoardMemberDetailScreen extends StatelessWidget {
   final User user;
