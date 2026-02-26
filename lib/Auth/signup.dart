@@ -1,6 +1,6 @@
 import 'package:afghancanadian/widgets/app_colors.dart';
 import 'package:flutter/material.dart';
-import 'signin.dart';
+import '../widgets/app_routes.dart';
 import '../widgets/custom_widgets.dart';
 
 class Signup extends StatefulWidget {
@@ -54,7 +54,7 @@ class _SignupState extends State<Signup> {
         );
 
         // Navigate back to Sign In screen
-        Navigator.pop(context);
+        AppRoutes.goBack(context);
       }
     } catch (e) {
       if (mounted) {
@@ -247,12 +247,7 @@ class _SignupState extends State<Signup> {
                                       ),
                                       GestureDetector(
                                         onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => const Signin(),
-                                            ),
-                                          );
+                                          AppRoutes.goToSignin(context);
                                         },
                                         child: Text(
                                           'Sign In',

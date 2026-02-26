@@ -1,6 +1,7 @@
 import 'package:afghancanadian/widgets/app_colors.dart';
 import 'package:afghancanadian/widgets/custom_drawer.dart';
 import 'package:flutter/material.dart';
+import '../widgets/app_routes.dart';
 import '../widgets/custom_app_bar.dart';
 
 class DonationScreen extends StatelessWidget {
@@ -8,90 +9,17 @@ class DonationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-    final isTablet = screenWidth > 600;
-
-    // Responsive padding and spacing
-    final horizontalPadding = isTablet ? screenWidth * 0.1 : 35.0;
-    final cardWidth = isTablet ? screenWidth * 0.8 : screenWidth - 70;
-
+    // Redirect to NewBottomNavScreen with donation index (5)
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Navigator.pushReplacementNamed(context, AppRoutes.home); // NewBottomNavScreen
+    });
+    
+    // Show loading indicator while redirecting
     return Scaffold(
-      appBar: CustomAppBar(),
-      drawer: CustomDrawer(),
-      drawerEnableOpenDragGesture: false,
       backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            // Header Section
-            Container(
-              width: double.infinity,
-              color: Colors.white,
-              padding: const EdgeInsets.symmetric(vertical: 24),
-              child: Column(
-                children: [
-                  Text(
-                    "Make a difference by sending donation",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: isTablet ? 20 : 16,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.textPrimary,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 12),
-
-            // Form Section
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
-              child: SizedBox(
-                width: cardWidth,
-                child: Column(
-                  children: [
-                    _buildInputField("Applicant First Name", isTablet, isRequired: true),
-                    _buildInputField("Applicant Last Name", isTablet, isRequired: true),
-                    _buildInputField("Email Address", isTablet, isRequired: true),
-                    _buildInputField("Home/Office Phone Number", isTablet, isRequired: true),
-                    _buildInputField("Donate (\$CAD)", isTablet, isRequired: true),
-                    _buildDropdownField("Payment frequency", isTablet),
-                    _buildInputField("Comment", isTablet, maxLines: 4),
-                    const SizedBox(height: 20),
-
-                    // Pay Button
-                    SizedBox(
-                      width: double.infinity,
-                      height: isTablet ? 55 : 45,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.buttonPrimary,
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                          elevation: 0,
-                        ),
-                        onPressed: () {},
-                        child: Text(
-                          "Pay",
-                          style: TextStyle(
-                            fontSize: isTablet ? 18 : 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-
-            SizedBox(height: screenHeight * 0.05 > 60 ? 60 : screenHeight * 0.05)
-          ],
+      body: Center(
+        child: CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(AppColors.primaryDark),
         ),
       ),
     );

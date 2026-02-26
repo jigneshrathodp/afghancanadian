@@ -1,69 +1,8 @@
 import 'package:afghancanadian/widgets/responsive_helper.dart';
 import 'package:flutter/material.dart';
 
-import '../frontscreens/homescreen.dart';
-import '../frontscreens/about_screen.dart';
-import '../frontscreens/calendar_screen.dart';
-import '../frontscreens/services_screen.dart';
-import '../frontscreens/contact_screen.dart';
-import '../frontscreens/donation_screen.dart';
-
-class BottomNavScreen extends StatefulWidget {
-  final int initialIndex;
-
-  const BottomNavScreen({super.key, this.initialIndex = 2});
-
-  @override
-  State<BottomNavScreen> createState() => _BottomNavScreenState();
-}
-
-class _BottomNavScreenState extends State<BottomNavScreen> {
-  late int _selectedBottomNavIndex;
-
-  @override
-  void initState() {
-    super.initState();
-    _selectedBottomNavIndex = widget.initialIndex;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final scales = ResponsiveHelper.getScales(context);
-
-    // Define the pages for each tab
-    final List<Widget> pages = [
-      // About page
-      const AboutScreen(),
-      // Calendar page
-      const CalendarScreen(),
-      // Home page (current content)
-      Homescreen(),
-      // Services page
-      const ServicesScreen(),
-      // Contact page
-      const ContactScreen(),
-      // Donation page
-      const DonationScreen(),
-    ];
-
-    return Scaffold(
-      body: SafeArea(
-        child: pages[_selectedBottomNavIndex],
-      ),
-      bottomNavigationBar: CustomBottomBar(
-        selectedIndex: _selectedBottomNavIndex,
-        onIndexChanged: (index) {
-          setState(() {
-            _selectedBottomNavIndex = index;
-          });
-        },
-        scales: scales,
-      ),
-    );
-  }
-}
-
 class CustomBottomBar extends StatefulWidget {
+
   final int selectedIndex;
   final Function(int) onIndexChanged;
   final ResponsiveScales scales;

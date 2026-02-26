@@ -1,74 +1,13 @@
 import 'package:afghancanadian/widgets/responsive_helper.dart';
 import 'package:flutter/material.dart';
 
-import 'frontscreens/homescreen.dart';
-import 'frontscreens/contact_screen.dart';
-import 'frontscreens/donation_screen.dart';
-import 'clientside/dashboard_screen.dart';
-import 'membership.dart';
-import 'clientside/contact_Invoice_screen.dart';
 
-class NewBottomNavScreen extends StatefulWidget {
-  final int initialIndex;
-
-  const NewBottomNavScreen({super.key, this.initialIndex = 2});
-
-  @override
-  State<NewBottomNavScreen> createState() => _NewBottomNavScreenState();
-}
-
-class _NewBottomNavScreenState extends State<NewBottomNavScreen> {
-  late int _selectedBottomNavIndex;
-
-  @override
-  void initState() {
-    super.initState();
-    _selectedBottomNavIndex = widget.initialIndex;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final scales = ResponsiveHelper.getScales(context);
-
-    // Define the pages for each tab
-    final List<Widget> pages = [
-      // Dashboard page
-      const DashboardScreen(),
-      // Membership page
-      const MembershipScreen(),
-      // Home page
-      Homescreen(),
-      // Invoice page
-      const ContactInvoiceScreen(),
-      // Contact page
-      const ContactScreen(),
-      // Donation page
-      const DonationScreen(),
-    ];
-
-    return Scaffold(
-      body: SafeArea(
-        child: pages[_selectedBottomNavIndex],
-      ),
-      bottomNavigationBar: CustomBottomBar(
-        selectedIndex: _selectedBottomNavIndex,
-        onIndexChanged: (index) {
-          setState(() {
-            _selectedBottomNavIndex = index;
-          });
-        },
-        scales: scales,
-      ),
-    );
-  }
-}
-
-class CustomBottomBar extends StatefulWidget {
+class NewCustomBottomBar extends StatefulWidget {
   final int selectedIndex;
   final Function(int) onIndexChanged;
   final ResponsiveScales scales;
 
-  const CustomBottomBar({
+  const NewCustomBottomBar({
     super.key,
     required this.selectedIndex,
     required this.onIndexChanged,
@@ -76,10 +15,10 @@ class CustomBottomBar extends StatefulWidget {
   });
 
   @override
-  State<CustomBottomBar> createState() => _CustomBottomBarState();
+  State<NewCustomBottomBar> createState() => _NewCustomBottomBarState();
 }
 
-class _CustomBottomBarState extends State<CustomBottomBar> {
+class _NewCustomBottomBarState extends State<NewCustomBottomBar> {
   @override
   Widget build(BuildContext context) {
     final heightScale = widget.scales.heightScale;

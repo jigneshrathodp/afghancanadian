@@ -1,11 +1,11 @@
 import 'package:afghancanadian/widgets/app_colors.dart';
-import 'package:afghancanadian/new_bottomNavScreen.dart';
 import 'package:afghancanadian/widgets/responsive_helper.dart';
-import 'package:afghancanadian/clientside/credit_change_password_screen.dart';
-import 'package:afghancanadian/clientside/edit_profile_screen.dart';
-import 'package:afghancanadian/clientside/credit_card_on_file_screen.dart';
-import 'package:afghancanadian/clientside/contact_payment_screen.dart';
-import 'package:afghancanadian/Auth/signin.dart';
+import 'package:afghancanadian/clientscreens/credit_change_password_screen.dart';
+import 'package:afghancanadian/clientscreens/edit_profile_screen.dart';
+import 'package:afghancanadian/clientscreens/credit_card_on_file_screen.dart';
+import 'package:afghancanadian/clientscreens/contact_payment_screen.dart';
+import 'package:afghancanadian/widgets/app_routes.dart';
+import 'package:afghancanadian/services/auth_manager.dart';
 import 'package:flutter/material.dart';
 
 class NewCustomDrawer extends StatelessWidget {
@@ -13,14 +13,37 @@ class NewCustomDrawer extends StatelessWidget {
 
   void _navigateToBottomNav(BuildContext context, int index) {
     Navigator.of(context).pop();
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => NewBottomNavScreen(initialIndex: index)),
-      (route) => false,
-    );
+    switch (index) {
+      case 0:
+        // Dashboard - Navigate to client dashboard
+        AppRoutes.goToClientHome(context);
+        break;
+      case 1:
+        // Membership Details - Navigate to membership screen
+        AppRoutes.goToContactMembership(context);
+        break;
+      case 2:
+        // Home - Navigate to main home screen
+        AppRoutes.goToHome(context);
+        break;
+      case 3:
+        // Invoice - Navigate to invoice screen
+        AppRoutes.goToContactInvoice(context);
+        break;
+      case 4:
+        // Contact - Navigate to contact screen
+        AppRoutes.goToContact(context);
+        break;
+      case 5:
+        // Donation - Navigate to donation screen
+        AppRoutes.goToContactDonation(context);
+        break;
+    }
   }
 
   void _navigateToScreen(BuildContext context, Widget screen) {
     Navigator.of(context).pop();
+    // For screens that don't have named routes, we keep the direct navigation
     Navigator.of(context).push(
       MaterialPageRoute(builder: (context) => screen),
     );
@@ -30,7 +53,6 @@ class NewCustomDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     final scales = ResponsiveHelper.getScales(context);
     final widthScale = scales.widthScale;
-    final heightScale = scales.heightScale;
     final isTablet = ResponsiveHelper.isTablet(context);
     final screenWidth = MediaQuery.of(context).size.width;
     final drawerWidth = isTablet ? screenWidth * 0.5 : screenWidth * 0.75;
@@ -41,6 +63,7 @@ class NewCustomDrawer extends StatelessWidget {
 
     return Drawer(
       width: drawerWidth,
+      backgroundColor: Colors.white,
       // Use ListView so the header image and the menu items all scroll together
       child: ListView(
         padding: EdgeInsets.zero,
@@ -110,7 +133,7 @@ class NewCustomDrawer extends StatelessWidget {
 
           _buildTile(
             icon: Icons.card_membership,
-            title: "Membership",
+            title: "Membership Details",
             onTap: () => _navigateToBottomNav(context, 1),
             widthScale: widthScale,
             isTablet: isTablet,
@@ -167,12 +190,10 @@ class NewCustomDrawer extends StatelessWidget {
             title: "Logout",
             iconColor: AppColors.iconError,
             textColor: AppColors.iconError,
-            onTap: () {
+            onTap: () async {
               Navigator.of(context).pop();
-              Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => const Signin()),
-                (route) => false,
-              );
+              await AuthManager().logout();
+              AppRoutes.goToHome(context);
             },
             widthScale: widthScale,
             isTablet: isTablet,

@@ -1,17 +1,12 @@
 import 'package:afghancanadian/widgets/app_colors.dart';
 import 'package:afghancanadian/widgets/responsive_helper.dart';
-import 'package:afghancanadian/services/cultural_service_screen.dart';
-import 'package:afghancanadian/services/education_service_screen.dart';
-import 'package:afghancanadian/services/funeral_service_screen.dart';
-import 'package:afghancanadian/services/library_service_screen.dart';
-import 'package:afghancanadian/services/women_service_screen.dart';
-import 'package:afghancanadian/services/youth_service_screen.dart';
-import 'package:afghancanadian/widgets/service_detail_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import '../widgets/app_routes.dart';
 import '../newcustomdrawer.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/custom_drawer.dart';
+import '../services/auth_manager.dart';
 
 class Homescreen extends StatefulWidget {
   const Homescreen({super.key});
@@ -31,7 +26,7 @@ class _HomescreenState extends State<Homescreen> {
 
     return Scaffold(
       appBar: CustomAppBar(),
-      drawer: CustomDrawer(),
+      drawer: AuthManager().isLoggedIn ? NewCustomDrawer() : CustomDrawer(),
       drawerEnableOpenDragGesture: false,
       body: _buildHomeContent(),
     );
@@ -329,12 +324,12 @@ class _HomescreenState extends State<Homescreen> {
 
   Widget _buildOurServicesSection(double widthScale, double heightScale) {
     final services = [
-      {'name': 'Cultural Services', 'svg': '1.svg', 'screen': const CulturalServiceScreen(), 'title': 'Cultural Services'},
-      {'name': 'Youth Programs', 'svg': '2.svg', 'screen': const YouthServiceScreen(), 'title': 'Youth Programs'},
-      {'name': 'Women Services', 'svg': '3.svg', 'screen': const WomenServiceScreen(), 'title': 'Women Services'},
-      {'name': 'Maktab', 'svg': '4.svg', 'screen': const EducationServiceScreen(), 'title': 'Education Services'},
-      {'name': 'Funeral Service', 'svg': '21.svg', 'screen': const FuneralServiceScreen(), 'title': 'Funeral Services'},
-      {'name': 'Library', 'svg': '22.svg', 'screen': const Libraryservicescreen(), 'title': 'Library Services'},
+      {'name': 'Cultural Services', 'svg': '1.svg', 'route': AppRoutes.culturalService},
+      {'name': 'Youth Programs', 'svg': '2.svg', 'route': AppRoutes.youthService},
+      {'name': 'Women Services', 'svg': '3.svg', 'route': AppRoutes.womenService},
+      {'name': 'Maktab', 'svg': '4.svg', 'route': AppRoutes.educationService},
+      {'name': 'Funeral Service', 'svg': '21.svg', 'route': AppRoutes.funeralService},
+      {'name': 'Library', 'svg': '22.svg', 'route': AppRoutes.libraryService},
     ];
 
     return Container(
@@ -367,16 +362,7 @@ class _HomescreenState extends State<Homescreen> {
               final service = services[index];
               return GestureDetector(
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ServiceDetailWrapper(
-                        title: service['title'] as String,
-                        currentNavIndex: 2, // Home tab
-                        child: service['screen'] as Widget,
-                      ),
-                    ),
-                  );
+                  AppRoutes.navigateTo(context, service['route'] as String);
                 },
                 child: Container(
                   decoration: BoxDecoration(

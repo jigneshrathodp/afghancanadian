@@ -1,7 +1,6 @@
 import 'package:afghancanadian/widgets/app_colors.dart';
+import 'package:afghancanadian/widgets/app_routes.dart';
 import 'package:flutter/material.dart';
-import '../widgets/custom_app_bar.dart';
-import '../widgets/custom_drawer.dart';
 
 class CulturalServiceScreen extends StatelessWidget {
   const CulturalServiceScreen({super.key});
@@ -22,9 +21,6 @@ class CulturalServiceScreen extends StatelessWidget {
     final bodyFontSize = screenWidth * 0.04 > 16 ? 16.0 : screenWidth * 0.04;
 
     return Scaffold(
-      appBar: CustomAppBar(),
-      drawer: CustomDrawer(),
-      drawerEnableOpenDragGesture: false,
       body: Column(
         children: [
           Expanded(

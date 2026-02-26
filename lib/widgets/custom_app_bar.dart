@@ -1,9 +1,7 @@
-import 'package:afghancanadian/Auth/signin.dart';
-import 'package:afghancanadian/clientside/edit_profile_screen.dart';
 import 'package:afghancanadian/widgets/app_colors.dart';
 import 'package:afghancanadian/widgets/responsive_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'app_routes.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback? onMenuPressed;
@@ -66,12 +64,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           ? [
               IconButton(
                 onPressed: onProfilePressed ?? () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const Signin(),
-                    ),
-                  );
+                  AppRoutes.goToSignin(context);
                 },
                 icon: Image.asset(
                   'assets/profile.png',

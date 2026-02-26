@@ -1,9 +1,7 @@
-// import 'package:afghancanadian/Auth/signin.dart';
-import 'package:afghancanadian/Auth/signin.dart';
 import 'package:flutter/material.dart';
 
-import 'new_bottomNavScreen.dart';
-// import 'bottom_nav_screen.dart';
+import 'widgets/app_routes.dart';
+import 'services/auth_manager.dart';
 
 class Splashscreen extends StatefulWidget {
   const Splashscreen({super.key});
@@ -32,20 +30,23 @@ class _SplashscreenState extends State<Splashscreen>
 
     _controller.forward();
 
-    // Navigate to Home screen (BottomNavScreen) when animation completes
-    _controller.addStatusListener((status) {
+    // Navigate based on login state when animation completes
+    _controller.addStatusListener((status) async {
       if (status == AnimationStatus.completed) {
         if (mounted) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute<void>(
-              builder: (context) => const NewBottomNavScreen(),
-            ),
-          );
+          // Initialize auth manager
+          await AuthManager().init();
+          
+          // For now, navigate to home screen for both cases
+          // You can uncomment the login check when you want to implement the two flows
+          // if (AuthManager().isLoggedIn) {
+          //   AppRoutes.goToClientHome(context);
+          // } else {
+            AppRoutes.goToHome(context);
+          // }
         }
       }
-    }
-    );
+    });
 
 
 

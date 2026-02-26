@@ -1,14 +1,8 @@
 import 'package:afghancanadian/widgets/app_colors.dart';
 import 'package:afghancanadian/widgets/responsive_helper.dart';
-import 'package:afghancanadian/services/cultural_service_screen.dart';
-import 'package:afghancanadian/services/education_service_screen.dart';
-import 'package:afghancanadian/services/funeral_service_screen.dart';
-import 'package:afghancanadian/services/library_service_screen.dart';
-import 'package:afghancanadian/services/women_service_screen.dart';
-import 'package:afghancanadian/services/youth_service_screen.dart';
-import 'package:afghancanadian/widgets/service_detail_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import '../widgets/app_routes.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/custom_drawer.dart';
 
@@ -19,32 +13,32 @@ class ServicesScreen extends StatelessWidget {
     {
       'name': 'Cultural Services',
       'svg': '1.svg',
-      'screen': 'CulturalServiceScreen',
+      'route': AppRoutes.culturalService,
     },
     {
       'name': 'Youth Programs',
       'svg': '2.svg',
-      'screen': 'YouthServiceScreen',
+      'route': AppRoutes.youthService,
     },
     {
       'name': 'Women Services',
       'svg': '3.svg',
-      'screen': 'WomenServiceScreen',
+      'route': AppRoutes.womenService,
     },
     {
       'name': 'Maktab',
       'svg': '4.svg',
-      'screen': 'EducationServiceScreen',
+      'route': AppRoutes.educationService,
     },
     {
       'name': 'Funeral Service',
       'svg': '21.svg',
-      'screen': 'FuneralServiceScreen',
+      'route': AppRoutes.funeralService,
     },
     {
       'name': 'Library',
       'svg': '22.svg',
-      'screen': 'LibraryScreen',
+      'route': AppRoutes.libraryService,
     },
   ];
 
@@ -89,48 +83,9 @@ class ServicesScreen extends StatelessWidget {
                     itemCount: services.length,
                     itemBuilder: (context, index) {
                       final service = services[index];
-                      final hasScreen = service.containsKey('screen');
-
                       return GestureDetector(
                         onTap: () {
-                          if (hasScreen) {
-                            final screenName = service['screen'] as String;
-                            Widget? serviceScreen;
-                            String serviceTitle = '';
-                            
-                            if (screenName == 'CulturalServiceScreen') {
-                              serviceScreen = const CulturalServiceScreen();
-                              serviceTitle = 'Cultural Services';
-                            } else if (screenName == 'EducationServiceScreen') {
-                              serviceScreen = const EducationServiceScreen();
-                              serviceTitle = 'Education Services';
-                            } else if (screenName == 'FuneralServiceScreen') {
-                              serviceScreen = const FuneralServiceScreen();
-                              serviceTitle = 'Funeral Services';
-                            } else if (screenName == 'YouthServiceScreen') {
-                              serviceScreen = const YouthServiceScreen();
-                              serviceTitle = 'Youth Programs';
-                            } else if (screenName == 'WomenServiceScreen') {
-                              serviceScreen = const WomenServiceScreen();
-                              serviceTitle = 'Women Services';
-                            } else if (screenName == 'LibraryScreen') {
-                              serviceScreen = const Libraryservicescreen();
-                              serviceTitle = 'Library Services';
-                            }
-                            
-                            if (serviceScreen != null) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ServiceDetailWrapper(
-                                    title: serviceTitle,
-                                    currentNavIndex: 3, // Services tab
-                                    child: serviceScreen!,
-                                  ),
-                                ),
-                              );
-                            }
-                          }
+                          AppRoutes.navigateTo(context, service['route'] as String);
                         },
                         child: Container(
                           decoration: BoxDecoration(

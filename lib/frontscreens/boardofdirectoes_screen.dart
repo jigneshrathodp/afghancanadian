@@ -1,23 +1,10 @@
 import 'package:afghancanadian/widgets/app_colors.dart';
-import 'package:afghancanadian/widgets/bottom_nav_screen.dart';
 import 'package:afghancanadian/widgets/responsive_helper.dart';
 import 'package:flutter/material.dart';
-import 'widgets/custom_app_bar.dart';
-import 'widgets/custom_drawer.dart';
-
-class User {
-  final String name;
-  final String role;
-  final String description;
-  final String image;
-
-  User({
-    required this.name,
-    required this.role,
-    required this.description,
-    required this.image,
-  });
-}
+import '../models/user_model.dart';
+import '../widgets/app_routes.dart';
+import '../widgets/custom_app_bar.dart';
+import '../widgets/custom_drawer.dart';
 
 class BoardOfDirectorsScreen extends StatelessWidget {
   const BoardOfDirectorsScreen({super.key});
@@ -173,11 +160,10 @@ class UserCard extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => DetailScreen(user: user),
-                    ),
+                  AppRoutes.navigateTo(context, AppRoutes.boardMemberDetail, 
+                    arguments: RouteArguments(data: {
+                      'user': user,
+                    })
                   );
                 },
                 style: ElevatedButton.styleFrom(
@@ -199,129 +185,6 @@ class UserCard extends StatelessWidget {
             ),
           ),
           SizedBox(height: 12 * heightScale),
-        ],
-      ),
-    );
-  }
-}
-
-class DetailScreen extends StatelessWidget {
-  final User user;
-
-  const DetailScreen({super.key, required this.user});
-
-  @override
-  Widget build(BuildContext context) {
-    final scales = ResponsiveHelper.getScales(context);
-    final widthScale = scales.widthScale;
-    final heightScale = scales.heightScale;
-
-    return Scaffold(
-      appBar: CustomAppBar(),
-      drawer: CustomDrawer(),
-      drawerEnableOpenDragGesture: false,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(height: 20 * heightScale),
-            Text(
-              'BOARD OF DIRECTORS PROFILE',
-              style: TextStyle(
-                fontSize: 22 * widthScale,
-                fontWeight: FontWeight.bold,
-                color: AppColors.primaryDark,
-              ),
-            ),
-            SizedBox(height: 24 * heightScale),
-            Image.network(
-              user.image,
-              width: MediaQuery.of(context).size.width * 0.6,
-              height: MediaQuery.of(context).size.width * 0.6,
-              fit: BoxFit.cover,
-            ),
-            SizedBox(height: 24 * heightScale),
-            Text(
-              user.name,
-              style: TextStyle(
-                  fontSize: 26 * widthScale,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.primaryDark),
-            ),
-            Text(
-              user.role,
-              style: TextStyle(color: AppColors.customGold, fontSize: 18 * widthScale),
-            ),
-            SizedBox(height: 20 * heightScale),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24 * widthScale),
-              child: Text(
-                user.description,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 16 * widthScale,
-                  color: Colors.black87,
-                  height: 1.5,
-                ),
-              ),
-            ),
-            SizedBox(height: 40 * heightScale),
-          ],
-        ),
-      ),
-      bottomNavigationBar: _buildBottomNavigationBar(context),
-    );
-  }
-
-  Widget _buildBottomNavigationBar(BuildContext context) {
-    final widthScale = ResponsiveHelper.getWidthScale(context);
-
-    return Container(
-      height: 55 * widthScale,
-      color: AppColors.navBackground,
-      child: Padding(
-        padding: EdgeInsets.only(left: 8 * widthScale, right: 8 * widthScale, bottom: 8 * widthScale),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            _buildNavItem(Icons.info_outline, 'About', 0, context, widthScale),
-            _buildNavItem(Icons.calendar_today_outlined, 'Calendar', 1, context, widthScale),
-            _buildNavItem(Icons.home, 'Home', 2, context, widthScale),
-            _buildNavItem(Icons.miscellaneous_services_outlined, 'Services', 3, context, widthScale),
-            _buildNavItem(Icons.contact_phone_outlined, 'Contact', 4, context, widthScale),
-            _buildNavItem(Icons.volunteer_activism_outlined, 'Donation', 5, context, widthScale),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildNavItem(IconData icon, String label, int index, BuildContext context, double widthScale) {
-    return GestureDetector(
-      onTap: () {
-        if (index != 2) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (_) => BottomNavScreen(initialIndex: index),
-            ),
-          );
-        }
-      },
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            icon,
-            color: index == 2 ? AppColors.navSelected : AppColors.navUnselected,
-            size: 24 * widthScale,
-          ),
-          Text(
-            label,
-            style: TextStyle(
-              color: index == 2 ? AppColors.navSelected : AppColors.navUnselected,
-              fontSize: 10 * widthScale,
-            ),
-          ),
         ],
       ),
     );

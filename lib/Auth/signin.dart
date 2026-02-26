@@ -1,9 +1,8 @@
 import 'package:afghancanadian/widgets/app_colors.dart';
 import 'package:flutter/material.dart';
-import '../new_bottomNavScreen.dart';
-import 'signup.dart';
-import 'forget_password.dart';
+import '../widgets/app_routes.dart';
 import '../widgets/custom_widgets.dart';
+import '../services/auth_manager.dart';
 
 class Signin extends StatefulWidget {
   const Signin({super.key});
@@ -50,31 +49,13 @@ class _SigninState extends State<Signin> {
           ),
         );
 
-        // Optionally navigate away or close dialog
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text('Success'),
-              content: const Text('Login successful!'),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute<void>(
-                        builder: (context) => const NewBottomNavScreen(),
-                      ),
-                      (route) => false,
-                    );
-                  },
-                  child: const Text('OK'),
-                ),
-              ],
-            );
-          },
-        );
+        // Save login state and navigate
+        await AuthManager().login(userId: '54881852', userName: 'Hameed Zarabi');
+        
+        // Navigate to signed-in flow
+        if (mounted) {
+          AppRoutes.goToClientHome(context);
+        }
       }
     } catch (e) {
       if (mounted) {
@@ -209,12 +190,7 @@ class _SigninState extends State<Signin> {
                                     alignment: Alignment.center,
                                     child: GestureDetector(
                                       onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => const ForgetPassword(),
-                                          ),
-                                        );
+                                        AppRoutes.goToForgetPassword(context);
                                       },
                                       child: Text(
                                         'Forgot you password?',
@@ -249,12 +225,7 @@ class _SigninState extends State<Signin> {
                                       ),
                                       GestureDetector(
                                         onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => const Signup(),
-                                            ),
-                                          );
+                                          AppRoutes.goToSignup(context);
                                         },
                                         child: Text(
                                           'Create Account',

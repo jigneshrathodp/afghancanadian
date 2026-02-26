@@ -1,6 +1,6 @@
 import 'package:afghancanadian/widgets/app_colors.dart';
 import 'package:flutter/material.dart';
-import 'reset_password.dart';
+import '../widgets/app_routes.dart';
 import '../widgets/custom_widgets.dart';
 
 class ForgetPassword extends StatefulWidget {
@@ -58,13 +58,8 @@ class _ForgetPasswordState extends State<ForgetPassword> {
               actions: [
                 TextButton(
                   onPressed: () {
-                    Navigator.pop(context);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const ResetPassword(),
-                      ),
-                    );
+                    AppRoutes.goBack(context);
+                    AppRoutes.goToResetPassword(context);
                   },
                   child: const Text('OK'),
                 ),
@@ -195,7 +190,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                                     children: [
                                       GestureDetector(
                                         onTap: () {
-                                          Navigator.pop(context);
+                                          AppRoutes.goBack(context);
                                         },
                                         child: Text(
                                           'Back To Sign In',

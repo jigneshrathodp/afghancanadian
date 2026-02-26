@@ -1,16 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:afghancanadian/widgets/app_colors.dart';
-
-import 'Contact_membership_screen.dart';
-import 'contact_Invoice_recode_payment_screen.dart';
-import 'contact_Invoice_screen.dart';
-import 'contact_donation_add_screen.dart';
-import 'contact_donation_screen.dart';
-import 'contact_payment_screen.dart';
-import 'credit_card_on_file_screen.dart';
-import 'credit_change_password_screen.dart';
-import 'dashboard_screen.dart';
-import 'edit_profile_screen.dart';
+import 'package:afghancanadian/widgets/app_routes.dart';
 
 class ClientsideMenuScreen extends StatelessWidget {
   const ClientsideMenuScreen({super.key});
@@ -21,52 +11,47 @@ class ClientsideMenuScreen extends StatelessWidget {
       {
         'title': 'Dashboard',
         'icon': Icons.dashboard,
-        'screen': const DashboardScreen(),
+        'route': AppRoutes.dashboard,
       },
       {
         'title': 'Edit Profile',
         'icon': Icons.person,
-        'screen': const EditProfileScreen(),
+        'route': AppRoutes.editProfile,
       },
       {
         'title': 'Contact Membership',
         'icon': Icons.card_membership,
-        'screen': const ContactMembershipScreen(),
+        'route': AppRoutes.contactMembership,
       },
       {
         'title': 'Contact Invoice',
         'icon': Icons.receipt,
-        'screen': const ContactInvoiceScreen(),
+        'route': AppRoutes.contactInvoice,
       },
       {
         'title': 'Invoice Record Payment',
         'icon': Icons.payment,
-        'screen': const ContactInvoiceRecordPaymentScreen(),
+        'route': AppRoutes.contactInvoiceRecordPayment,
       },
       {
         'title': 'Contact Donation',
         'icon': Icons.volunteer_activism,
-        'screen': const ContactDonationScreen(),
-      },
-      {
-        'title': 'Add Donation',
-        'icon': Icons.add_circle,
-        'screen': const ContactDonationAddScreen(),
+        'route': AppRoutes.contactDonation,
       },
       {
         'title': 'Contact Payment',
         'icon': Icons.credit_card,
-        'screen': const ContactPaymentScreen(),
+        'route': AppRoutes.contactPayment,
       },
       {
         'title': 'Credit Card on File',
         'icon': Icons.credit_score,
-        'screen': const CreditCardOnFileScreen(),
+        'route': AppRoutes.creditCardOnFile,
       },
       {
         'title': 'Change Password',
         'icon': Icons.lock,
-        'screen': const CreditChangePasswordScreen(),
+        'route': AppRoutes.creditChangePassword,
       },
     ];
 
@@ -92,12 +77,7 @@ class ClientsideMenuScreen extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 12.0),
               child: ElevatedButton.icon(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => item['screen'],
-                    ),
-                  );
+                  AppRoutes.navigateTo(context, item['route']);
                 },
                 icon: Icon(item['icon'], color: Colors.white),
                 label: Text(
