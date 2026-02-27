@@ -1,4 +1,5 @@
 import 'package:afghancanadian/widgets/app_colors.dart';
+import 'package:afghancanadian/widgets/responsive_helper.dart';
 import 'package:flutter/material.dart';
 
 class YouthServiceScreen extends StatelessWidget {
@@ -172,6 +173,7 @@ class YouthServiceScreen extends StatelessWidget {
               ),
             ),
           ),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.05 > 60 ? 60 : MediaQuery.of(context).size.height * 0.05)
         ],
       ),
     );

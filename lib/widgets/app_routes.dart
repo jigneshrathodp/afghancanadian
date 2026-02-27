@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 // Import all screens
 import '../Auth/forget_password.dart';
@@ -9,7 +10,7 @@ import '../frontscreens/board_member_detail_screen.dart';
 import '../frontscreens/boardofdirectoes_screen.dart';
 import '../clientscreens/Contact_membership_screen.dart';
 import '../clientscreens/clientside_menu_screen.dart';
-import '../clientscreens/contact_Invoice_recode_payment_screen.dart';
+import '../clientscreens/contact_Invoice_record_payment_screen.dart';
 import '../clientscreens/contact_Invoice_screen.dart';
 import '../clientscreens/contact_donation_screen.dart';
 import '../clientscreens/contact_payment_screen.dart';
@@ -93,8 +94,84 @@ class AppRoutes {
   static const String marketplace = '/marketplace';
   static const String publications = '/publications';
 
-  // ==================== ROUTE MAP ====================
-  /// Returns the route map for MaterialApp
+  // ==================== GETX ROUTE PAGES ====================
+  static List<GetPage> get getPages => [
+    // Auth Routes
+    GetPage(name: splash, page: () => const Splashscreen()),
+    GetPage(name: signin, page: () => const Signin()),
+    GetPage(name: signup, page: () => const Signup()),
+    GetPage(name: forgetPassword, page: () => const ForgetPassword()),
+    GetPage(name: resetPassword, page: () => const ResetPassword()),
+    
+    // Main Navigation Routes
+    GetPage(name: home, page: () => const Homescreen()),
+    GetPage(name: about, page: () => const AboutScreen()),
+    GetPage(name: calendar, page: () => const CalendarScreen()),
+    GetPage(name: services, page: () => const ServicesScreen()),
+    GetPage(name: contact, page: () => const ContactScreen()),
+    GetPage(name: donation, page: () => const DonationScreen()),
+    
+    // Client Side Routes
+    GetPage(name: clientsideMenu, page: () => const ClientsideMenuScreen()),
+    GetPage(name: contactMembership, page: () => const ContactMembershipScreen()),
+    GetPage(name: contactInvoice, page: () => const ContactInvoiceScreen()),
+    GetPage(name: contactInvoiceRecordPayment, page: () => const ContactInvoiceRecordPaymentScreen()),
+    GetPage(name: contactDonation, page: () => const ContactDonationScreen()),
+    GetPage(name: contactPayment, page: () => const ContactPaymentScreen()),
+    GetPage(name: creditCardOnFile, page: () => const CreditCardOnFileScreen()),
+    GetPage(name: creditChangePassword, page: () => const CreditChangePasswordScreen()),
+    GetPage(name: dashboard, page: () => const DashboardScreen()),
+    GetPage(name: editProfile, page: () => const EditProfileScreen()),
+
+    // Service Detail Routes
+    GetPage(name: culturalService, page: () => const ServiceDetailWrapper(
+      title: 'Cultural Services',
+      currentNavIndex: 3,
+      child: CulturalServiceScreen(),
+    )),
+    GetPage(name: educationService, page: () => const ServiceDetailWrapper(
+      title: 'Education Services',
+      currentNavIndex: 3,
+      child: EducationServiceScreen(),
+    )),
+    GetPage(name: funeralService, page: () => const ServiceDetailWrapper(
+      title: 'Funeral Services',
+      currentNavIndex: 3,
+      child: FuneralServiceScreen(),
+    )),
+    GetPage(name: libraryService, page: () => const ServiceDetailWrapper(
+      title: 'Library Services',
+      currentNavIndex: 3,
+      child: Libraryservicescreen(),
+    )),
+    GetPage(name: womenService, page: () => const ServiceDetailWrapper(
+      title: 'Women Services',
+      currentNavIndex: 3,
+      child: WomenServiceScreen(),
+    )),
+    GetPage(name: youthService, page: () => const ServiceDetailWrapper(
+      title: 'Youth Programs',
+      currentNavIndex: 3,
+      child: YouthServiceScreen(),
+    )),
+
+    // Other Routes
+    GetPage(name: boardOfDirectors, page: () => const BoardOfDirectorsScreen()),
+    GetPage(name: boardMemberDetail, page: () {
+      final args = Get.arguments as RouteArguments?;
+      final user = args?.get<User>('user');
+      return BoardMemberDetailScreen(user: user!);
+    }),
+    GetPage(name: formerBoardMembers, page: () => const DropdownScreen()),
+    GetPage(name: form, page: () => const FormScreen()),
+    GetPage(name: membership, page: () => const MembershipScreen()),
+    GetPage(name: privacyPolicy, page: () => const PrivacyPolicyScreen()),
+    GetPage(name: termsAndConditions, page: () => const termsandcondtions()),
+    GetPage(name: marketplace, page: () => const Marketplace()),
+    GetPage(name: publications, page: () => const Publications()),
+  ];
+
+  // ==================== TRADITIONAL ROUTE MAP FOR BACKWARD COMPATIBILITY ====================
   static Map<String, WidgetBuilder> get routes => {
     // Auth Routes
     splash: (context) => const Splashscreen(),
@@ -111,8 +188,6 @@ class AppRoutes {
     contact: (context) => const ContactScreen(),
     donation: (context) => const DonationScreen(),
     
-
-
     // Client Side Routes
     clientsideMenu: (context) => const ClientsideMenuScreen(),
     contactMembership: (context) => const ContactMembershipScreen(),
@@ -176,86 +251,80 @@ class AppRoutes {
   // ==================== NAVIGATION HELPERS ====================
   
   /// Navigate to a named route
-  static Future<T?> navigateTo<T>(BuildContext context, String routeName, {Object? arguments}) {
-    return Navigator.pushNamed<T>(context, routeName, arguments: arguments);
+  static Future<T?> navigateTo<T>(String routeName, {Object? arguments}) async {
+    return await Get.toNamed<T>(routeName, arguments: arguments);
   }
 
   /// Navigate to a named route and remove all previous routes
-  static Future<T?> navigateAndRemoveUntil<T>(BuildContext context, String routeName, {Object? arguments}) {
-    return Navigator.pushNamedAndRemoveUntil<T>(
-      context,
-      routeName,
-      (route) => false,
-      arguments: arguments,
-    );
+  static Future<T?> navigateAndRemoveUntil<T>(String routeName, {Object? arguments}) async {
+    return await Get.offAllNamed<T>(routeName, arguments: arguments);
   }
 
   /// Navigate to a named route and replace current route
-  static Future<T?> navigateAndReplace<T, TO>(BuildContext context, String routeName, {Object? arguments}) {
-    return Navigator.pushReplacementNamed<T, TO>(context, routeName, arguments: arguments);
+  static Future<T?> navigateAndReplace<T, TO>(String routeName, {Object? arguments}) async {
+    return await Get.offAndToNamed<T>(routeName, arguments: arguments);
   }
 
   /// Navigate back
-  static void goBack(BuildContext context, {dynamic result}) {
-    Navigator.pop(context, result);
+  static void goBack({dynamic result}) {
+    Get.back(result: result);
   }
 
   /// Navigate back to specific route
-  static void goBackUntil(BuildContext context, String routeName) {
-    Navigator.popUntil(context, ModalRoute.withName(routeName));
+  static void goBackUntil(String routeName) {
+    Get.until((route) => Get.currentRoute == routeName);
   }
 
   // ==================== SPECIFIC NAVIGATION METHODS ====================
   
   // Auth Navigation
-  static Future<void> goToSignin(BuildContext context) => navigateAndRemoveUntil(context, signin);
-  static Future<void> goToSignup(BuildContext context) => navigateTo(context, signup);
-  static Future<void> goToForgetPassword(BuildContext context) => navigateTo(context, forgetPassword);
-  static Future<void> goToResetPassword(BuildContext context) => navigateTo(context, resetPassword);
-  static Future<void> goToClientHome(BuildContext context) => navigateAndRemoveUntil(context, dashboard);
+  static Future<void> goToSignin() => navigateAndRemoveUntil(signin);
+  static Future<void> goToSignup() => navigateTo(signup);
+  static Future<void> goToForgetPassword() => navigateTo(forgetPassword);
+  static Future<void> goToResetPassword() => navigateTo(resetPassword);
+  static Future<void> goToClientHome() => navigateAndRemoveUntil(dashboard);
 
   // Main Navigation
-  static Future<void> goToHome(BuildContext context) => navigateAndRemoveUntil(context, home);
-  static Future<void> goToAbout(BuildContext context) => navigateAndRemoveUntil(context, about);
-  static Future<void> goToCalendar(BuildContext context) => navigateAndRemoveUntil(context, calendar);
-  static Future<void> goToServices(BuildContext context) => navigateAndRemoveUntil(context, services);
-  static Future<void> goToContact(BuildContext context) => navigateAndRemoveUntil(context, contact);
-  static Future<void> goToDonation(BuildContext context) => navigateAndRemoveUntil(context, donation);
-  static Future<void> goToClientHomeFromDashboard(BuildContext context) => navigateAndRemoveUntil(context, home);
+  static Future<void> goToHome() => navigateAndRemoveUntil(home);
+  static Future<void> goToAbout() => navigateAndRemoveUntil(about);
+  static Future<void> goToCalendar() => navigateAndRemoveUntil(calendar);
+  static Future<void> goToServices() => navigateAndRemoveUntil(services);
+  static Future<void> goToContact() => navigateAndRemoveUntil(contact);
+  static Future<void> goToDonation() => navigateAndRemoveUntil(donation);
+  static Future<void> goToClientHomeFromDashboard() => navigateAndRemoveUntil(home);
 
   // Client Side Navigation
-  static Future<void> goToClientsideMenu(BuildContext context) => navigateTo(context, clientsideMenu);
-  static Future<void> goToContactMembership(BuildContext context) => navigateTo(context, contactMembership);
-  static Future<void> goToContactInvoice(BuildContext context) => navigateTo(context, contactInvoice);
-  static Future<void> goToContactInvoiceRecordPayment(BuildContext context) => navigateTo(context, contactInvoiceRecordPayment);
-  static Future<void> goToContactDonation(BuildContext context) => navigateTo(context, contactDonation);
-  static Future<void> goToContactPayment(BuildContext context) => navigateTo(context, contactPayment);
-  static Future<void> goToCreditCardOnFile(BuildContext context) => navigateTo(context, creditCardOnFile);
-  static Future<void> goToCreditChangePassword(BuildContext context) => navigateTo(context, creditChangePassword);
-  static Future<void> goToDashboard(BuildContext context) => navigateTo(context, dashboard);
-  static Future<void> goToEditProfile(BuildContext context) => navigateTo(context, editProfile);
-  static Future<void> goToInvoice(BuildContext context) => navigateTo(context, contactInvoice);
+  static Future<void> goToClientsideMenu() => navigateTo(clientsideMenu);
+  static Future<void> goToContactMembership() => navigateTo(contactMembership);
+  static Future<void> goToContactInvoice() => navigateTo(contactInvoice);
+  static Future<void> goToContactInvoiceRecordPayment() => navigateTo(contactInvoiceRecordPayment);
+  static Future<void> goToContactDonation() => navigateTo(contactDonation);
+  static Future<void> goToContactPayment() => navigateTo(contactPayment);
+  static Future<void> goToCreditCardOnFile() => navigateTo(creditCardOnFile);
+  static Future<void> goToCreditChangePassword() => navigateTo(creditChangePassword);
+  static Future<void> goToDashboard() => navigateTo(dashboard);
+  static Future<void> goToEditProfile() => navigateTo(editProfile);
+  static Future<void> goToInvoice() => navigateTo(contactInvoice);
 
   // Service Navigation
-  static Future<void> goToCulturalService(BuildContext context) => navigateTo(context, culturalService);
-  static Future<void> goToEducationService(BuildContext context) => navigateTo(context, educationService);
-  static Future<void> goToFuneralService(BuildContext context) => navigateTo(context, funeralService);
-  static Future<void> goToLibraryService(BuildContext context) => navigateTo(context, libraryService);
-  static Future<void> goToWomenService(BuildContext context) => navigateTo(context, womenService);
-  static Future<void> goToYouthService(BuildContext context) => navigateTo(context, youthService);
+  static Future<void> goToCulturalService() => navigateTo(culturalService);
+  static Future<void> goToEducationService() => navigateTo(educationService);
+  static Future<void> goToFuneralService() => navigateTo(funeralService);
+  static Future<void> goToLibraryService() => navigateTo(libraryService);
+  static Future<void> goToWomenService() => navigateTo(womenService);
+  static Future<void> goToYouthService() => navigateTo(youthService);
 
   // Other Navigation
-  static Future<void> goToBoardOfDirectors(BuildContext context) => navigateTo(context, boardOfDirectors);
-  static Future<void> goToBoardMemberDetail(BuildContext context, User user) => 
-    navigateTo(context, boardMemberDetail, arguments: RouteArguments(data: {'user': user}));
-  static Future<void> goToFormerBoardMembers(BuildContext context) => navigateTo(context, formerBoardMembers);
-  static Future<void> goToForm(BuildContext context) => navigateTo(context, form);
-  static Future<void> goToMembership(BuildContext context) => navigateTo(context, membership);
-  static Future<void> goToPrivacyPolicy(BuildContext context) => navigateTo(context, privacyPolicy);
-  static Future<void> goToTermsAndConditions(BuildContext context) => navigateTo(context, termsAndConditions);
-  static Future<void> goToHouse(BuildContext context) => navigateTo(context, house);
-  static Future<void> goToMarketplace(BuildContext context) => navigateTo(context, marketplace);
-  static Future<void> goToPublications(BuildContext context) => navigateTo(context, publications);
+  static Future<void> goToBoardOfDirectors() => navigateTo(boardOfDirectors);
+  static Future<void> goToBoardMemberDetail(User user) => 
+    navigateTo(boardMemberDetail, arguments: RouteArguments(data: {'user': user}));
+  static Future<void> goToFormerBoardMembers() => navigateTo(formerBoardMembers);
+  static Future<void> goToForm() => navigateTo(form);
+  static Future<void> goToMembership() => navigateTo(membership);
+  static Future<void> goToPrivacyPolicy() => navigateTo(privacyPolicy);
+  static Future<void> goToTermsAndConditions() => navigateTo(termsAndConditions);
+  static Future<void> goToMarketplace() => navigateTo(marketplace);
+  static Future<void> goToPublications() => navigateTo(publications);
 }
 
 /// Route arguments class for passing data between screens

@@ -5,6 +5,8 @@ import 'package:afghancanadian/widgets/responsive_helper.dart';
 import 'package:afghancanadian/widgets/app_routes.dart';
 import 'package:afghancanadian/new_bottomNavScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import '../controllers/main_donation_controller.dart';
 
 class ContactDonationScreen extends StatefulWidget {
   const ContactDonationScreen({super.key});
@@ -13,89 +15,8 @@ class ContactDonationScreen extends StatefulWidget {
   State<ContactDonationScreen> createState() => _ContactDonationScreenState();
 }
 
-class _ContactDonationScreenState extends State<ContactDonationScreen>
-    with SingleTickerProviderStateMixin {
+class _ContactDonationScreenState extends State<ContactDonationScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  final Set<int> _expandedRows = {};
-
-  // Form visibility states
-  bool _showDonationForm = false;
-  bool _showPledgeForm = false;
-  bool _showRecurringForm = false;
-
-  // Donation form controllers
-  final TextEditingController _donationAmountController = TextEditingController();
-  final TextEditingController _donationNoteController = TextEditingController();
-  String? _selectedDonationReason;
-
-  // Pledge Donation form controllers
-  final TextEditingController _pledgeAmountController = TextEditingController();
-  final TextEditingController _pledgeNoteController = TextEditingController();
-  String? _selectedPledgeReason;
-
-  // Recurring Donation form controllers
-  final TextEditingController _recurringAmountController = TextEditingController();
-  String? _selectedRecurringStatus;
-  String _emiType = 'Monthly';
-
-  final List<String> _reasons = [
-    'General Donation',
-    'Zakat',
-    'Sadaqah',
-    'Charity',
-    'Other',
-  ];
-
-  final List<String> _statuses = [
-    'Active',
-    'Inactive',
-  ];
-
-  // Sample data for Donation tab
-  final List<Map<String, dynamic>> donationData = [
-    {
-      'id': '00031',
-      'date': 'Nov 13, 2025\n06:05am',
-      'note': 'Pledge donation\nid-12 note',
-      'amount': '0.01',
-      'isExpandable': true,
-    },
-    {
-      'id': '00031',
-      'date': 'Nov 13, 2025\n06:05am',
-      'note': 'Pledge donation\nid-12 note',
-      'amount': '',
-      'isExpandable': false,
-    },
-    {
-      'id': '00031',
-      'date': 'Nov 13, 2025\n06:05am',
-      'note': 'Pledge donation\nid-12 note',
-      'amount': '',
-      'isExpandable': false,
-    },
-    {
-      'id': '00031',
-      'date': 'Nov 13, 2025\n06:05am',
-      'note': 'Pledge donation\nid-12 note',
-      'amount': '',
-      'isExpandable': false,
-    },
-    {
-      'id': '00031',
-      'date': 'Nov 13, 2025\n06:05am',
-      'note': 'Pledge donation id-12 note',
-      'amount': '',
-      'isExpandable': false,
-    },
-    {
-      'id': '00031',
-      'date': 'Nov 13, 2025\n06:05am',
-      'note': 'Pledge donation\nid-12 note',
-      'amount': '',
-      'isExpandable': false,
-    },
-  ];
 
   @override
   void initState() {
@@ -106,26 +27,12 @@ class _ContactDonationScreenState extends State<ContactDonationScreen>
   @override
   void dispose() {
     _tabController.dispose();
-    _donationAmountController.dispose();
-    _donationNoteController.dispose();
-    _pledgeAmountController.dispose();
-    _pledgeNoteController.dispose();
-    _recurringAmountController.dispose();
     super.dispose();
-  }
-
-  void _toggleRow(int index) {
-    setState(() {
-      if (_expandedRows.contains(index)) {
-        _expandedRows.remove(index);
-      } else {
-        _expandedRows.add(index);
-      }
-    });
   }
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(MainDonationController());
     final scales = ResponsiveHelper.getScales(context);
     final widthScale = scales.widthScale;
     final heightScale = scales.heightScale;
@@ -135,7 +42,6 @@ class _ContactDonationScreenState extends State<ContactDonationScreen>
       appBar: CustomAppBar(),
       drawer: NewCustomDrawer(),
       drawerEnableOpenDragGesture: false,
-
       body: SafeArea(
         child: Column(
           children: [
@@ -235,9 +141,9 @@ class _ContactDonationScreenState extends State<ContactDonationScreen>
               child: TabBarView(
                 controller: _tabController,
                 children: [
-                  _buildDonationTab(widthScale, heightScale),
-                  _buildPledgeDonationTab(widthScale, heightScale),
-                  _buildRecurringDonationTab(widthScale, heightScale),
+                  _buildDonationTab(controller, widthScale, heightScale),
+                  _buildPledgeDonationTab(controller, widthScale, heightScale),
+                  _buildRecurringDonationTab(controller, widthScale, heightScale),
                 ],
               ),
             ),
@@ -250,19 +156,19 @@ class _ContactDonationScreenState extends State<ContactDonationScreen>
           if (index != 5) { // Don't navigate if already on donation
             switch (index) {
               case 0:
-                AppRoutes.goToClientHome(context);
+                Get.toNamed(AppRoutes.dashboard);
                 break;
               case 1:
-                AppRoutes.goToContactMembership(context);
+                Get.toNamed(AppRoutes.contactMembership);
                 break;
               case 2:
-                AppRoutes.goToHome(context);
+                Get.toNamed(AppRoutes.home);
                 break;
               case 3:
-                AppRoutes.goToContactInvoice(context);
+                Get.toNamed(AppRoutes.contactInvoice);
                 break;
               case 4:
-                AppRoutes.goToContact(context);
+                Get.toNamed(AppRoutes.contact);
                 break;
             }
           }
@@ -272,43 +178,7 @@ class _ContactDonationScreenState extends State<ContactDonationScreen>
     );
   }
 
-  Widget _buildTab(String text, int index, double widthScale, double heightScale) {
-    return AnimatedBuilder(
-      animation: _tabController,
-      builder: (context, child) {
-        final isSelected = _tabController.index == index;
-        return Container(
-          margin: EdgeInsets.symmetric(
-            horizontal: 4 * widthScale,
-            vertical: 8 * heightScale,
-          ),
-          padding: EdgeInsets.symmetric(
-            horizontal: 12 * widthScale,
-            vertical: 10 * heightScale,
-          ),
-          decoration: BoxDecoration(
-            color: isSelected ? AppColors.primaryDark : Colors.transparent,
-            borderRadius: BorderRadius.circular(8 * widthScale),
-          ),
-          child: Center(
-            child: Text(
-              text,
-              style: TextStyle(
-                fontSize: 13 * widthScale,
-                fontWeight: FontWeight.w600,
-                color: isSelected ? Colors.white : AppColors.textSecondary,
-              ),
-              textAlign: TextAlign.center,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildDonationTab(double widthScale, double heightScale) {
+  Widget _buildDonationTab(MainDonationController controller, double widthScale, double heightScale) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -339,25 +209,29 @@ class _ContactDonationScreenState extends State<ContactDonationScreen>
                       child: _buildSearchField(widthScale, heightScale),
                     ),
                     SizedBox(width: 12 * widthScale),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _showDonationForm = !_showDonationForm;
-                        });
-                      },
-                      child: _buildActionButton(
-                        'Record A Donation',
-                        widthScale,
-                        heightScale,
+                    Flexible(
+                      child: GestureDetector(
+                        onTap: () {
+                          controller.toggleDonationForm();
+                        },
+                        child: _buildActionButton(
+                          'Record A Donation',
+                          widthScale,
+                          heightScale,
+                        ),
                       ),
                     ),
                   ],
                 ),
                 // Donation Form Card
-                if (_showDonationForm) ...[
-                  SizedBox(height: 16 * heightScale),
-                  _buildDonationFormCard(widthScale, heightScale),
-                ],
+                Obx(() => controller.showDonationForm.value 
+                  ? Column(
+                      children: [
+                        SizedBox(height: 16 * heightScale),
+                        _buildDonationFormCard(controller, widthScale, heightScale),
+                      ],
+                    )
+                  : const SizedBox.shrink()),
                 SizedBox(height: 16 * heightScale),
                 // Table Header
                 _buildTableHeader(widthScale, heightScale),
@@ -366,11 +240,12 @@ class _ContactDonationScreenState extends State<ContactDonationScreen>
                   padding: EdgeInsets.zero,
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: donationData.length,
+                  itemCount: controller.donationData.length,
                   itemBuilder: (context, index) {
                     return _buildDonationRow(
-                      donationData[index],
+                      controller.donationData[index],
                       index,
+                      controller,
                       widthScale,
                       heightScale,
                     );
@@ -402,7 +277,7 @@ class _ContactDonationScreenState extends State<ContactDonationScreen>
     );
   }
 
-  Widget _buildPledgeDonationTab(double widthScale, double heightScale) {
+  Widget _buildPledgeDonationTab(MainDonationController controller, double widthScale, double heightScale) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -419,25 +294,29 @@ class _ContactDonationScreenState extends State<ContactDonationScreen>
                       child: _buildSearchField(widthScale, heightScale),
                     ),
                     SizedBox(width: 12 * widthScale),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _showPledgeForm = !_showPledgeForm;
-                        });
-                      },
-                      child: _buildActionButton(
-                        'Pledge A Donation',
-                        widthScale,
-                        heightScale,
+                    Flexible(
+                      child: GestureDetector(
+                        onTap: () {
+                          controller.togglePledgeForm();
+                        },
+                        child: _buildActionButton(
+                          'Pledge A Donation',
+                          widthScale,
+                          heightScale,
+                        ),
                       ),
                     ),
                   ],
                 ),
                 // Pledge Form Card
-                if (_showPledgeForm) ...[
-                  SizedBox(height: 16 * heightScale),
-                  _buildPledgeFormCard(widthScale, heightScale),
-                ],
+                Obx(() => controller.showPledgeForm.value 
+                  ? Column(
+                      children: [
+                        SizedBox(height: 16 * heightScale),
+                        _buildPledgeFormCard(controller, widthScale, heightScale),
+                      ],
+                    )
+                  : const SizedBox.shrink()),
                 SizedBox(height: 16 * heightScale),
                 // Table Header
                 _buildPledgeTableHeader(widthScale, heightScale),
@@ -487,7 +366,7 @@ class _ContactDonationScreenState extends State<ContactDonationScreen>
     );
   }
 
-  Widget _buildRecurringDonationTab(double widthScale, double heightScale) {
+  Widget _buildRecurringDonationTab(MainDonationController controller, double widthScale, double heightScale) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -504,25 +383,29 @@ class _ContactDonationScreenState extends State<ContactDonationScreen>
                       child: _buildSearchField(widthScale, heightScale),
                     ),
                     SizedBox(width: 12 * widthScale),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _showRecurringForm = !_showRecurringForm;
-                        });
-                      },
-                      child: _buildActionButton(
-                        'Record A Recurring\nDonation',
-                        widthScale,
-                        heightScale,
+                    Flexible(
+                      child: GestureDetector(
+                        onTap: () {
+                          controller.toggleRecurringForm();
+                        },
+                        child: _buildActionButton(
+                          'Record A Recurring\nDonation',
+                          widthScale,
+                          heightScale,
+                        ),
                       ),
                     ),
                   ],
                 ),
                 // Recurring Form Card
-                if (_showRecurringForm) ...[
-                  SizedBox(height: 16 * heightScale),
-                  _buildRecurringFormCard(widthScale, heightScale),
-                ],
+                Obx(() => controller.showRecurringForm.value 
+                  ? Column(
+                      children: [
+                        SizedBox(height: 16 * heightScale),
+                        _buildRecurringFormCard(controller, widthScale, heightScale),
+                      ],
+                    )
+                  : const SizedBox.shrink()),
                 SizedBox(height: 16 * heightScale),
                 // Table Header
                 _buildTableHeader(widthScale, heightScale),
@@ -810,10 +693,11 @@ class _ContactDonationScreenState extends State<ContactDonationScreen>
   Widget _buildDonationRow(
     Map<String, dynamic> data,
     int index,
+    MainDonationController controller,
     double widthScale,
     double heightScale,
   ) {
-    final isExpanded = _expandedRows.contains(index);
+    final isExpanded = controller.expandedRows.contains(index);
     final hasAmount = data['amount'] != null && data['amount'].toString().isNotEmpty;
 
     return Column(
@@ -838,7 +722,7 @@ class _ContactDonationScreenState extends State<ContactDonationScreen>
                   // Expand/Collapse Icon
                   if (data['isExpandable'] == true)
                     GestureDetector(
-                      onTap: () => _toggleRow(index),
+                      onTap: () => controller.toggleRow(index),
                       child: Icon(
                         isExpanded
                             ? Icons.remove_circle_outline
@@ -861,7 +745,7 @@ class _ContactDonationScreenState extends State<ContactDonationScreen>
                   SizedBox(
                     width: 50 * widthScale,
                     child: Text(
-                      data['id'],
+                      data['id']?.toString() ?? '',
                       style: TextStyle(
                         fontSize: 12 * widthScale,
                         color: AppColors.textPrimary,
@@ -948,7 +832,7 @@ class _ContactDonationScreenState extends State<ContactDonationScreen>
   }
 
   // Donation Form Card
-  Widget _buildDonationFormCard(double widthScale, double heightScale) {
+  Widget _buildDonationFormCard(MainDonationController controller, double widthScale, double heightScale) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -986,9 +870,7 @@ class _ContactDonationScreenState extends State<ContactDonationScreen>
                 ),
                 GestureDetector(
                   onTap: () {
-                    setState(() {
-                      _showDonationForm = false;
-                    });
+                    controller.showDonationForm.value = false;
                   },
                   child: Icon(
                     Icons.close,
@@ -1007,29 +889,27 @@ class _ContactDonationScreenState extends State<ContactDonationScreen>
                 // Amount Field
                 _buildFormLabel('Amount*', widthScale),
                 SizedBox(height: 8 * heightScale),
-                _buildAmountField(_donationAmountController, widthScale, heightScale),
+                _buildAmountField(controller.donationAmountController, widthScale, heightScale),
                 SizedBox(height: 16 * heightScale),
                 // Reason Dropdown
                 _buildFormLabel('Reason*', widthScale),
                 SizedBox(height: 8 * heightScale),
-                _buildFormDropdown(
-                  value: _selectedDonationReason,
+                Obx(() => _buildFormDropdown(
+                  value: controller.selectedDonationReason.value,
                   hint: 'Select',
-                  items: _reasons,
+                  items: controller.reasons,
                   onChanged: (value) {
-                    setState(() {
-                      _selectedDonationReason = value;
-                    });
+                    controller.selectedDonationReason.value = value;
                   },
                   widthScale: widthScale,
                   heightScale: heightScale,
-                ),
+                )),
                 SizedBox(height: 16 * heightScale),
                 // Note Field
                 _buildFormLabel('Note', widthScale),
                 SizedBox(height: 8 * heightScale),
                 _buildFormTextField(
-                  controller: _donationNoteController,
+                  controller: controller.donationNoteController,
                   hint: 'Note',
                   widthScale: widthScale,
                   heightScale: heightScale,
@@ -1048,7 +928,7 @@ class _ContactDonationScreenState extends State<ContactDonationScreen>
   }
 
   // Pledge Form Card
-  Widget _buildPledgeFormCard(double widthScale, double heightScale) {
+  Widget _buildPledgeFormCard(MainDonationController controller, double widthScale, double heightScale) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -1086,9 +966,7 @@ class _ContactDonationScreenState extends State<ContactDonationScreen>
                 ),
                 GestureDetector(
                   onTap: () {
-                    setState(() {
-                      _showPledgeForm = false;
-                    });
+                    controller.showPledgeForm.value = false;
                   },
                   child: Icon(
                     Icons.close,
@@ -1107,29 +985,27 @@ class _ContactDonationScreenState extends State<ContactDonationScreen>
                 // Amount Field
                 _buildFormLabel('Amount*', widthScale),
                 SizedBox(height: 8 * heightScale),
-                _buildAmountField(_pledgeAmountController, widthScale, heightScale),
+                _buildAmountField(controller.pledgeAmountController, widthScale, heightScale),
                 SizedBox(height: 16 * heightScale),
                 // Reason Dropdown
                 _buildFormLabel('Reason*', widthScale),
                 SizedBox(height: 8 * heightScale),
-                _buildFormDropdown(
-                  value: _selectedPledgeReason,
+                Obx(() => _buildFormDropdown(
+                  value: controller.selectedPledgeReason.value,
                   hint: 'Select',
-                  items: _reasons,
+                  items: controller.reasons,
                   onChanged: (value) {
-                    setState(() {
-                      _selectedPledgeReason = value;
-                    });
+                    controller.selectedPledgeReason.value = value;
                   },
                   widthScale: widthScale,
                   heightScale: heightScale,
-                ),
+                )),
                 SizedBox(height: 16 * heightScale),
                 // Note Field
                 _buildFormLabel('Note', widthScale),
                 SizedBox(height: 8 * heightScale),
                 _buildFormTextField(
-                  controller: _pledgeNoteController,
+                  controller: controller.pledgeNoteController,
                   hint: 'Note',
                   widthScale: widthScale,
                   heightScale: heightScale,
@@ -1148,7 +1024,7 @@ class _ContactDonationScreenState extends State<ContactDonationScreen>
   }
 
   // Recurring Form Card
-  Widget _buildRecurringFormCard(double widthScale, double heightScale) {
+  Widget _buildRecurringFormCard(MainDonationController controller, double widthScale, double heightScale) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -1186,9 +1062,7 @@ class _ContactDonationScreenState extends State<ContactDonationScreen>
                 ),
                 GestureDetector(
                   onTap: () {
-                    setState(() {
-                      _showRecurringForm = false;
-                    });
+                    controller.showRecurringForm.value = false;
                   },
                   child: Icon(
                     Icons.close,
@@ -1207,55 +1081,49 @@ class _ContactDonationScreenState extends State<ContactDonationScreen>
                 // Amount Field
                 _buildFormLabel('Amount*', widthScale),
                 SizedBox(height: 8 * heightScale),
-                _buildAmountField(_recurringAmountController, widthScale, heightScale),
+                _buildAmountField(controller.recurringAmountController, widthScale, heightScale),
                 SizedBox(height: 16 * heightScale),
                 // EMI Date Label
                 _buildFormLabel('EMI Date*', widthScale),
                 SizedBox(height: 8 * heightScale),
                 // Radio Buttons
-                Row(
+                Obx(() => Row(
                   children: [
                     _buildRadioButton(
                       value: 'Monthly',
-                      groupValue: _emiType,
+                      groupValue: controller.emiType.value,
                       label: 'Monthly',
                       onChanged: (value) {
-                        setState(() {
-                          _emiType = value!;
-                        });
+                        controller.emiType.value = value!;
                       },
                       widthScale: widthScale,
                     ),
                     SizedBox(width: 16 * widthScale),
                     _buildRadioButton(
                       value: 'Yearly',
-                      groupValue: _emiType,
+                      groupValue: controller.emiType.value,
                       label: 'Yearly',
                       onChanged: (value) {
-                        setState(() {
-                          _emiType = value!;
-                        });
+                        controller.emiType.value = value!;
                       },
                       widthScale: widthScale,
                     ),
                   ],
-                ),
+                )),
                 SizedBox(height: 16 * heightScale),
                 // Status Dropdown
                 _buildFormLabel('Status*', widthScale),
                 SizedBox(height: 8 * heightScale),
-                _buildFormDropdown(
-                  value: _selectedRecurringStatus,
+                Obx(() => _buildFormDropdown(
+                  value: controller.selectedRecurringStatus.value,
                   hint: 'Select',
-                  items: _statuses,
+                  items: controller.statuses,
                   onChanged: (value) {
-                    setState(() {
-                      _selectedRecurringStatus = value;
-                    });
+                    controller.selectedRecurringStatus.value = value;
                   },
                   widthScale: widthScale,
                   heightScale: heightScale,
-                ),
+                )),
                 SizedBox(height: 24 * heightScale),
                 // Submit Button
                 _buildFormSubmitButton(() {

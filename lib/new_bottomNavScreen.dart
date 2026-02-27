@@ -1,17 +1,18 @@
 import 'package:afghancanadian/widgets/responsive_helper.dart';
 import 'package:flutter/material.dart';
 
-
 class NewCustomBottomBar extends StatefulWidget {
   final int selectedIndex;
   final Function(int) onIndexChanged;
   final ResponsiveScales scales;
+  final String? navigationSource; // Track where navigation came from
 
   const NewCustomBottomBar({
     super.key,
     required this.selectedIndex,
     required this.onIndexChanged,
     required this.scales,
+    this.navigationSource,
   });
 
   @override
@@ -19,6 +20,54 @@ class NewCustomBottomBar extends StatefulWidget {
 }
 
 class _NewCustomBottomBarState extends State<NewCustomBottomBar> {
+  bool _isNavigating = false;
+
+  Future<void> _handleNavigation(int index) async {
+    if (_isNavigating || index == widget.selectedIndex) return;
+    
+    setState(() {
+      _isNavigating = true;
+    });
+    
+    // Show popup based on navigation source and selected index
+    if (widget.navigationSource != null) {
+      if (widget.navigationSource == 'service_screen' && index == 2) {
+        _showPopup('Home Icon', 'Navigated from Service Screen');
+      } else if (widget.navigationSource == 'home_screen' && index == 3) {
+        _showPopup('Service Icon', 'Navigated from Home Screen');
+      }
+    }
+    
+    widget.onIndexChanged(index);
+    
+    // Reset navigation flag after a short delay
+    await Future.delayed(const Duration(milliseconds: 300));
+    if (mounted) {
+      setState(() {
+        _isNavigating = false;
+      });
+    }
+  }
+
+  void _showPopup(String title, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
   @override
   Widget build(BuildContext context) {
     final heightScale = widget.scales.heightScale;
@@ -89,12 +138,10 @@ class _NewCustomBottomBarState extends State<NewCustomBottomBar> {
   ) {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: () {
-        widget.onIndexChanged(index);
-      },
+      onTap: () => _handleNavigation(index),
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        curve: Curves.easeInOut,
+        duration: const Duration(milliseconds: 150), // Reduced from 200ms
+        curve: Curves.easeOutCubic, // Smoother curve
         transform: isSelected
             ? Matrix4.translationValues(0, floatingOffset, 0)
             : Matrix4.identity(),

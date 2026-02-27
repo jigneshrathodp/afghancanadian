@@ -3,43 +3,68 @@ import 'package:afghancanadian/newcustomdrawer.dart';
 import 'package:afghancanadian/widgets/responsive_helper.dart';
 import 'package:afghancanadian/widgets/app_routes.dart';
 import 'package:afghancanadian/new_bottomNavScreen.dart';
+import 'package:get/get.dart';
+import '../controllers/change_password_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class CreditChangePasswordScreen extends StatefulWidget {
+class CreditChangePasswordScreen extends StatelessWidget {
   const CreditChangePasswordScreen({super.key});
 
   @override
-  State<CreditChangePasswordScreen> createState() =>
-      _CreditChangePasswordScreenState();
-}
-
-class _CreditChangePasswordScreenState
-    extends State<CreditChangePasswordScreen> {
-  final TextEditingController _currentPasswordController =
-      TextEditingController();
-  final TextEditingController _newPasswordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
-  final _formKey = GlobalKey<FormState>();
-
-  bool _obscureCurrentPassword = true;
-  bool _obscureNewPassword = true;
-  bool _obscureConfirmPassword = true;
-
-  @override
-  void dispose() {
-    _currentPasswordController.dispose();
-    _newPasswordController.dispose();
-    _confirmPasswordController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final controller = Get.put(ChangePasswordController());
     final scales = ResponsiveHelper.getScales(context);
     final widthScale = scales.widthScale;
     final heightScale = scales.heightScale;
+
+    Widget buildPasswordField({
+      required TextEditingController controller,
+      required String hint,
+      required bool obscureText,
+      required VoidCallback onToggleVisibility,
+      required double widthScale,
+      required double heightScale,
+      String? Function(String?)? validator,
+    }) {
+      return Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(color: Colors.grey.shade400),
+          borderRadius: BorderRadius.circular(8 * widthScale),
+        ),
+        child: TextFormField(
+          controller: controller,
+          obscureText: obscureText,
+          validator: validator,
+          decoration: InputDecoration(
+            hintText: hint,
+            hintStyle: TextStyle(
+              fontSize: 14 * widthScale,
+              color: Colors.grey.shade500,
+            ),
+            contentPadding: EdgeInsets.symmetric(
+              horizontal: 12 * widthScale,
+              vertical: 12 * heightScale,
+            ),
+            border: InputBorder.none,
+            isDense: true,
+            suffixIcon: IconButton(
+              icon: Icon(
+                obscureText ? Icons.visibility_off : Icons.visibility,
+                color: Colors.grey.shade600,
+                size: 20 * widthScale,
+              ),
+              onPressed: onToggleVisibility,
+            ),
+          ),
+          style: TextStyle(
+            fontSize: 14 * widthScale,
+            color: Colors.black87,
+          ),
+        ),
+      );
+    }
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -52,7 +77,7 @@ class _CreditChangePasswordScreenState
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 16 * widthScale),
             child: Form(
-              key: _formKey,
+              key: GlobalKey<FormState>(),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -105,15 +130,11 @@ class _CreditChangePasswordScreenState
                                 ),
                               ),
                               SizedBox(height: 8 * heightScale),
-                              _buildPasswordField(
-                                controller: _currentPasswordController,
+                              Obx(() => buildPasswordField(
+                                controller: controller.currentPasswordController,
                                 hint: 'Enter current password',
-                                obscureText: _obscureCurrentPassword,
-                                onToggleVisibility: () {
-                                  setState(() {
-                                    _obscureCurrentPassword = !_obscureCurrentPassword;
-                                  });
-                                },
+                                obscureText: controller.obscureCurrentPassword.value,
+                                onToggleVisibility: controller.toggleCurrentPasswordVisibility,
                                 widthScale: widthScale,
                                 heightScale: heightScale,
                                 validator: (value) {
@@ -122,7 +143,7 @@ class _CreditChangePasswordScreenState
                                   }
                                   return null;
                                 },
-                              ),
+                              )),
 
                               SizedBox(height: 16 * heightScale),
 
@@ -136,15 +157,11 @@ class _CreditChangePasswordScreenState
                                 ),
                               ),
                               SizedBox(height: 8 * heightScale),
-                              _buildPasswordField(
-                                controller: _newPasswordController,
+                              Obx(() => buildPasswordField(
+                                controller: controller.newPasswordController,
                                 hint: 'Enter new password',
-                                obscureText: _obscureNewPassword,
-                                onToggleVisibility: () {
-                                  setState(() {
-                                    _obscureNewPassword = !_obscureNewPassword;
-                                  });
-                                },
+                                obscureText: controller.obscureNewPassword.value,
+                                onToggleVisibility: controller.toggleNewPasswordVisibility,
                                 widthScale: widthScale,
                                 heightScale: heightScale,
                                 validator: (value) {
@@ -156,7 +173,7 @@ class _CreditChangePasswordScreenState
                                   }
                                   return null;
                                 },
-                              ),
+                              )),
 
                               SizedBox(height: 16 * heightScale),
 
@@ -170,27 +187,23 @@ class _CreditChangePasswordScreenState
                                 ),
                               ),
                               SizedBox(height: 8 * heightScale),
-                              _buildPasswordField(
-                                controller: _confirmPasswordController,
+                              Obx(() => buildPasswordField(
+                                controller: controller.confirmPasswordController,
                                 hint: 'Confirm new password',
-                                obscureText: _obscureConfirmPassword,
-                                onToggleVisibility: () {
-                                  setState(() {
-                                    _obscureConfirmPassword = !_obscureConfirmPassword;
-                                  });
-                                },
+                                obscureText: controller.obscureConfirmPassword.value,
+                                onToggleVisibility: controller.toggleConfirmPasswordVisibility,
                                 widthScale: widthScale,
                                 heightScale: heightScale,
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
                                     return 'Please confirm new password';
                                   }
-                                  if (value != _newPasswordController.text) {
+                                  if (value != controller.newPasswordController.text) {
                                     return 'Passwords do not match';
                                   }
                                   return null;
                                 },
-                              ),
+                              )),
 
                               SizedBox(height: 24 * heightScale),
 
@@ -198,7 +211,7 @@ class _CreditChangePasswordScreenState
                               Center(
                                 child: ElevatedButton(
                                   onPressed: () {
-                                    _submitChangePassword();
+                                    controller.submitChangePassword();
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: const Color(0xFF1B5E20),
@@ -240,94 +253,27 @@ class _CreditChangePasswordScreenState
         onIndexChanged: (index) {
           switch (index) {
             case 0:
-              AppRoutes.goToClientHome(context);
+              Get.toNamed(AppRoutes.dashboard);
               break;
             case 1:
-              AppRoutes.goToContactMembership(context);
+              Get.toNamed(AppRoutes.contactMembership);
               break;
             case 2:
-              AppRoutes.goToHome(context);
+              Get.toNamed(AppRoutes.home);
               break;
             case 3:
-              AppRoutes.goToContactInvoice(context);
+              Get.toNamed(AppRoutes.contactInvoice);
               break;
             case 4:
-              AppRoutes.goToContact(context);
+              Get.toNamed(AppRoutes.contact);
               break;
             case 5:
-              AppRoutes.goToContactDonation(context);
+              Get.toNamed(AppRoutes.contactDonation);
               break;
           }
         },
         scales: scales,
       ),
     );
-  }
-
-  Widget _buildPasswordField({
-    required TextEditingController controller,
-    required String hint,
-    required bool obscureText,
-    required VoidCallback onToggleVisibility,
-    required double widthScale,
-    required double heightScale,
-    String? Function(String?)? validator,
-  }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: Colors.grey.shade400),
-        borderRadius: BorderRadius.circular(8 * widthScale),
-      ),
-      child: TextFormField(
-        controller: controller,
-        obscureText: obscureText,
-        validator: validator,
-        decoration: InputDecoration(
-          hintText: hint,
-          hintStyle: TextStyle(
-            fontSize: 14 * widthScale,
-            color: Colors.grey.shade500,
-          ),
-          contentPadding: EdgeInsets.symmetric(
-            horizontal: 12 * widthScale,
-            vertical: 12 * heightScale,
-          ),
-          border: InputBorder.none,
-          isDense: true,
-          suffixIcon: IconButton(
-            icon: Icon(
-              obscureText ? Icons.visibility_off : Icons.visibility,
-              color: Colors.grey.shade600,
-              size: 20 * widthScale,
-            ),
-            onPressed: onToggleVisibility,
-          ),
-        ),
-        style: TextStyle(
-          fontSize: 14 * widthScale,
-          color: Colors.black87,
-        ),
-      ),
-    );
-  }
-
-  void _submitChangePassword() {
-    if (!_formKey.currentState!.validate()) {
-      return;
-    }
-
-    // Show success message
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Password changed successfully'),
-        backgroundColor: Color(0xFF1B5E20),
-      ),
-    );
-
-    // Clear fields
-    _currentPasswordController.clear();
-    _newPasswordController.clear();
-    _confirmPasswordController.clear();
   }
 }

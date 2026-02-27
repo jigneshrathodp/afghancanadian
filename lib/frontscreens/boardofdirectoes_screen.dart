@@ -5,6 +5,7 @@ import '../models/user_model.dart';
 import '../widgets/app_routes.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/custom_drawer.dart';
+import '../widgets/bottom_nav_screen.dart';
 
 class BoardOfDirectorsScreen extends StatelessWidget {
   const BoardOfDirectorsScreen({super.key});
@@ -103,6 +104,32 @@ class BoardOfDirectorsScreen extends StatelessWidget {
           ],
         ),
       ),
+      bottomNavigationBar: CustomBottomBar(
+        selectedIndex: -1, // No item selected
+        onIndexChanged: (index) {
+          switch (index) {
+            case 0:
+              AppRoutes.goToAbout();
+              break;
+            case 1:
+              AppRoutes.goToCalendar();
+              break;
+            case 2:
+              AppRoutes.goToHome();
+              break;
+            case 3:
+              AppRoutes.goToServices();
+              break;
+            case 4:
+              AppRoutes.goToContact();
+              break;
+            case 5:
+              AppRoutes.goToDonation();
+              break;
+          }
+        },
+        scales: scales,
+      ),
     );
   }
 }
@@ -160,7 +187,7 @@ class UserCard extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  AppRoutes.navigateTo(context, AppRoutes.boardMemberDetail, 
+                  AppRoutes.navigateTo(AppRoutes.boardMemberDetail, 
                     arguments: RouteArguments(data: {
                       'user': user,
                     })

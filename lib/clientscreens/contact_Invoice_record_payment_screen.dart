@@ -3,10 +3,12 @@ import 'package:afghancanadian/newcustomdrawer.dart';
 import 'package:afghancanadian/widgets/responsive_helper.dart';
 import 'package:afghancanadian/widgets/app_routes.dart';
 import 'package:afghancanadian/new_bottomNavScreen.dart';
+import 'package:get/get.dart';
+import '../controllers/invoice_record_payment_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class ContactInvoiceRecordPaymentScreen extends StatefulWidget {
+class ContactInvoiceRecordPaymentScreen extends StatelessWidget {
   final Map<String, dynamic>? invoiceData;
 
   const ContactInvoiceRecordPaymentScreen({
@@ -15,56 +17,112 @@ class ContactInvoiceRecordPaymentScreen extends StatefulWidget {
   });
 
   @override
-  State<ContactInvoiceRecordPaymentScreen> createState() =>
-      _ContactInvoiceRecordPaymentScreenState();
-}
-
-class _ContactInvoiceRecordPaymentScreenState
-    extends State<ContactInvoiceRecordPaymentScreen> {
-  final TextEditingController _nameOnCardController = TextEditingController();
-  final TextEditingController _cardNumberController = TextEditingController();
-  final TextEditingController _expireDateController = TextEditingController();
-  final TextEditingController _cvvController = TextEditingController();
-
-  String? _selectedMonth;
-  String? _selectedDateRange;
-
-  final List<String> _monthOptions = [
-    'Current Month',
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
-
-  @override
-  void dispose() {
-    _nameOnCardController.dispose();
-    _cardNumberController.dispose();
-    _expireDateController.dispose();
-    _cvvController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final controller = Get.put(InvoiceRecordPaymentController());
     final scales = ResponsiveHelper.getScales(context);
     final widthScale = scales.widthScale;
     final heightScale = scales.heightScale;
 
     // Sample invoice data - in real app this comes from widget.invoiceData
-    final invoiceNumber = widget.invoiceData?['invoiceNumber'] ?? '#65';
-    final invoiceNote = widget.invoiceData?['note'] ?? '- Note 3';
-    final createdDate = widget.invoiceData?['createdDate'] ?? 'Oct, 11 2025';
-    final amount = widget.invoiceData?['amount'] ?? '750';
+    final invoiceNumber = invoiceData?['invoiceNumber'] ?? '#65';
+    final invoiceNote = invoiceData?['note'] ?? '- Note 3';
+    final createdDate = invoiceData?['createdDate'] ?? 'Oct, 11 2025';
+    final amount = invoiceData?['amount'] ?? '750';
+
+    Widget buildDropdown({
+      required String? value,
+      required String hint,
+      required List<String> items,
+      required ValueChanged<String?> onChanged,
+      required double widthScale,
+      required double heightScale,
+    }) {
+      return Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: 12 * widthScale,
+          vertical: 4 * heightScale,
+        ),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(color: Colors.grey.shade300),
+          borderRadius: BorderRadius.circular(8 * widthScale),
+        ),
+        child: DropdownButtonHideUnderline(
+          child: Obx(() => DropdownButton<String>(
+            value: value,
+            hint: Text(
+              hint,
+              style: TextStyle(
+                fontSize: 14 * widthScale,
+                color: Colors.grey.shade600,
+              ),
+            ),
+            isExpanded: true,
+            icon: Icon(
+              Icons.keyboard_arrow_down,
+              color: Colors.grey.shade600,
+              size: 20 * widthScale,
+            ),
+            style: TextStyle(
+              fontSize: 14 * widthScale,
+              color: Colors.black87,
+            ),
+            items: items.map((String item) {
+              return DropdownMenuItem<String>(
+                value: item == hint ? null : item,
+                child: Text(
+                  item,
+                  style: TextStyle(
+                    fontSize: 14 * widthScale,
+                    color: Colors.black87,
+                  ),
+                ),
+              );
+            }).toList(),
+            onChanged: onChanged,
+          )),
+        ),
+      );
+    }
+
+    Widget buildTextField({
+      required TextEditingController controller,
+      required String hint,
+      required double widthScale,
+      required double heightScale,
+      TextInputType? keyboardType,
+      List<TextInputFormatter>? inputFormatters,
+    }) {
+      return Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(color: Colors.grey.shade400),
+          borderRadius: BorderRadius.circular(8 * widthScale),
+        ),
+        child: TextField(
+          controller: controller,
+          keyboardType: keyboardType,
+          inputFormatters: inputFormatters,
+          decoration: InputDecoration(
+            hintText: hint,
+            hintStyle: TextStyle(
+              fontSize: 14 * widthScale,
+              color: Colors.grey.shade500,
+            ),
+            contentPadding: EdgeInsets.symmetric(
+              horizontal: 12 * widthScale,
+              vertical: 12 * heightScale,
+            ),
+            border: InputBorder.none,
+            isDense: true,
+          ),
+          style: TextStyle(
+            fontSize: 14 * widthScale,
+            color: Colors.black87,
+          ),
+        ),
+      );
+    }
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -118,33 +176,29 @@ class _ContactInvoiceRecordPaymentScreenState
                         Row(
                           children: [
                             Expanded(
-                              child: _buildDropdown(
-                                value: _selectedMonth,
+                              child: Obx(() => buildDropdown(
+                                value: controller.selectedMonth.value,
                                 hint: 'Current Month',
-                                items: _monthOptions,
+                                items: controller.monthOptions,
                                 onChanged: (value) {
-                                  setState(() {
-                                    _selectedMonth = value;
-                                  });
+                                  controller.selectedMonth.value = value;
                                 },
                                 widthScale: widthScale,
                                 heightScale: heightScale,
-                              ),
+                              )),
                             ),
                             SizedBox(width: 12 * widthScale),
                             Expanded(
-                              child: _buildDropdown(
-                                value: _selectedDateRange,
+                              child: Obx(() => buildDropdown(
+                                value: controller.selectedDateRange.value,
                                 hint: 'Start - End Date',
                                 items: const ['Start - End Date', 'Last 7 Days', 'Last 30 Days'],
                                 onChanged: (value) {
-                                  setState(() {
-                                    _selectedDateRange = value;
-                                  });
+                                  controller.selectedDateRange.value = value;
                                 },
                                 widthScale: widthScale,
                                 heightScale: heightScale,
-                              ),
+                              )),
                             ),
                           ],
                         ),
@@ -236,8 +290,8 @@ class _ContactInvoiceRecordPaymentScreenState
                               ),
                             ),
                             SizedBox(height: 8 * heightScale),
-                            _buildTextField(
-                              controller: _nameOnCardController,
+                            buildTextField(
+                              controller: controller.nameOnCardController,
                               hint: 'Name on Card',
                               widthScale: widthScale,
                               heightScale: heightScale,
@@ -255,8 +309,8 @@ class _ContactInvoiceRecordPaymentScreenState
                               ),
                             ),
                             SizedBox(height: 8 * heightScale),
-                            _buildTextField(
-                              controller: _cardNumberController,
+                            buildTextField(
+                              controller: controller.cardNumberController,
                               hint: 'Card Number',
                               widthScale: widthScale,
                               heightScale: heightScale,
@@ -279,8 +333,8 @@ class _ContactInvoiceRecordPaymentScreenState
                               ),
                             ),
                             SizedBox(height: 8 * heightScale),
-                            _buildTextField(
-                              controller: _expireDateController,
+                            buildTextField(
+                              controller: controller.expireDateController,
                               hint: 'MM/YY',
                               widthScale: widthScale,
                               heightScale: heightScale,
@@ -299,8 +353,8 @@ class _ContactInvoiceRecordPaymentScreenState
                               ),
                             ),
                             SizedBox(height: 8 * heightScale),
-                            _buildTextField(
-                              controller: _cvvController,
+                            buildTextField(
+                              controller: controller.cvvController,
                               hint: 'Card CVV Number',
                               widthScale: widthScale,
                               heightScale: heightScale,
@@ -451,7 +505,7 @@ class _ContactInvoiceRecordPaymentScreenState
                 ElevatedButton(
                   onPressed: () {
                     // Handle payment submission
-                    _submitPayment();
+                    controller.submitPayment();
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF1B5E20),
@@ -484,145 +538,26 @@ class _ContactInvoiceRecordPaymentScreenState
         onIndexChanged: (index) {
           switch (index) {
             case 0:
-              AppRoutes.goToClientHome(context);
+              Get.toNamed(AppRoutes.dashboard);
               break;
             case 1:
-              AppRoutes.goToContactMembership(context);
+              Get.toNamed(AppRoutes.contactMembership);
               break;
             case 2:
-              AppRoutes.goToHome(context);
+              Get.toNamed(AppRoutes.home);
               break;
             case 3:
-              AppRoutes.goToContactInvoice(context);
+              Get.toNamed(AppRoutes.contactInvoice);
               break;
             case 4:
-              AppRoutes.goToContact(context);
+              Get.toNamed(AppRoutes.contact);
               break;
             case 5:
-              AppRoutes.goToContactDonation(context);
+              Get.toNamed(AppRoutes.contactDonation);
               break;
           }
         },
         scales: scales,
-      ),
-    );
-  }
-
-  Widget _buildDropdown({
-    required String? value,
-    required String hint,
-    required List<String> items,
-    required ValueChanged<String?> onChanged,
-    required double widthScale,
-    required double heightScale,
-  }) {
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: 12 * widthScale,
-        vertical: 4 * heightScale,
-      ),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: Colors.grey.shade300),
-        borderRadius: BorderRadius.circular(8 * widthScale),
-      ),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
-          value: value,
-          hint: Text(
-            hint,
-            style: TextStyle(
-              fontSize: 14 * widthScale,
-              color: Colors.grey.shade600,
-            ),
-          ),
-          isExpanded: true,
-          icon: Icon(
-            Icons.keyboard_arrow_down,
-            color: Colors.grey.shade600,
-            size: 20 * widthScale,
-          ),
-          style: TextStyle(
-            fontSize: 14 * widthScale,
-            color: Colors.black87,
-          ),
-          items: items.map((String item) {
-            return DropdownMenuItem<String>(
-              value: item == hint ? null : item,
-              child: Text(
-                item,
-                style: TextStyle(
-                  fontSize: 14 * widthScale,
-                  color: Colors.black87,
-                ),
-              ),
-            );
-          }).toList(),
-          onChanged: onChanged,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTextField({
-    required TextEditingController controller,
-    required String hint,
-    required double widthScale,
-    required double heightScale,
-    TextInputType? keyboardType,
-    List<TextInputFormatter>? inputFormatters,
-  }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: Colors.grey.shade400),
-        borderRadius: BorderRadius.circular(8 * widthScale),
-      ),
-      child: TextField(
-        controller: controller,
-        keyboardType: keyboardType,
-        inputFormatters: inputFormatters,
-        decoration: InputDecoration(
-          hintText: hint,
-          hintStyle: TextStyle(
-            fontSize: 14 * widthScale,
-            color: Colors.grey.shade500,
-          ),
-          contentPadding: EdgeInsets.symmetric(
-            horizontal: 12 * widthScale,
-            vertical: 12 * heightScale,
-          ),
-          border: InputBorder.none,
-          isDense: true,
-        ),
-        style: TextStyle(
-          fontSize: 14 * widthScale,
-          color: Colors.black87,
-        ),
-      ),
-    );
-  }
-
-  void _submitPayment() {
-    // Validate fields
-    if (_nameOnCardController.text.isEmpty ||
-        _cardNumberController.text.isEmpty ||
-        _expireDateController.text.isEmpty ||
-        _cvvController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please fill in all fields'),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return;
-    }
-
-    // Process payment
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Payment submitted successfully'),
-        backgroundColor: Color(0xFF1B5E20),
       ),
     );
   }

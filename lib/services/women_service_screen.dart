@@ -1,5 +1,5 @@
 import 'package:afghancanadian/widgets/app_colors.dart';
-import 'package:afghancanadian/widgets/app_routes.dart';
+import 'package:afghancanadian/widgets/responsive_helper.dart';
 import 'package:flutter/material.dart';
 
 class WomenServiceScreen extends StatelessWidget {
@@ -16,7 +16,6 @@ class WomenServiceScreen extends StatelessWidget {
 
     // Responsive font sizes
     final titleFontSize = screenWidth * 0.06 > 28 ? 28.0 : screenWidth * 0.06;
-    final headingFontSize = screenWidth * 0.05 > 22 ? 22.0 : screenWidth * 0.05;
     final subheadingFontSize = screenWidth * 0.045 > 18 ? 18.0 : screenWidth * 0.045;
     final bodyFontSize = screenWidth * 0.04 > 16 ? 16.0 : screenWidth * 0.04;
 
@@ -119,6 +118,7 @@ class WomenServiceScreen extends StatelessWidget {
               ),
             ),
           ),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.05 > 60 ? 60 : MediaQuery.of(context).size.height * 0.05)
         ],
       ),
     );

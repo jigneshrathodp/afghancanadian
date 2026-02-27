@@ -20,7 +20,6 @@ class termsandcondtions extends StatelessWidget {
 
     // Responsive font sizes
     final titleFontSize = screenWidth * 0.06 > 28 ? 28.0 : screenWidth * 0.06;
-    final headingFontSize = screenWidth * 0.05 > 22 ? 22.0 : screenWidth * 0.05;
     final subheadingFontSize = screenWidth * 0.045 > 18 ? 18.0 : screenWidth * 0.045;
     final bodyFontSize = screenWidth * 0.04 > 16 ? 16.0 : screenWidth * 0.04;
 
@@ -338,22 +337,22 @@ class termsandcondtions extends StatelessWidget {
         onIndexChanged: (index) {
           switch (index) {
             case 0:
-              AppRoutes.goToAbout(context);
+              AppRoutes.goToAbout();
               break;
             case 1:
-              AppRoutes.goToCalendar(context);
+              AppRoutes.goToCalendar();
               break;
             case 2:
-              AppRoutes.goToHome(context);
+              AppRoutes.goToHome();
               break;
             case 3:
-              AppRoutes.goToServices(context);
+              AppRoutes.goToServices();
               break;
             case 4:
-              AppRoutes.goToContact(context);
+              AppRoutes.goToContact();
               break;
             case 5:
-              AppRoutes.goToDonation(context);
+              AppRoutes.goToDonation();
               break;
           }
         },

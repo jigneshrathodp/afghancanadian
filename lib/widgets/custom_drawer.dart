@@ -16,7 +16,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
   void _navigateToScreen(BuildContext context, String routeName) {
     Navigator.of(context).pop();
-    AppRoutes.navigateTo(context, routeName);
+    AppRoutes.navigateTo(routeName);
   }
 
   @override
@@ -223,7 +223,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
           _buildTile(
             icon: Icons.volunteer_activism,
             title: "Donation",
-            onTap: () => _navigateToScreen(context, AppRoutes.donation),
+            onTap: () => _navigateToScreen(context, AppRoutes.contactDonation),
             widthScale: widthScale,
             isTablet: isTablet,
           ),

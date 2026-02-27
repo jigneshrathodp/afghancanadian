@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:afghancanadian/widgets/app_colors.dart';
 import 'package:afghancanadian/widgets/app_routes.dart';
+import 'package:get/get.dart';
 
 class ClientsideMenuScreen extends StatelessWidget {
   const ClientsideMenuScreen({super.key});
@@ -77,7 +78,7 @@ class ClientsideMenuScreen extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 12.0),
               child: ElevatedButton.icon(
                 onPressed: () {
-                  AppRoutes.navigateTo(context, item['route']);
+                  Get.toNamed(item['route']);
                 },
                 icon: Icon(item['icon'], color: Colors.white),
                 label: Text(

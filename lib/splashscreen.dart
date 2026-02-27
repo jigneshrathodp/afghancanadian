@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-
+import 'package:get/get.dart';
 import 'widgets/app_routes.dart';
-import 'services/auth_manager.dart';
+import 'controllers/auth_controller.dart';
 
 class Splashscreen extends StatefulWidget {
   const Splashscreen({super.key});
@@ -35,14 +35,16 @@ class _SplashscreenState extends State<Splashscreen>
       if (status == AnimationStatus.completed) {
         if (mounted) {
           // Initialize auth manager
-          await AuthManager().init();
+          // Using GetX approach - find the controller instead of direct service call
+          Get.put(AuthController());
+          final authController = Get.find<AuthController>();
+          await authController.init();
           
-          // Navigate to sign in screen
-          AppRoutes.goToSignin(context);
+          // Navigate to sign in screen using GetX
+          Get.offAllNamed(AppRoutes.signin);
         }
       }
     });
-
 
 
     _blueScaleAnimation = TweenSequence<double>([

@@ -2,6 +2,8 @@ import 'package:afghancanadian/widgets/app_colors.dart';
 import 'package:afghancanadian/widgets/custom_app_bar.dart';
 import 'package:afghancanadian/widgets/custom_drawer.dart';
 import 'package:afghancanadian/widgets/responsive_helper.dart';
+import 'package:afghancanadian/widgets/bottom_nav_screen.dart';
+import 'package:afghancanadian/widgets/app_routes.dart';
 import 'package:flutter/material.dart';
 
 class FormerBoardMember {
@@ -348,6 +350,32 @@ class _DropdownScreenState extends State<DropdownScreen> {
           );
         },
       ),
+      bottomNavigationBar: CustomBottomBar(
+        selectedIndex: -1, // No item selected
+        onIndexChanged: (index) {
+          switch (index) {
+            case 0:
+              AppRoutes.goToAbout();
+              break;
+            case 1:
+              AppRoutes.goToCalendar();
+              break;
+            case 2:
+              AppRoutes.goToHome();
+              break;
+            case 3:
+              AppRoutes.goToServices();
+              break;
+            case 4:
+              AppRoutes.goToContact();
+              break;
+            case 5:
+              AppRoutes.goToDonation();
+              break;
+          }
+        },
+        scales: scales,
+      ),
     );
   }
 
@@ -451,7 +479,6 @@ class _DropdownScreenState extends State<DropdownScreen> {
     double heightScale,
   ) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
     final dialogWidth = screenWidth > 600 ? 550.0 : screenWidth * 0.92;
     final dialogHeightScale = screenWidth > 600 ? 1.2 : heightScale * 1.2;
     final dialogWidthScale = screenWidth > 600 ? 1.1 : widthScale * 1.1;

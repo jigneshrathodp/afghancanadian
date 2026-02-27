@@ -16,27 +16,27 @@ class NewCustomDrawer extends StatelessWidget {
     switch (index) {
       case 0:
         // Dashboard - Navigate to client dashboard
-        AppRoutes.goToClientHome(context);
+        AppRoutes.goToClientHome();
         break;
       case 1:
         // Membership Details - Navigate to membership screen
-        AppRoutes.goToContactMembership(context);
+        AppRoutes.goToContactMembership();
         break;
       case 2:
         // Home - Navigate to main home screen
-        AppRoutes.goToHome(context);
+        AppRoutes.goToHome();
         break;
       case 3:
         // Invoice - Navigate to invoice screen
-        AppRoutes.goToContactInvoice(context);
+        AppRoutes.goToContactInvoice();
         break;
       case 4:
         // Contact - Navigate to contact screen
-        AppRoutes.goToContact(context);
+        AppRoutes.goToContact();
         break;
       case 5:
         // Donation - Navigate to donation screen
-        AppRoutes.goToContactDonation(context);
+        AppRoutes.goToContactDonation();
         break;
     }
   }
@@ -193,7 +193,7 @@ class NewCustomDrawer extends StatelessWidget {
             onTap: () async {
               Navigator.of(context).pop();
               await AuthManager().logout();
-              AppRoutes.goToHome(context);
+              AppRoutes.goToHome();
             },
             widthScale: widthScale,
             isTablet: isTablet,

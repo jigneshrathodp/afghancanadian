@@ -159,22 +159,22 @@ class PrivacyPolicyScreen extends StatelessWidget {
         onIndexChanged: (index) {
           switch (index) {
             case 0:
-              AppRoutes.goToAbout(context);
+              AppRoutes.goToAbout();
               break;
             case 1:
-              AppRoutes.goToCalendar(context);
+              AppRoutes.goToCalendar();
               break;
             case 2:
-              AppRoutes.goToHome(context);
+              AppRoutes.goToHome();
               break;
             case 3:
-              AppRoutes.goToServices(context);
+              AppRoutes.goToServices();
               break;
             case 4:
-              AppRoutes.goToContact(context);
+              AppRoutes.goToContact();
               break;
             case 5:
-              AppRoutes.goToDonation(context);
+              AppRoutes.goToDonation();
               break;
           }
         },

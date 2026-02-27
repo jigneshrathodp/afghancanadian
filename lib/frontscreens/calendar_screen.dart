@@ -1,69 +1,51 @@
 import 'package:afghancanadian/widgets/app_colors.dart';
 import 'package:afghancanadian/widgets/responsive_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/custom_drawer.dart';
 import '../widgets/app_routes.dart';
 import '../widgets/bottom_nav_screen.dart';
-//CalendarScreen
+import '../controllers/calendar_controller.dart';
 
-
-
-class CalendarScreen extends StatefulWidget {
+class CalendarScreen extends GetView<CalendarController> {
   const CalendarScreen({super.key});
 
-  @override
-  State<CalendarScreen> createState() =>
-      _PremiumCalendarScreenState();
-}
-
-class _PremiumCalendarScreenState extends State<CalendarScreen> {
-  DateTime focusedDate = DateTime.now();
-  DateTime? selectedDate;
-
-  final List<String> weekDays = const [
-    'Mon',
-    'Tue',
-    'Wed',
-    'Thu',
-    'Fri',
-    'Sat',
-    'Sun'
-  ];
-
-  List<DateTime?> _generateCalendarDays(DateTime date) {
-    final firstDayOfMonth = DateTime(date.year, date.month, 1);
-    final lastDayOfMonth = DateTime(date.year, date.month + 1, 0);
-
-    int startWeekday = firstDayOfMonth.weekday; // Mon=1
-    int totalDays = lastDayOfMonth.day;
-
-    List<DateTime?> days = [];
-
-    for (int i = 1; i < startWeekday; i++) {
-      days.add(null);
-    }
-
-    for (int i = 1; i <= totalDays; i++) {
-      days.add(DateTime(date.year, date.month, i));
-    }
-
-    while (days.length % 7 != 0) {
-      days.add(null);
-    }
-
-    return days;
-  }
-
-  void _changeMonth(int delta) {
-    setState(() {
-      focusedDate = DateTime(focusedDate.year, focusedDate.month + delta);
-    });
+  Widget _eventCard({required String title, required String subtitle, Color? backgroundColor, required double widthScale, required double heightScale, required bool isTablet}) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(vertical: 18 * heightScale, horizontal: 16 * widthScale),
+      decoration: BoxDecoration(
+        color: backgroundColor ?? AppColors.eventCardBackground,
+        borderRadius: BorderRadius.circular(16 * widthScale),
+        border: Border.all(color: AppColors.mediumGreen),
+      ),
+      child: Column(
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: isTablet ? 24 : (20 * widthScale),
+              fontWeight: FontWeight.bold,
+              color: AppColors.darkGreen,
+            ),
+          ),
+          SizedBox(height: 6 * heightScale),
+          Text(
+            subtitle,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: isTablet ? 17 : (15 * widthScale),
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final days = _generateCalendarDays(focusedDate);
     final scales = ResponsiveHelper.getScales(context);
     final widthScale = scales.widthScale;
     final heightScale = scales.heightScale;
@@ -105,20 +87,20 @@ class _PremiumCalendarScreenState extends State<CalendarScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         IconButton(
-                          onPressed: () => _changeMonth(-1),
+                          onPressed: () => controller.changeMonth(-1),
                           icon: const Icon(Icons.arrow_back,
                               color: Colors.white),
                         ),
-                        Text(
-                          '${_monthName(focusedDate.month)} ${focusedDate.year}',
+                        Obx(() => Text(
+                          '${controller.getMonthName(controller.focusedDate.value.month)} ${controller.focusedDate.value.year}',
                           style: TextStyle(
                             color: AppColors.navSelected,
                             fontSize: isTablet ? 24 : (20 * widthScale),
                             fontWeight: FontWeight.bold,
                           ),
-                        ),
+                        )),
                         IconButton(
-                          onPressed: () => _changeMonth(1),
+                          onPressed: () => controller.changeMonth(1),
                           icon: const Icon(Icons.arrow_forward,
                               color: Colors.white),
                         ),
@@ -129,7 +111,7 @@ class _PremiumCalendarScreenState extends State<CalendarScreen> {
 
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: weekDays
+                      children: controller.weekDays
                           .map(
                             (d) => Expanded(
                           child: Center(
@@ -149,52 +131,53 @@ class _PremiumCalendarScreenState extends State<CalendarScreen> {
 
                     SizedBox(height: 10 * heightScale),
 
-                    GridView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: days.length,
-                      gridDelegate:
-                      SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 7,
-                        mainAxisSpacing: 8 * heightScale,
-                        crossAxisSpacing: 8 * widthScale,
-                        childAspectRatio: 1,
-                      ),
-                      itemBuilder: (context, index) {
-                        final date = days[index];
-                        final isSelected = selectedDate != null &&
-                            date != null &&
-                            _isSameDay(date, selectedDate!);
+                    Obx(() {
+                      final days = controller.generateCalendarDays(controller.focusedDate.value);
+                      return GridView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: days.length,
+                        gridDelegate:
+                        SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 7,
+                          mainAxisSpacing: 8 * heightScale,
+                          crossAxisSpacing: 8 * widthScale,
+                          childAspectRatio: 1,
+                        ),
+                        itemBuilder: (context, index) {
+                          final date = days[index];
+                          final isSelected = controller.selectedDate.value != null &&
+                              date != null &&
+                              controller.isSameDay(date, controller.selectedDate.value!);
 
-                        return GestureDetector(
-                          onTap: date == null
-                              ? null
-                              : () {
-                            setState(() {
-                              selectedDate = date;
-                            });
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: date == null
-                                  ? Colors.transparent
-                                  : isSelected
-                                  ? AppColors.accentGreen
-                                  : AppColors.mediumGreen,
-                              borderRadius: BorderRadius.circular(8 * widthScale),
-                            ),
-                            alignment: Alignment.center,
-                            child: Text(
-                              date?.day.toString() ?? '',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600,
+                          return GestureDetector(
+                            onTap: date == null
+                                ? null
+                                : () {
+                              controller.selectDate(date);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: date == null
+                                    ? Colors.transparent
+                                    : isSelected
+                                    ? AppColors.accentGreen
+                                    : AppColors.mediumGreen,
+                                borderRadius: BorderRadius.circular(8 * widthScale),
+                              ),
+                              alignment: Alignment.center,
+                              child: Text(
+                                date?.day.toString() ?? '',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                             ),
-                          ),
-                        );
-                      },
-                    ),
+                          );
+                        },
+                      );
+                    }),
                   ],
                 ),
               ),
@@ -244,85 +227,9 @@ class _PremiumCalendarScreenState extends State<CalendarScreen> {
       ),
       bottomNavigationBar: CustomBottomBar(
         selectedIndex: 1, // Calendar
-        onIndexChanged: (index) {
-          switch (index) {
-            case 0:
-              AppRoutes.goToAbout(context);
-              break;
-            case 1:
-              AppRoutes.goToCalendar(context);
-              break;
-            case 2:
-              AppRoutes.goToHome(context);
-              break;
-            case 3:
-              AppRoutes.goToServices(context);
-              break;
-            case 4:
-              AppRoutes.goToContact(context);
-              break;
-            case 5:
-              AppRoutes.goToDonation(context);
-              break;
-          }
-        },
+        onIndexChanged: controller.onBottomNavChanged,
         scales: scales,
       ),
     );
-  }
-
-  Widget _eventCard({required String title, required String subtitle, Color? backgroundColor, required double widthScale, required double heightScale, required bool isTablet}) {
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.symmetric(vertical: 18 * heightScale, horizontal: 16 * widthScale),
-      decoration: BoxDecoration(
-        color: backgroundColor ?? AppColors.eventCardBackground,
-        borderRadius: BorderRadius.circular(16 * widthScale),
-        border: Border.all(color: AppColors.mediumGreen),
-      ),
-      child: Column(
-        children: [
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: isTablet ? 24 : (20 * widthScale),
-              fontWeight: FontWeight.bold,
-              color: AppColors.darkGreen,
-            ),
-          ),
-          SizedBox(height: 6 * heightScale),
-          Text(
-            subtitle,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: isTablet ? 17 : (15 * widthScale),
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  bool _isSameDay(DateTime a, DateTime b) {
-    return a.year == b.year && a.month == b.month && a.day == b.day;
-  }
-
-  String _monthName(int month) {
-    const months = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December'
-    ];
-    return months[month - 1];
   }
 }

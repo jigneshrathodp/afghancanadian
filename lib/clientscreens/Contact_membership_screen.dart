@@ -5,6 +5,7 @@ import 'package:afghancanadian/widgets/responsive_helper.dart';
 import 'package:afghancanadian/widgets/app_routes.dart';
 import 'package:afghancanadian/new_bottomNavScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ContactMembershipScreen extends StatelessWidget {
   const ContactMembershipScreen({super.key});
@@ -201,19 +202,19 @@ class ContactMembershipScreen extends StatelessWidget {
           if (index != 1) { // Don't navigate if already on membership
             switch (index) {
               case 0:
-                AppRoutes.goToClientHome(context);
+                Get.toNamed(AppRoutes.dashboard);
                 break;
               case 2:
-                AppRoutes.goToHome(context);
+                Get.toNamed(AppRoutes.home);
                 break;
               case 3:
-                AppRoutes.goToContactInvoice(context);
+                Get.toNamed(AppRoutes.contactInvoice);
                 break;
               case 4:
-                AppRoutes.goToContact(context);
+                Get.toNamed(AppRoutes.contact);
                 break;
               case 5:
-                AppRoutes.goToContactDonation(context);
+                Get.toNamed(AppRoutes.contactDonation);
                 break;
             }
           }

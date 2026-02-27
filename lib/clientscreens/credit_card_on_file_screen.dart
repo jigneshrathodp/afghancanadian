@@ -4,37 +4,80 @@ import 'package:afghancanadian/newcustomdrawer.dart';
 import 'package:afghancanadian/widgets/responsive_helper.dart';
 import 'package:afghancanadian/widgets/app_routes.dart';
 import 'package:afghancanadian/new_bottomNavScreen.dart';
+import 'package:get/get.dart';
+import '../controllers/credit_card_controller.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
-class CreditCardOnFileScreen extends StatefulWidget {
+class CreditCardOnFileScreen extends StatelessWidget {
   const CreditCardOnFileScreen({super.key});
 
   @override
-  State<CreditCardOnFileScreen> createState() => _CreditCardOnFileScreenState();
-}
-
-class _CreditCardOnFileScreenState extends State<CreditCardOnFileScreen> {
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _cardNumberController = TextEditingController();
-  final TextEditingController _expiryController = TextEditingController();
-  final TextEditingController _cvvController = TextEditingController();
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _cardNumberController.dispose();
-    _expiryController.dispose();
-    _cvvController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final controller = Get.put(CreditCardController());
     final scales = ResponsiveHelper.getScales(context);
     final widthScale = scales.widthScale;
     final heightScale = scales.heightScale;
+
+    Widget buildTextField({
+      required TextEditingController controller,
+      required String labelText,
+      required String hintText,
+      required double widthScale,
+      required double heightScale,
+      TextInputType keyboardType = TextInputType.text,
+      bool obscureText = false,
+    }) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Label
+          Text(
+            labelText,
+            style: TextStyle(
+              fontSize: 14 * widthScale,
+              fontWeight: FontWeight.w500,
+              color: AppColors.textPrimary,
+            ),
+          ),
+          SizedBox(height: 6 * heightScale),
+          // Text Field
+          Container(
+            width: double.infinity,
+            height: 48 * heightScale,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8 * widthScale),
+              border: Border.all(
+                color: Colors.grey.shade400,
+                width: 1,
+              ),
+            ),
+            child: TextField(
+              controller: controller,
+              keyboardType: keyboardType,
+              obscureText: obscureText,
+              style: TextStyle(
+                fontSize: 14 * widthScale,
+                color: Colors.black,
+              ),
+              decoration: InputDecoration(
+                hintText: hintText,
+                hintStyle: TextStyle(
+                  fontSize: 14 * widthScale,
+                  color: Colors.grey.shade500,
+                ),
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 16 * widthScale,
+                  vertical: 12 * heightScale,
+                ),
+                border: InputBorder.none,
+              ),
+            ),
+          ),
+        ],
+      );
+    }
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -104,8 +147,8 @@ class _CreditCardOnFileScreenState extends State<CreditCardOnFileScreen> {
                       child: Column(
                         children: [
                           // Name on Card Field
-                          _buildTextField(
-                            controller: _nameController,
+                          buildTextField(
+                            controller: controller.nameController,
                             labelText: 'Name on Card',
                             hintText: 'Enter name on card',
                             widthScale: widthScale,
@@ -113,8 +156,8 @@ class _CreditCardOnFileScreenState extends State<CreditCardOnFileScreen> {
                           ),
                           SizedBox(height: 16 * heightScale),
                           // Card Number Field
-                          _buildTextField(
-                            controller: _cardNumberController,
+                          buildTextField(
+                            controller: controller.cardNumberController,
                             labelText: 'Card Number',
                             hintText: 'Enter card number',
                             widthScale: widthScale,
@@ -123,8 +166,8 @@ class _CreditCardOnFileScreenState extends State<CreditCardOnFileScreen> {
                           ),
                           SizedBox(height: 16 * heightScale),
                           // Expire Date Field
-                          _buildTextField(
-                            controller: _expiryController,
+                          buildTextField(
+                            controller: controller.expiryController,
                             labelText: 'Expire Date (MM/YY)',
                             hintText: 'MM/YY',
                             widthScale: widthScale,
@@ -133,8 +176,8 @@ class _CreditCardOnFileScreenState extends State<CreditCardOnFileScreen> {
                           ),
                           SizedBox(height: 16 * heightScale),
                           // CVV Field
-                          _buildTextField(
-                            controller: _cvvController,
+                          buildTextField(
+                            controller: controller.cvvController,
                             labelText: 'CVV',
                             hintText: 'Enter CVV',
                             widthScale: widthScale,
@@ -143,16 +186,24 @@ class _CreditCardOnFileScreenState extends State<CreditCardOnFileScreen> {
                             obscureText: true,
                           ),
                           SizedBox(height: 20 * heightScale),
-                          // Credit Card SVG Display
+                          // Credit Card Placeholder
                           Container(
                             width: double.infinity,
-                            child: ClipRRect(
+                            height: 100 * heightScale,
+                            decoration: BoxDecoration(
+                              color: AppColors.primaryDark.withOpacity(0.1),
                               borderRadius: BorderRadius.circular(12 * widthScale),
-                              child: AspectRatio(
-                                aspectRatio: 331 / 142,
-                                child: SvgPicture.asset(
-                                  'assets/card.svg',
-                                  fit: BoxFit.fitWidth,
+                              border: Border.all(
+                                color: AppColors.primaryDark,
+                                width: 1,
+                              ),
+                            ),
+                            child: Center(
+                              child: Text(
+                                'Credit Card Preview',
+                                style: TextStyle(
+                                  color: AppColors.primaryDark,
+                                  fontSize: 14 * widthScale,
                                 ),
                               ),
                             ),
@@ -193,87 +244,27 @@ class _CreditCardOnFileScreenState extends State<CreditCardOnFileScreen> {
         onIndexChanged: (index) {
           switch (index) {
             case 0:
-              AppRoutes.goToClientHome(context);
+              Get.toNamed(AppRoutes.dashboard);
               break;
             case 1:
-              AppRoutes.goToContactMembership(context);
+              Get.toNamed(AppRoutes.contactMembership);
               break;
             case 2:
-              AppRoutes.goToHome(context);
+              Get.toNamed(AppRoutes.home);
               break;
             case 3:
-              AppRoutes.goToContactInvoice(context);
+              Get.toNamed(AppRoutes.contactInvoice);
               break;
             case 4:
-              AppRoutes.goToContact(context);
+              Get.toNamed(AppRoutes.contact);
               break;
             case 5:
-              AppRoutes.goToContactDonation(context);
+              Get.toNamed(AppRoutes.contactDonation);
               break;
           }
         },
         scales: scales,
       ),
-    );
-  }
-
-  Widget _buildTextField({
-    required TextEditingController controller,
-    required String labelText,
-    required String hintText,
-    required double widthScale,
-    required double heightScale,
-    TextInputType keyboardType = TextInputType.text,
-    bool obscureText = false,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Label
-        Text(
-          labelText,
-          style: TextStyle(
-            fontSize: 14 * widthScale,
-            fontWeight: FontWeight.w500,
-            color: AppColors.textPrimary,
-          ),
-        ),
-        SizedBox(height: 6 * heightScale),
-        // Text Field
-        Container(
-          width: double.infinity,
-          height: 48 * heightScale,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(8 * widthScale),
-            border: Border.all(
-              color: Colors.grey.shade400,
-              width: 1,
-            ),
-          ),
-          child: TextField(
-            controller: controller,
-            keyboardType: keyboardType,
-            obscureText: obscureText,
-            style: TextStyle(
-              fontSize: 14 * widthScale,
-              color: Colors.black,
-            ),
-            decoration: InputDecoration(
-              hintText: hintText,
-              hintStyle: TextStyle(
-                fontSize: 14 * widthScale,
-                color: Colors.grey.shade500,
-              ),
-              contentPadding: EdgeInsets.symmetric(
-                horizontal: 16 * widthScale,
-                vertical: 12 * heightScale,
-              ),
-              border: InputBorder.none,
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

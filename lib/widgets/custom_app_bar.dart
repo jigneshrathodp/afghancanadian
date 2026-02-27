@@ -64,7 +64,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           ? [
               IconButton(
                 onPressed: onProfilePressed ?? () {
-                  AppRoutes.goToSignin(context);
+                  AppRoutes.goToSignin();
                 },
                 icon: Image.asset(
                   'assets/profile.png',

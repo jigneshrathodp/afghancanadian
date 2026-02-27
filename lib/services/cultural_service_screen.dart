@@ -1,5 +1,5 @@
 import 'package:afghancanadian/widgets/app_colors.dart';
-import 'package:afghancanadian/widgets/app_routes.dart';
+import 'package:afghancanadian/widgets/responsive_helper.dart';
 import 'package:flutter/material.dart';
 
 class CulturalServiceScreen extends StatelessWidget {
@@ -132,6 +132,7 @@ class CulturalServiceScreen extends StatelessWidget {
               ),
             ),
           ),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.05 > 60 ? 60 : MediaQuery.of(context).size.height * 0.05)
         ],
       ),
     );
@@ -165,4 +166,5 @@ class CulturalServiceScreen extends StatelessWidget {
       ),
     );
   }
+
 }

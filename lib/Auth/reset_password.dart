@@ -1,101 +1,20 @@
 import 'package:afghancanadian/widgets/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../widgets/app_routes.dart';
 import '../widgets/custom_widgets.dart';
 
-class ResetPassword extends StatefulWidget {
+class ResetPassword extends StatelessWidget {
   const ResetPassword({super.key});
 
   @override
-  State<ResetPassword> createState() => _ResetPasswordState();
-}
-
-class _ResetPasswordState extends State<ResetPassword> {
-  final TextEditingController _newPasswordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
-  bool _isLoading = false;
-
-  @override
-  void dispose() {
-    _newPasswordController.dispose();
-    _confirmPasswordController.dispose();
-    super.dispose();
-  }
-
-  Future<void> _resetPassword() async {
-    if (!_formKey.currentState!.validate()) {
-      return;
-    }
-
-    if (_newPasswordController.text != _confirmPasswordController.text) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Passwords do not match!'),
-          backgroundColor: Colors.orange,
-        ),
-      );
-      return;
-    }
-
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      // Simulate password reset
-      await Future.delayed(const Duration(seconds: 2));
-
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Password reset successfully!'),
-            backgroundColor: Colors.green,
-          ),
-        );
-
-        // Show success dialog
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text('Success'),
-              content: const Text(
-                'Your password has been reset successfully. You can now log in with your new password.',
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    AppRoutes.goToSignin(context);
-                  },
-                  child: const Text('OK'),
-                ),
-              ],
-            );
-          },
-        );
-      }
-    } catch (e) {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error: $e'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
+    // Create reactive variables for the state
+    final newPasswordController = Get.put(TextEditingController(), tag: 'reset_new_password');
+    final confirmPasswordController = Get.put(TextEditingController(), tag: 'reset_confirm_password');
+    final formKey = GlobalKey<FormState>();
+    final isLoading = false.obs;
+
     final screenHeight = MediaQuery.of(context).size.height;
     final isSmallScreen = screenHeight < 700;
     final screenWidth = MediaQuery.of(context).size.width;
@@ -111,6 +30,62 @@ class _ResetPasswordState extends State<ResetPassword> {
     // Adjust header height for tablets - larger height for better visibility
     final isTablet = screenWidth >= 600;
     final headerHeight = isTablet ? screenHeight * 0.45 : screenHeight * 0.35;
+
+    Future<void> resetPassword() async {
+      if (!formKey.currentState!.validate()) {
+        return;
+      }
+
+      if (newPasswordController.text != confirmPasswordController.text) {
+        Get.snackbar(
+          'Error',
+          'Passwords do not match!',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.orange,
+          colorText: Colors.white,
+        );
+        return;
+      }
+
+      isLoading.value = true;
+
+      try {
+        // Simulate password reset
+        await Future.delayed(const Duration(seconds: 2));
+
+        isLoading.value = false;
+
+        Get.snackbar(
+          'Success',
+          'Password reset successfully!',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
+
+        // Show success dialog
+        Get.defaultDialog(
+          title: 'Success',
+          middleText: 'Your password has been reset successfully. You can now log in with your new password.',
+          confirm: ElevatedButton(
+            onPressed: () {
+              Get.back(); // Close dialog
+              Get.offAllNamed(AppRoutes.signin); // Navigate to sign in
+            },
+            child: const Text('OK'),
+          ),
+        );
+      } catch (e) {
+        isLoading.value = false;
+        Get.snackbar(
+          'Error',
+          'Error: $e',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      }
+    }
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -148,7 +123,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                               ? (isCompactWidth ? 10.0 : 12.0)
                               : (isCompactWidth ? 18.0 : 22.0),
                         ),
-                        child: Column(
+                        child: Obx(() => Column(  // Using Obx to react to reactive variables
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             const StyledText(
@@ -156,7 +131,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                             ),
                             SizedBox(height: isSmallScreen ? 12 : 20),
                             Form(
-                              key: _formKey,
+                              key: formKey,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisSize: MainAxisSize.min,
@@ -173,7 +148,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                                   ),
                                   SizedBox(height: isSmallScreen ? 6 : 8),
                                   CustomTextFormField(
-                                    controller: _newPasswordController,
+                                    controller: newPasswordController,
                                     hintText: 'New Password',
                                     obscureText: true,
                                     textInputAction: TextInputAction.next,
@@ -200,7 +175,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                                   ),
                                   SizedBox(height: isSmallScreen ? 6 : 8),
                                   CustomTextFormField(
-                                    controller: _confirmPasswordController,
+                                    controller: confirmPasswordController,
                                     hintText: 'Confirm Password',
                                     obscureText: true,
                                     textInputAction: TextInputAction.done,
@@ -217,8 +192,8 @@ class _ResetPasswordState extends State<ResetPassword> {
                                   SizedBox(height: isSmallScreen ? 20 : 30),
                                   CustomButton(
                                     label: 'Submit',
-                                    onPressed: _isLoading ? null : _resetPassword,
-                                    isLoading: _isLoading,
+                                    onPressed: isLoading.value ? null : resetPassword,
+                                    isLoading: isLoading.value,
                                   ),
                                   SizedBox(height: isSmallScreen ? 12 : 16),
                                   Row(
@@ -226,7 +201,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                                     children: [
                                       GestureDetector(
                                         onTap: () {
-                                          AppRoutes.goBack(context);
+                                          Get.back();
                                         },
                                         child: Text(
                                           'Back To Sign In',
@@ -245,7 +220,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                               ),
                             ),
                           ],
-                        ),
+                        )),
                       ),
                     ],
                   ),

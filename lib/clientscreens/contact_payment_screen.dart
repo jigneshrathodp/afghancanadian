@@ -3,135 +3,76 @@ import 'package:afghancanadian/newcustomdrawer.dart';
 import 'package:afghancanadian/widgets/responsive_helper.dart';
 import 'package:afghancanadian/widgets/app_routes.dart';
 import 'package:afghancanadian/new_bottomNavScreen.dart';
+import 'package:get/get.dart';
+import '../controllers/payment_controller.dart';
 
 import 'package:flutter/material.dart';
 
-class ContactPaymentScreen extends StatefulWidget {
+class ContactPaymentScreen extends StatelessWidget {
   const ContactPaymentScreen({super.key});
 
   @override
-  State<ContactPaymentScreen> createState() => _ContactPaymentScreenState();
-}
-
-class _ContactPaymentScreenState extends State<ContactPaymentScreen> {
-  String? _selectedMonth;
-  String? _selectedDateRange;
-  final Set<int> _expandedItems = {};
-
-  final List<String> _monthOptions = [
-    'Current Month',
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
-
-  final List<Map<String, dynamic>> _payments = [
-    {
-      'date': 'Nov,\n14,\n2025\n12:00\nam',
-      'id': '00095',
-      'repName': 'Test Contact\nACIC',
-      'details': 'Donation #00042 Payment received for pledge donation #42',
-      'amount': '121.50',
-      'status': '',
-      'isPositive': false,
-    },
-    {
-      'date': 'Nov,\n14,\n2025\n12:00\nam',
-      'id': '00094',
-      'repName': 'Test Contact\nACIC',
-      'details': null,
-      'amount': null,
-      'status': null,
-      'isPositive': true,
-    },
-    {
-      'date': 'Nov,\n14,\n2025\n12:00\nam',
-      'id': '00093',
-      'repName': 'Test Contact\nACIC',
-      'details': 'Payment : Cash\nRefund Settled',
-      'amount': '-100.15',
-      'status': '',
-      'isPositive': false,
-    },
-    {
-      'date': 'Nov,\n14,\n2025\n12:00\nam',
-      'id': '00092',
-      'repName': 'Test Contact\nACIC',
-      'details': null,
-      'amount': null,
-      'status': null,
-      'isPositive': true,
-    },
-    {
-      'date': 'Nov,\n14,\n2025\n12:00\nam',
-      'id': '00091',
-      'repName': 'Test Contact\nACIC',
-      'details': null,
-      'amount': null,
-      'status': null,
-      'isPositive': true,
-    },
-    {
-      'date': 'Nov,\n14,\n2025\n12:00\nam',
-      'id': '00090',
-      'repName': 'Test Contact\nACIC',
-      'details': null,
-      'amount': null,
-      'status': null,
-      'isPositive': true,
-    },
-    {
-      'date': 'Nov,\n14,\n2025\n12:00\nam',
-      'id': '00089',
-      'repName': 'Test Contact\nACIC',
-      'details': null,
-      'amount': null,
-      'status': null,
-      'isPositive': true,
-    },
-    {
-      'date': 'Nov,\n14,\n2025\n12:00\nam',
-      'id': '00088',
-      'repName': 'Test Contact\nACIC',
-      'details': null,
-      'amount': null,
-      'status': null,
-      'isPositive': true,
-    },
-    {
-      'date': 'Nov,\n14,\n2025\n12:00\nam',
-      'id': '00087',
-      'repName': 'Test Contact\nACIC',
-      'details': null,
-      'amount': null,
-      'status': null,
-      'isPositive': true,
-    },
-    {
-      'date': 'Nov,\n14,\n2025\n12:00\nam',
-      'id': '00086',
-      'repName': 'Test Contact\nACIC',
-      'details': null,
-      'amount': null,
-      'status': null,
-      'isPositive': true,
-    },
-  ];
-
-  @override
   Widget build(BuildContext context) {
+    final controller = Get.put(PaymentController());
     final scales = ResponsiveHelper.getScales(context);
     final widthScale = scales.widthScale;
     final heightScale = scales.heightScale;
+
+    Widget buildDropdown({
+      required String? value,
+      required String hint,
+      required List<String> items,
+      required ValueChanged<String?> onChanged,
+      required double widthScale,
+      required double heightScale,
+    }) {
+      return Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: 10 * widthScale,
+          vertical: 4 * heightScale,
+        ),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(color: Colors.grey.shade300),
+          borderRadius: BorderRadius.circular(8 * widthScale),
+        ),
+        child: DropdownButtonHideUnderline(
+          child: Obx(() => DropdownButton<String>(
+            value: value,
+            hint: Text(
+              hint,
+              style: TextStyle(
+                fontSize: 13 * widthScale,
+                color: Colors.grey.shade600,
+              ),
+            ),
+            isExpanded: true,
+            icon: Icon(
+              Icons.keyboard_arrow_down,
+              color: Colors.grey.shade600,
+              size: 20 * widthScale,
+            ),
+            style: TextStyle(
+              fontSize: 13 * widthScale,
+              color: Colors.black87,
+            ),
+            items: items.map((String item) {
+              return DropdownMenuItem<String>(
+                value: item == hint ? null : item,
+                child: Text(
+                  item,
+                  style: TextStyle(
+                    fontSize: 13 * widthScale,
+                    color: Colors.black87,
+                  ),
+                ),
+              );
+            }).toList(),
+            onChanged: onChanged,
+          )),
+        ),
+      );
+    }
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -174,33 +115,29 @@ class _ContactPaymentScreenState extends State<ContactPaymentScreen> {
                 Row(
                   children: [
                     Expanded(
-                      child: _buildDropdown(
-                        value: _selectedMonth,
+                      child: Obx(() => buildDropdown(
+                        value: controller.selectedMonth.value,
                         hint: 'Current Month',
-                        items: _monthOptions,
+                        items: controller.monthOptions,
                         onChanged: (value) {
-                          setState(() {
-                            _selectedMonth = value;
-                          });
+                          controller.selectedMonth.value = value;
                         },
                         widthScale: widthScale,
                         heightScale: heightScale,
-                      ),
+                      )),
                     ),
                     SizedBox(width: 12 * widthScale),
                     Expanded(
-                      child: _buildDropdown(
-                        value: _selectedDateRange,
+                      child: Obx(() => buildDropdown(
+                        value: controller.selectedDateRange.value,
                         hint: 'Start - End Date',
                         items: const ['Start - End Date', 'Last 7 Days', 'Last 30 Days'],
                         onChanged: (value) {
-                          setState(() {
-                            _selectedDateRange = value;
-                          });
+                          controller.selectedDateRange.value = value;
                         },
                         widthScale: widthScale,
                         heightScale: heightScale,
-                      ),
+                      )),
                     ),
                   ],
                 ),
@@ -281,9 +218,9 @@ class _ContactPaymentScreenState extends State<ContactPaymentScreen> {
                       ),
 
                       // Payment List Items
-                      ...List.generate(_payments.length, (index) {
-                        final payment = _payments[index];
-                        final isExpanded = _expandedItems.contains(index);
+                      ...List.generate(controller.payments.length, (index) {
+                        final payment = controller.payments[index];
+                        final isExpanded = controller.expandedItems.contains(index);
                         final hasDetails = payment['details'] != null;
 
                         return Column(
@@ -315,13 +252,7 @@ class _ContactPaymentScreenState extends State<ContactPaymentScreen> {
                                         GestureDetector(
                                           onTap: hasDetails
                                               ? () {
-                                                  setState(() {
-                                                    if (isExpanded) {
-                                                      _expandedItems.remove(index);
-                                                    } else {
-                                                      _expandedItems.add(index);
-                                                    }
-                                                  });
+                                                  controller.toggleExpandedItem(index);
                                                 }
                                               : null,
                                           child: Container(
@@ -352,7 +283,7 @@ class _ContactPaymentScreenState extends State<ContactPaymentScreen> {
                                         SizedBox(width: 4 * widthScale),
                                         Expanded(
                                           child: Text(
-                                            payment['date'],
+                                            payment['date'].toString(),
                                             style: TextStyle(
                                               fontSize: 11 * widthScale,
                                               color: Colors.black87,
@@ -367,7 +298,7 @@ class _ContactPaymentScreenState extends State<ContactPaymentScreen> {
                                   Expanded(
                                     flex: 2,
                                     child: Text(
-                                      payment['id'],
+                                      payment['id'].toString(),
                                       style: TextStyle(
                                         fontSize: 12 * widthScale,
                                         color: Colors.black87,
@@ -378,7 +309,7 @@ class _ContactPaymentScreenState extends State<ContactPaymentScreen> {
                                   Expanded(
                                     flex: 2,
                                     child: Text(
-                                      payment['repName'],
+                                      payment['repName'].toString(),
                                       style: TextStyle(
                                         fontSize: 11 * widthScale,
                                         color: Colors.black87,
@@ -438,7 +369,7 @@ class _ContactPaymentScreenState extends State<ContactPaymentScreen> {
                                         SizedBox(width: 8 * widthScale),
                                         Expanded(
                                           child: Text(
-                                            ': ${payment['details']}',
+                                            ': ${payment['details']?.toString() ?? ''}',
                                             style: TextStyle(
                                               fontSize: 12 * widthScale,
                                               color: Colors.black87,
@@ -463,7 +394,7 @@ class _ContactPaymentScreenState extends State<ContactPaymentScreen> {
                                           ),
                                           SizedBox(width: 8 * widthScale),
                                           Text(
-                                            ': ${payment['amount']}',
+                                            ': ${payment['amount']?.toString() ?? ''}',
                                             style: TextStyle(
                                               fontSize: 12 * widthScale,
                                               color: Colors.black87,
@@ -485,7 +416,7 @@ class _ContactPaymentScreenState extends State<ContactPaymentScreen> {
                                         ),
                                         SizedBox(width: 8 * widthScale),
                                         Text(
-                                          ': ${payment['status']}',
+                                          ': ${payment['status']?.toString() ?? ''}',
                                           style: TextStyle(
                                             fontSize: 12 * widthScale,
                                             color: Colors.black87,
@@ -556,82 +487,26 @@ class _ContactPaymentScreenState extends State<ContactPaymentScreen> {
         onIndexChanged: (index) {
           switch (index) {
             case 0:
-              AppRoutes.goToClientHome(context);
+              Get.toNamed(AppRoutes.dashboard);
               break;
             case 1:
-              AppRoutes.goToContactMembership(context);
+              Get.toNamed(AppRoutes.contactMembership);
               break;
             case 2:
-              AppRoutes.goToHome(context);
+              Get.toNamed(AppRoutes.home);
               break;
             case 3:
-              AppRoutes.goToContactInvoice(context);
+              Get.toNamed(AppRoutes.contactInvoice);
               break;
             case 4:
-              AppRoutes.goToContact(context);
+              Get.toNamed(AppRoutes.contact);
               break;
             case 5:
-              AppRoutes.goToContactDonation(context);
+              Get.toNamed(AppRoutes.contactDonation);
               break;
           }
         },
         scales: scales,
-      ),
-    );
-  }
-
-  Widget _buildDropdown({
-    required String? value,
-    required String hint,
-    required List<String> items,
-    required ValueChanged<String?> onChanged,
-    required double widthScale,
-    required double heightScale,
-  }) {
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: 10 * widthScale,
-        vertical: 4 * heightScale,
-      ),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: Colors.grey.shade300),
-        borderRadius: BorderRadius.circular(8 * widthScale),
-      ),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
-          value: value,
-          hint: Text(
-            hint,
-            style: TextStyle(
-              fontSize: 13 * widthScale,
-              color: Colors.grey.shade600,
-            ),
-          ),
-          isExpanded: true,
-          icon: Icon(
-            Icons.keyboard_arrow_down,
-            color: Colors.grey.shade600,
-            size: 20 * widthScale,
-          ),
-          style: TextStyle(
-            fontSize: 13 * widthScale,
-            color: Colors.black87,
-          ),
-          items: items.map((String item) {
-            return DropdownMenuItem<String>(
-              value: item == hint ? null : item,
-              child: Text(
-                item,
-                style: TextStyle(
-                  fontSize: 13 * widthScale,
-                  color: Colors.black87,
-                ),
-              ),
-            );
-          }).toList(),
-          onChanged: onChanged,
-        ),
       ),
     );
   }

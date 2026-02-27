@@ -2,46 +2,16 @@ import 'package:afghancanadian/widgets/app_colors.dart';
 import 'package:afghancanadian/widgets/responsive_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import '../widgets/app_routes.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/custom_drawer.dart';
 import '../widgets/bottom_nav_screen.dart';
+import '../controllers/services_controller.dart';
+import '../new_bottomNavScreen.dart';
 
-class ServicesScreen extends StatelessWidget {
+class ServicesScreen extends GetView<ServicesController> {
   const ServicesScreen({super.key});
-
-  final List<Map<String, dynamic>> services = const [
-    {
-      'name': 'Cultural Services',
-      'svg': '1.svg',
-      'route': AppRoutes.culturalService,
-    },
-    {
-      'name': 'Youth Programs',
-      'svg': '2.svg',
-      'route': AppRoutes.youthService,
-    },
-    {
-      'name': 'Women Services',
-      'svg': '3.svg',
-      'route': AppRoutes.womenService,
-    },
-    {
-      'name': 'Maktab',
-      'svg': '4.svg',
-      'route': AppRoutes.educationService,
-    },
-    {
-      'name': 'Funeral Service',
-      'svg': '21.svg',
-      'route': AppRoutes.funeralService,
-    },
-    {
-      'name': 'Library',
-      'svg': '22.svg',
-      'route': AppRoutes.libraryService,
-    },
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -81,12 +51,12 @@ class ServicesScreen extends StatelessWidget {
                       mainAxisSpacing: 15 * heightScale,
                       childAspectRatio: 0.9,
                     ),
-                    itemCount: services.length,
+                    itemCount: controller.services.length,
                     itemBuilder: (context, index) {
-                      final service = services[index];
+                      final service = controller.services[index];
                       return GestureDetector(
                         onTap: () {
-                          AppRoutes.navigateTo(context, service['route'] as String);
+                          controller.navigateToService(service['route'] as String);
                         },
                         child: Container(
                           decoration: BoxDecoration(
@@ -134,28 +104,7 @@ class ServicesScreen extends StatelessWidget {
       ),
       bottomNavigationBar: CustomBottomBar(
         selectedIndex: 3, // Services
-        onIndexChanged: (index) {
-          switch (index) {
-            case 0:
-              AppRoutes.goToAbout(context);
-              break;
-            case 1:
-              AppRoutes.goToCalendar(context);
-              break;
-            case 2:
-              AppRoutes.goToHome(context);
-              break;
-            case 3:
-              AppRoutes.goToServices(context);
-              break;
-            case 4:
-              AppRoutes.goToContact(context);
-              break;
-            case 5:
-              AppRoutes.goToDonation(context);
-              break;
-          }
-        },
+        onIndexChanged: controller.onBottomNavChanged,
         scales: scales,
       ),
     );

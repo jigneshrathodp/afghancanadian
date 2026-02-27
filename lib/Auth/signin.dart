@@ -1,76 +1,12 @@
 import 'package:afghancanadian/widgets/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../widgets/app_routes.dart';
 import '../widgets/custom_widgets.dart';
-import '../services/auth_manager.dart';
+import '../controllers/signin_controller.dart';
 
-class Signin extends StatefulWidget {
+class Signin extends GetView<SigninController> {
   const Signin({super.key});
-
-  @override
-  State<Signin> createState() => _SigninState();
-}
-
-class _SigninState extends State<Signin> {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
-  bool _isLoading = false;
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
-
-  Future<void> _loginUser() async {
-    if (!_formKey.currentState!.validate()) {
-      return;
-    }
-
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      // UI-only simulated login
-      await Future.delayed(const Duration(milliseconds: 700));
-
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Login successful!'),
-            backgroundColor: Colors.green,
-          ),
-        );
-
-        // Save login state and navigate
-        await AuthManager().login(userId: '54881852', userName: 'Hameed Zarabi');
-        
-        // Navigate to signed-in flow
-        if (mounted) {
-          AppRoutes.goToClientHome(context);
-        }
-      }
-    } catch (e) {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error: $e'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +36,7 @@ class _SigninState extends State<Signin> {
           TextButton(
             onPressed: () {
               // Skip login - navigate to home without authentication
-              AppRoutes.goToHome(context);
+              Get.offAllNamed(AppRoutes.home);
             },
             child: const Text(
               'Skip',
@@ -147,7 +83,7 @@ class _SigninState extends State<Signin> {
                               ? (isCompactWidth ? 10.0 : 12.0)
                               : (isCompactWidth ? 18.0 : 22.0)
                         ),
-                        child: Column(
+                        child: Obx(() => Column(  // Using Obx to react to reactive variables
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             const StyledText(
@@ -155,7 +91,7 @@ class _SigninState extends State<Signin> {
                             ),
                             SizedBox(height: isSmallScreen ? 12 : 20),
                             Form(
-                              key: _formKey,
+                              key: controller.formKey,  // Using controller's form key
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisSize: MainAxisSize.min,
@@ -172,17 +108,15 @@ class _SigninState extends State<Signin> {
                                   ),
                                   SizedBox(height: isSmallScreen ? 6 : 8),
                                   CustomTextFormField(
-                                    controller: _emailController,
+                                    controller: controller.emailController,  // Using controller's email controller
                                     hintText: 'E-mail Address',
                                     keyboardType: TextInputType.emailAddress,
                                     textInputAction: TextInputAction.next,
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
-                                        return 'Please enter an email';
+                                        return 'Please enter your email';
                                       }
-                                      if (!RegExp(
-                                        r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
-                                      ).hasMatch(value)) {
+                                      if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
                                         return 'Please enter a valid email';
                                       }
                                       return null;
@@ -201,7 +135,7 @@ class _SigninState extends State<Signin> {
                                   ),
                                   SizedBox(height: isSmallScreen ? 6 : 8),
                                   CustomTextFormField(
-                                    controller: _passwordController,
+                                    controller: controller.passwordController,  // Using controller's password controller
                                     hintText: 'Password',
                                     obscureText: true,
                                     textInputAction: TextInputAction.done,
@@ -210,9 +144,7 @@ class _SigninState extends State<Signin> {
                                   Align(
                                     alignment: Alignment.center,
                                     child: GestureDetector(
-                                      onTap: () {
-                                        AppRoutes.goToForgetPassword(context);
-                                      },
+                                      onTap: controller.navigateToForgetPassword,
                                       child: Text(
                                         'Forgot you password?',
                                         style: TextStyle(
@@ -227,8 +159,8 @@ class _SigninState extends State<Signin> {
                                   SizedBox(height: isSmallScreen ? 20 : 30),
                                   CustomButton(
                                     label: 'Sign In',
-                                    onPressed: _isLoading ? null : _loginUser,
-                                    isLoading: _isLoading,
+                                    onPressed: controller.isLoading.value ? null : controller.loginUser,  // Using controller's login method
+                                    isLoading: controller.isLoading.value,  // Reactive loading state
                                   ),
                                   SizedBox(height: isSmallScreen ? 12 : 16),
                                   Row(
@@ -245,9 +177,7 @@ class _SigninState extends State<Signin> {
                                         ),
                                       ),
                                       GestureDetector(
-                                        onTap: () {
-                                          AppRoutes.goToSignup(context);
-                                        },
+                                        onTap: controller.navigateToSignup,
                                         child: Text(
                                           'Create Account',
                                           style: TextStyle(
@@ -265,7 +195,7 @@ class _SigninState extends State<Signin> {
                               ),
                             ),
                           ],
-                        ),
+                        )),
                       ),
                     ],
                   ),

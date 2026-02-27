@@ -4,6 +4,8 @@ import 'package:afghancanadian/widgets/app_colors.dart';
 import 'package:afghancanadian/widgets/custom_app_bar.dart';
 import 'package:afghancanadian/widgets/custom_drawer.dart';
 import 'package:afghancanadian/widgets/responsive_helper.dart';
+import 'package:afghancanadian/widgets/bottom_nav_screen.dart';
+import 'package:afghancanadian/widgets/app_routes.dart';
 
 class BoardMemberDetailScreen extends StatelessWidget {
   final User user;
@@ -82,6 +84,32 @@ class BoardMemberDetailScreen extends StatelessWidget {
             SizedBox(height: 40 * heightScale),
           ],
         ),
+      ),
+      bottomNavigationBar: CustomBottomBar(
+        selectedIndex: -1, // No item selected
+        onIndexChanged: (index) {
+          switch (index) {
+            case 0:
+              AppRoutes.goToAbout();
+              break;
+            case 1:
+              AppRoutes.goToCalendar();
+              break;
+            case 2:
+              AppRoutes.goToHome();
+              break;
+            case 3:
+              AppRoutes.goToServices();
+              break;
+            case 4:
+              AppRoutes.goToContact();
+              break;
+            case 5:
+              AppRoutes.goToDonation();
+              break;
+          }
+        },
+        scales: scales,
       ),
     );
   }

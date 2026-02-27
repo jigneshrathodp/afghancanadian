@@ -1,28 +1,17 @@
 import 'package:afghancanadian/widgets/app_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:get/get.dart';
 
 import 'widgets/app_routes.dart';
 import 'services/auth_manager.dart';
+import 'bindings/app_bindings.dart';
 
-void main() {
-  runApp(
-    const MyApp(),
-  );
-}
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await AuthManager().init();
 
-class NoTransitionsBuilder extends PageTransitionsBuilder {
-  @override
-  Widget buildTransitions<T>(
-      PageRoute<T> route,
-      BuildContext context,
-      Animation<double> animation,
-      Animation<double> secondaryAnimation,
-      Widget child,
-      ) {
-    return child;
-  }
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
@@ -34,39 +23,30 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   @override
-  void initState() {
-    super.initState();
-    _initAuth();
-  }
-
-  Future<void> _initAuth() async {
-    await AuthManager().init();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Afghan Canadian Islamic Community',
       debugShowCheckedModeBanner: false,
+      defaultTransition: Transition.noTransition,
+      transitionDuration: Duration.zero,
       theme: ThemeData(
-        pageTransitionsTheme: PageTransitionsTheme(
-          builders: {
-            TargetPlatform.android: NoTransitionsBuilder(),
-            TargetPlatform.iOS: NoTransitionsBuilder(),
-          },
-        ),
         scaffoldBackgroundColor: AppColors.background,
-        colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryDark).copyWith(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: AppColors.primaryDark,
+          brightness: Brightness.light,
+        ).copyWith(
           surface: AppColors.background,
         ),
         textTheme: GoogleFonts.robotoTextTheme(),
         fontFamily: GoogleFonts.roboto().fontFamily,
+        useMaterial3: true,
       ),
-      // Named routes configuration
+
+      // Routing Configuration
       initialRoute: AppRoutes.splash,
-      routes: AppRoutes.routes,
+      getPages: AppRoutes.getPages,
+      initialBinding: AppBindings(),
+      unknownRoute: AppRoutes.getPages.first,
     );
   }
 }
-
-

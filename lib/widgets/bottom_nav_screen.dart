@@ -19,6 +19,25 @@ class CustomBottomBar extends StatefulWidget {
 }
 
 class _CustomBottomBarState extends State<CustomBottomBar> {
+  bool _isNavigating = false;
+
+  Future<void> _handleNavigation(int index) async {
+    if (_isNavigating || index == widget.selectedIndex) return;
+    
+    setState(() {
+      _isNavigating = true;
+    });
+    
+    widget.onIndexChanged(index);
+    
+    // Reset navigation flag after a short delay
+    await Future.delayed(const Duration(milliseconds: 300));
+    if (mounted) {
+      setState(() {
+        _isNavigating = false;
+      });
+    }
+  }
   @override
   Widget build(BuildContext context) {
     final heightScale = widget.scales.heightScale;
@@ -89,12 +108,10 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
   ) {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: () {
-        widget.onIndexChanged(index);
-      },
+      onTap: () => _handleNavigation(index),
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        curve: Curves.easeInOut,
+        duration: const Duration(milliseconds: 150),
+        curve: Curves.easeOutCubic,
         transform: isSelected
             ? Matrix4.translationValues(0, floatingOffset, 0)
             : Matrix4.identity(),

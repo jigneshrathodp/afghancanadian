@@ -1,5 +1,5 @@
 import 'package:afghancanadian/widgets/app_colors.dart';
-import 'package:afghancanadian/widgets/app_routes.dart';
+import 'package:afghancanadian/widgets/responsive_helper.dart';
 import 'package:flutter/material.dart';
 
 class Libraryservicescreen extends StatelessWidget {
@@ -16,7 +16,6 @@ class Libraryservicescreen extends StatelessWidget {
 
     // Responsive font sizes
     final titleFontSize = screenWidth * 0.06 > 28 ? 28.0 : screenWidth * 0.06;
-    final headingFontSize = screenWidth * 0.05 > 22 ? 22.0 : screenWidth * 0.05;
     final subheadingFontSize = screenWidth * 0.045 > 18 ? 18.0 : screenWidth * 0.045;
     final bodyFontSize = screenWidth * 0.04 > 16 ? 16.0 : screenWidth * 0.04;
 
@@ -147,4 +146,5 @@ class Libraryservicescreen extends StatelessWidget {
       ),
     );
   }
+
 }

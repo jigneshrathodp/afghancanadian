@@ -1,5 +1,5 @@
 import 'package:afghancanadian/widgets/app_colors.dart';
-import 'package:afghancanadian/widgets/app_routes.dart';
+import 'package:afghancanadian/widgets/responsive_helper.dart';
 import 'package:flutter/material.dart';
 
 class EducationServiceScreen extends StatelessWidget {
@@ -188,4 +188,5 @@ class EducationServiceScreen extends StatelessWidget {
       ),
     );
   }
+
 }

@@ -3,152 +3,74 @@ import 'package:afghancanadian/newcustomdrawer.dart';
 import 'package:afghancanadian/widgets/responsive_helper.dart';
 import 'package:afghancanadian/widgets/app_routes.dart';
 import 'package:afghancanadian/new_bottomNavScreen.dart';
+import 'package:get/get.dart';
+import '../controllers/invoice_controller.dart';
 import 'package:flutter/material.dart';
 
-class ContactInvoiceScreen extends StatefulWidget {
+class ContactInvoiceScreen extends StatelessWidget {
   const ContactInvoiceScreen({super.key});
 
   @override
-  State<ContactInvoiceScreen> createState() => _ContactInvoiceScreenState();
-}
-
-class _ContactInvoiceScreenState extends State<ContactInvoiceScreen> {
-  String? _selectedMonth;
-  String? _selectedDateRange;
-  final Set<int> _expandedItems = {};
-
-  final List<String> _monthOptions = [
-    'Current Month',
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
-
-  final List<Map<String, dynamic>> _invoices = [
-    {
-      'date': 'Nov,\n13,\n2025\n06:05\nam',
-      'invoiceNumber': '00065',
-      'repName': 'Test Contact\nACIC',
-      'invoiceType': 'Import',
-      'amount': '750',
-      'balanceDue': '750',
-      'totalAmount': '750.00',
-      'status': 'Unpaid',
-      'statusColor': 0xFFFFCDD2,
-      'statusTextColor': 0xFFE53935,
-    },
-    {
-      'date': 'Nov,\n13,\n2025\n06:05\nam',
-      'invoiceNumber': '00064',
-      'repName': 'Test Contact\nACIC',
-      'invoiceType': 'Manual Invoice',
-      'amount': '100',
-      'balanceDue': '100',
-      'totalAmount': '100.00',
-      'status': 'Void',
-      'statusColor': 0xFFE0E0E0,
-      'statusTextColor': 0xFF757575,
-    },
-    {
-      'date': 'Nov,\n13,\n2025\n06:05\nam',
-      'invoiceNumber': '00063',
-      'repName': 'Test Contact\nACIC',
-      'invoiceType': null,
-      'amount': null,
-      'balanceDue': null,
-      'totalAmount': null,
-      'status': null,
-    },
-    {
-      'date': 'Nov,\n13,\n2025\n06:05\nam',
-      'invoiceNumber': '00062',
-      'repName': 'Test Contact\nACIC',
-      'invoiceType': 'Manual Invoice',
-      'amount': '11.11',
-      'balanceDue': '11.11',
-      'totalAmount': '111.11',
-      'status': 'Partially Paid',
-      'statusColor': 0xFFFFF9C4,
-      'statusTextColor': 0xFFFBC02D,
-    },
-    {
-      'date': 'Nov,\n13,\n2025\n06:05\nam',
-      'invoiceNumber': '00061',
-      'repName': 'Test Contact\nACIC',
-      'invoiceType': null,
-      'amount': null,
-      'balanceDue': null,
-      'totalAmount': null,
-      'status': null,
-    },
-    {
-      'date': 'Nov,\n13,\n2025\n06:05\nam',
-      'invoiceNumber': '00060',
-      'repName': 'Test Contact\nACIC',
-      'invoiceType': null,
-      'amount': null,
-      'balanceDue': null,
-      'totalAmount': null,
-      'status': null,
-    },
-    {
-      'date': 'Nov,\n13,\n2025\n06:05\nam',
-      'invoiceNumber': '00059',
-      'repName': 'Test Contact\nACIC',
-      'invoiceType': null,
-      'amount': null,
-      'balanceDue': null,
-      'totalAmount': null,
-      'status': null,
-    },
-    {
-      'date': 'Nov,\n13,\n2025\n06:05\nam',
-      'invoiceNumber': '00058',
-      'repName': 'Test Contact\nACIC',
-      'invoiceType': null,
-      'amount': null,
-      'balanceDue': null,
-      'totalAmount': null,
-      'status': null,
-    },
-    {
-      'date': 'Nov,\n13,\n2025\n06:05\nam',
-      'invoiceNumber': '00057',
-      'repName': 'Test Contact\nACIC',
-      'invoiceType': 'Membership Changed',
-      'amount': '6.25',
-      'balanceDue': null,
-      'totalAmount': null,
-      'status': 'Fully Paid',
-      'statusColor': 0xFFC8E6C9,
-      'statusTextColor': 0xFF2E7D32,
-    },
-    {
-      'date': 'Nov,\n13,\n2025\n06:05\nam',
-      'invoiceNumber': '00056',
-      'repName': 'Test Contact\nACIC',
-      'invoiceType': null,
-      'amount': null,
-      'balanceDue': null,
-      'totalAmount': null,
-      'status': null,
-    },
-  ];
-
-  @override
   Widget build(BuildContext context) {
+    final controller = Get.put(InvoiceController());
     final scales = ResponsiveHelper.getScales(context);
     final widthScale = scales.widthScale;
     final heightScale = scales.heightScale;
+
+    Widget buildDropdown({
+      required String? value,
+      required String hint,
+      required List<String> items,
+      required ValueChanged<String?> onChanged,
+      required double widthScale,
+      required double heightScale,
+    }) {
+      return Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: 10 * widthScale,
+          vertical: 4 * heightScale,
+        ),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(color: Colors.grey.shade300),
+          borderRadius: BorderRadius.circular(8 * widthScale),
+        ),
+        child: DropdownButtonHideUnderline(
+          child: DropdownButton<String>(
+            value: value,
+            hint: Text(
+              hint,
+              style: TextStyle(
+                fontSize: 13 * widthScale,
+                color: Colors.grey.shade600,
+              ),
+            ),
+            isExpanded: true,
+            icon: Icon(
+              Icons.keyboard_arrow_down,
+              color: Colors.grey.shade600,
+              size: 20 * widthScale,
+            ),
+            style: TextStyle(
+              fontSize: 13 * widthScale,
+              color: Colors.black87,
+            ),
+            items: items.map((String item) {
+              return DropdownMenuItem<String>(
+                value: item == hint ? null : item,
+                child: Text(
+                  item,
+                  style: TextStyle(
+                    fontSize: 13 * widthScale,
+                    color: Colors.black87,
+                  ),
+                ),
+              );
+            }).toList(),
+            onChanged: onChanged,
+          )),
+        );
+      }
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -190,14 +112,12 @@ class _ContactInvoiceScreenState extends State<ContactInvoiceScreen> {
                 Row(
                   children: [
                     Expanded(
-                      child: _buildDropdown(
-                        value: _selectedMonth,
+                      child: buildDropdown(
+                        value: controller.selectedMonth.value,
                         hint: 'Current Month',
-                        items: _monthOptions,
+                        items: controller.monthOptions,
                         onChanged: (value) {
-                          setState(() {
-                            _selectedMonth = value;
-                          });
+                          controller.selectedMonth.value = value;
                         },
                         widthScale: widthScale,
                         heightScale: heightScale,
@@ -205,14 +125,12 @@ class _ContactInvoiceScreenState extends State<ContactInvoiceScreen> {
                     ),
                     SizedBox(width: 12 * widthScale),
                     Expanded(
-                      child: _buildDropdown(
-                        value: _selectedDateRange,
+                      child: buildDropdown(
+                        value: controller.selectedDateRange.value,
                         hint: 'Start - End Date',
                         items: const ['Start - End Date', 'Last 7 Days', 'Last 30 Days'],
                         onChanged: (value) {
-                          setState(() {
-                            _selectedDateRange = value;
-                          });
+                          controller.selectedDateRange.value = value;
                         },
                         widthScale: widthScale,
                         heightScale: heightScale,
@@ -297,9 +215,9 @@ class _ContactInvoiceScreenState extends State<ContactInvoiceScreen> {
                       ),
 
                       // Invoice List Items
-                      ...List.generate(_invoices.length, (index) {
-                        final invoice = _invoices[index];
-                        final isExpanded = _expandedItems.contains(index);
+                      ...List.generate(controller.invoices.length, (index) {
+                        final invoice = controller.invoices[index];
+                        final isExpanded = controller.expandedItems.contains(index);
                         final hasDetails = invoice['invoiceType'] != null;
 
                         return Column(
@@ -331,13 +249,7 @@ class _ContactInvoiceScreenState extends State<ContactInvoiceScreen> {
                                         GestureDetector(
                                           onTap: hasDetails
                                               ? () {
-                                                  setState(() {
-                                                    if (isExpanded) {
-                                                      _expandedItems.remove(index);
-                                                    } else {
-                                                      _expandedItems.add(index);
-                                                    }
-                                                  });
+                                                  controller.toggleExpandedItem(index);
                                                 }
                                               : null,
                                           child: Container(
@@ -368,7 +280,7 @@ class _ContactInvoiceScreenState extends State<ContactInvoiceScreen> {
                                         SizedBox(width: 4 * widthScale),
                                         Expanded(
                                           child: Text(
-                                            invoice['date'],
+                                            invoice['date'].toString(),
                                             style: TextStyle(
                                               fontSize: 11 * widthScale,
                                               color: Colors.black87,
@@ -383,7 +295,7 @@ class _ContactInvoiceScreenState extends State<ContactInvoiceScreen> {
                                   Expanded(
                                     flex: 2,
                                     child: Text(
-                                      invoice['invoiceNumber'],
+                                      invoice['invoiceNumber'].toString(),
                                       style: TextStyle(
                                         fontSize: 12 * widthScale,
                                         color: Colors.black87,
@@ -394,7 +306,7 @@ class _ContactInvoiceScreenState extends State<ContactInvoiceScreen> {
                                   Expanded(
                                     flex: 2,
                                     child: Text(
-                                      invoice['repName'],
+                                      invoice['repName'].toString(),
                                       style: TextStyle(
                                         fontSize: 11 * widthScale,
                                         color: Colors.black87,
@@ -423,6 +335,7 @@ class _ContactInvoiceScreenState extends State<ContactInvoiceScreen> {
                                         GestureDetector(
                                           onTap: () {
                                             // Navigate to record payment
+                                            Get.toNamed(AppRoutes.contactInvoiceRecordPayment, arguments: invoice);
                                           },
                                           child: Container(
                                             padding: EdgeInsets.symmetric(
@@ -481,7 +394,7 @@ class _ContactInvoiceScreenState extends State<ContactInvoiceScreen> {
                                           ),
                                         ),
                                         Text(
-                                          invoice['invoiceType'],
+                                          invoice['invoiceType'].toString(),
                                           style: TextStyle(
                                             fontSize: 12 * widthScale,
                                             color: Colors.black87,
@@ -550,15 +463,15 @@ class _ContactInvoiceScreenState extends State<ContactInvoiceScreen> {
                                               vertical: 2 * heightScale,
                                             ),
                                             decoration: BoxDecoration(
-                                              color: Color(invoice['statusColor']),
+                                              color: Color(invoice['statusColor'] as int),
                                               borderRadius: BorderRadius.circular(4 * widthScale),
                                             ),
                                             child: Text(
-                                              invoice['status'],
+                                              invoice['status'].toString(),
                                               style: TextStyle(
                                                 fontSize: 11 * widthScale,
                                                 fontWeight: FontWeight.w500,
-                                                color: Color(invoice['statusTextColor']),
+                                                color: Color(invoice['statusTextColor'] as int)
                                               ),
                                             ),
                                           ),
@@ -628,80 +541,24 @@ class _ContactInvoiceScreenState extends State<ContactInvoiceScreen> {
           if (index != 3) { // Don't navigate if already on invoice
             switch (index) {
               case 0:
-                AppRoutes.goToClientHome(context);
+                Get.toNamed(AppRoutes.dashboard);
                 break;
               case 1:
-                AppRoutes.goToContactMembership(context);
+                Get.toNamed(AppRoutes.contactMembership);
                 break;
               case 2:
-                AppRoutes.goToHome(context);
+                Get.toNamed(AppRoutes.home);
                 break;
               case 4:
-                AppRoutes.goToContact(context);
+                Get.toNamed(AppRoutes.contact);
                 break;
               case 5:
-                AppRoutes.goToContactDonation(context);
+                Get.toNamed(AppRoutes.contactDonation);
                 break;
             }
           }
         },
         scales: scales,
-      ),
-    );
-  }
-
-  Widget _buildDropdown({
-    required String? value,
-    required String hint,
-    required List<String> items,
-    required ValueChanged<String?> onChanged,
-    required double widthScale,
-    required double heightScale,
-  }) {
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: 10 * widthScale,
-        vertical: 4 * heightScale,
-      ),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: Colors.grey.shade300),
-        borderRadius: BorderRadius.circular(8 * widthScale),
-      ),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
-          value: value,
-          hint: Text(
-            hint,
-            style: TextStyle(
-              fontSize: 13 * widthScale,
-              color: Colors.grey.shade600,
-            ),
-          ),
-          isExpanded: true,
-          icon: Icon(
-            Icons.keyboard_arrow_down,
-            color: Colors.grey.shade600,
-            size: 20 * widthScale,
-          ),
-          style: TextStyle(
-            fontSize: 13 * widthScale,
-            color: Colors.black87,
-          ),
-          items: items.map((String item) {
-            return DropdownMenuItem<String>(
-              value: item == hint ? null : item,
-              child: Text(
-                item,
-                style: TextStyle(
-                  fontSize: 13 * widthScale,
-                  color: Colors.black87,
-                ),
-              ),
-            );
-          }).toList(),
-          onChanged: onChanged,
-        ),
       ),
     );
   }

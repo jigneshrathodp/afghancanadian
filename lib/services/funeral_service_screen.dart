@@ -1,5 +1,5 @@
 import 'package:afghancanadian/widgets/app_colors.dart';
-import 'package:afghancanadian/widgets/app_routes.dart';
+import 'package:afghancanadian/widgets/responsive_helper.dart';
 import 'package:flutter/material.dart';
 
 class FuneralServiceScreen extends StatelessWidget {
@@ -307,9 +307,8 @@ class FuneralServiceScreen extends StatelessWidget {
                 ],
               ),
             ),
-          ),
-        ],
-      ),
+          )],
+        ),
     );
   }
 
@@ -341,4 +340,5 @@ class FuneralServiceScreen extends StatelessWidget {
       ),
     );
   }
+
 }

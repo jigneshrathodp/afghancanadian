@@ -1,75 +1,21 @@
 import 'package:afghancanadian/widgets/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../widgets/app_routes.dart';
 import '../widgets/custom_widgets.dart';
 
-class Signup extends StatefulWidget {
+class Signup extends StatelessWidget {
   const Signup({super.key});
 
   @override
-  State<Signup> createState() => _SignupState();
-}
-
-class _SignupState extends State<Signup> {
-  final TextEditingController _userNameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
-
-  @override
-  void dispose() {
-    _userNameController.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
-    _confirmPasswordController.dispose();
-    super.dispose();
-  }
-
-  Future<void> _registerUser() async {
-    if (!_formKey.currentState!.validate()) {
-      return;
-    }
-
-    if (_passwordController.text != _confirmPasswordController.text) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Passwords do not match!'),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return;
-    }
-
-    try {
-      // UI-only: simulate registration
-      await Future.delayed(const Duration(milliseconds: 600));
-
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Registration successful! Please login.'),
-            backgroundColor: Colors.green,
-          ),
-        );
-
-        // Navigate back to Sign In screen
-        AppRoutes.goBack(context);
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error: $e'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
+    // For signup, we can create a simple controller or use reactive variables directly
+    final userNameController = Get.put(TextEditingController(), tag: 'signup_userName');
+    final emailController = Get.put(TextEditingController(), tag: 'signup_email');
+    final passwordController = Get.put(TextEditingController(), tag: 'signup_password');
+    final confirmPasswordController = Get.put(TextEditingController(), tag: 'signup_confirmPassword');
+    final formKey = GlobalKey<FormState>();
+
     final screenHeight = MediaQuery.of(context).size.height;
     final isSmallScreen = screenHeight < 700;
     final screenWidth = MediaQuery.of(context).size.width;
@@ -85,6 +31,47 @@ class _SignupState extends State<Signup> {
     // Adjust header height for tablets - larger height for better visibility
     final isTablet = screenWidth >= 600;
     final headerHeight = isTablet ? screenHeight * 0.45 : screenHeight * 0.35;
+
+    Future<void> registerUser() async {
+      if (!formKey.currentState!.validate()) {
+        return;
+      }
+
+      if (passwordController.text != confirmPasswordController.text) {
+        Get.snackbar(
+          'Error',
+          'Passwords do not match!',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+        return;
+      }
+
+      try {
+        // UI-only: simulate registration
+        await Future.delayed(const Duration(milliseconds: 600));
+
+        Get.snackbar(
+          'Success',
+          'Registration successful! Please login.',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
+
+        // Navigate back to Sign In screen
+        Get.back();
+      } catch (e) {
+        Get.snackbar(
+          'Error',
+          'Error: $e',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      }
+    }
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -131,7 +118,7 @@ class _SignupState extends State<Signup> {
                             ),
                             SizedBox(height: isSmallScreen ? 12 : 20),
                             Form(
-                              key: _formKey,
+                              key: formKey,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisSize: MainAxisSize.min,
@@ -148,7 +135,7 @@ class _SignupState extends State<Signup> {
                                   ),
                                   SizedBox(height: isSmallScreen ? 6 : 8),
                                   CustomTextFormField(
-                                    controller: _userNameController,
+                                    controller: userNameController,
                                     hintText: 'User Name',
                                     textInputAction: TextInputAction.next,
                                     validator: (value) {
@@ -174,7 +161,7 @@ class _SignupState extends State<Signup> {
                                   ),
                                   SizedBox(height: isSmallScreen ? 6 : 8),
                                   CustomTextFormField(
-                                    controller: _emailController,
+                                    controller: emailController,
                                     hintText: 'Email Address',
                                     keyboardType: TextInputType.emailAddress,
                                     textInputAction: TextInputAction.next,
@@ -203,7 +190,7 @@ class _SignupState extends State<Signup> {
                                   ),
                                   SizedBox(height: isSmallScreen ? 6 : 8),
                                   CustomTextFormField(
-                                    controller: _passwordController,
+                                    controller: passwordController,
                                     hintText: 'Password',
                                     obscureText: true,
                                     textInputAction: TextInputAction.next,
@@ -221,7 +208,7 @@ class _SignupState extends State<Signup> {
                                   ),
                                   SizedBox(height: isSmallScreen ? 6 : 8),
                                   CustomTextFormField(
-                                    controller: _confirmPasswordController,
+                                    controller: confirmPasswordController,
                                     hintText: 'Confirm Password',
                                     obscureText: true,
                                     textInputAction: TextInputAction.done,
@@ -229,7 +216,7 @@ class _SignupState extends State<Signup> {
                                   SizedBox(height: isSmallScreen ? 20 : 30),
                                   CustomButton(
                                     label: 'Submit',
-                                    onPressed: _registerUser,
+                                    onPressed: registerUser,
                                   ),
                                   SizedBox(height: isSmallScreen ? 10 : 15),
                                   Row(
@@ -247,7 +234,7 @@ class _SignupState extends State<Signup> {
                                       ),
                                       GestureDetector(
                                         onTap: () {
-                                          AppRoutes.goToSignin(context);
+                                          Get.toNamed(AppRoutes.signin);
                                         },
                                         child: Text(
                                           'Sign In',

@@ -1,90 +1,19 @@
 import 'package:afghancanadian/widgets/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../widgets/app_routes.dart';
 import '../widgets/custom_widgets.dart';
 
-class ForgetPassword extends StatefulWidget {
+class ForgetPassword extends StatelessWidget {
   const ForgetPassword({super.key});
 
   @override
-  State<ForgetPassword> createState() => _ForgetPasswordState();
-}
-
-class _ForgetPasswordState extends State<ForgetPassword> {
-  final TextEditingController _emailController = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
-  bool _isLoading = false;
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    super.dispose();
-  }
-
-  Future<void> _sendResetPasswordEmail() async {
-    if (!_formKey.currentState!.validate()) {
-      return;
-    }
-
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      // Simulate sending email
-      await Future.delayed(const Duration(seconds: 2));
-
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Password reset email sent successfully!'),
-            backgroundColor: Colors.green,
-          ),
-        );
-
-        // Show success dialog
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text('Success'),
-              content: const Text(
-                'Password reset link has been sent to your email. Please check your email and follow the instructions to reset your password.',
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    AppRoutes.goBack(context);
-                    AppRoutes.goToResetPassword(context);
-                  },
-                  child: const Text('OK'),
-                ),
-              ],
-            );
-          },
-        );
-      }
-    } catch (e) {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error: $e'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
+    // Create reactive variables for the state
+    final emailController = Get.put(TextEditingController(), tag: 'forget_email');
+    final formKey = GlobalKey<FormState>();
+    final isLoading = false.obs;
+
     final screenHeight = MediaQuery.of(context).size.height;
     final isSmallScreen = screenHeight < 700;
     final screenWidth = MediaQuery.of(context).size.width;
@@ -100,6 +29,51 @@ class _ForgetPasswordState extends State<ForgetPassword> {
     // Adjust header height for tablets - larger height for better visibility
     final isTablet = screenWidth >= 600;
     final headerHeight = isTablet ? screenHeight * 0.45 : screenHeight * 0.35;
+
+    Future<void> sendResetPasswordEmail() async {
+      if (!formKey.currentState!.validate()) {
+        return;
+      }
+
+      isLoading.value = true;
+
+      try {
+        // Simulate sending email
+        await Future.delayed(const Duration(seconds: 2));
+
+        isLoading.value = false;
+
+        Get.snackbar(
+          'Success',
+          'Password reset email sent successfully!',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
+
+        // Show success dialog
+        Get.defaultDialog(
+          title: 'Success',
+          middleText: 'Password reset link has been sent to your email. Please check your email and follow the instructions to reset your password.',
+          confirm: ElevatedButton(
+            onPressed: () {
+              Get.back(); // Close dialog
+              Get.toNamed(AppRoutes.resetPassword); // Navigate to reset password
+            },
+            child: const Text('OK'),
+          ),
+        );
+      } catch (e) {
+        isLoading.value = false;
+        Get.snackbar(
+          'Error',
+          'Error: $e',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      }
+    }
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -137,7 +111,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                               ? (isCompactWidth ? 10.0 : 12.0)
                               : (isCompactWidth ? 18.0 : 22.0),
                         ),
-                        child: Column(
+                        child: Obx(() => Column(  // Using Obx to react to reactive variables
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             const StyledText(
@@ -145,7 +119,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                             ),
                             SizedBox(height: isSmallScreen ? 12 : 20),
                             Form(
-                              key: _formKey,
+                              key: formKey,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisSize: MainAxisSize.min,
@@ -162,7 +136,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                                   ),
                                   SizedBox(height: isSmallScreen ? 6 : 8),
                                   CustomTextFormField(
-                                    controller: _emailController,
+                                    controller: emailController,
                                     hintText: 'E-mail Address',
                                     keyboardType: TextInputType.emailAddress,
                                     textInputAction: TextInputAction.done,
@@ -181,8 +155,8 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                                   SizedBox(height: isSmallScreen ? 20 : 30),
                                   CustomButton(
                                     label: 'Send reset password mail',
-                                    onPressed: _isLoading ? null : _sendResetPasswordEmail,
-                                    isLoading: _isLoading,
+                                    onPressed: isLoading.value ? null : sendResetPasswordEmail,
+                                    isLoading: isLoading.value,
                                   ),
                                   SizedBox(height: isSmallScreen ? 12 : 16),
                                   Row(
@@ -190,7 +164,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                                     children: [
                                       GestureDetector(
                                         onTap: () {
-                                          AppRoutes.goBack(context);
+                                          Get.back();
                                         },
                                         child: Text(
                                           'Back To Sign In',
@@ -209,7 +183,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                               ),
                             ),
                           ],
-                        ),
+                        )),
                       ),
                     ],
                   ),

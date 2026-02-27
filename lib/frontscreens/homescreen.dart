@@ -2,94 +2,44 @@ import 'package:afghancanadian/widgets/app_colors.dart';
 import 'package:afghancanadian/widgets/responsive_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import '../widgets/app_routes.dart';
 import '../newcustomdrawer.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/custom_drawer.dart';
-import '../services/auth_manager.dart';
+import '../controllers/auth_controller.dart';
+import '../controllers/home_controller.dart';
 import '../widgets/bottom_nav_screen.dart';
 import '../new_bottomNavScreen.dart';
 
-class Homescreen extends StatefulWidget {
+class Homescreen extends GetView<HomeController> {
   const Homescreen({super.key});
 
   @override
-  State<Homescreen> createState() => _HomescreenState();
-}
-
-class _HomescreenState extends State<Homescreen> {
-  int _selectedTabIndex = 0;
-
-  @override
   Widget build(BuildContext context) {
-
-
     // Calculate responsive scaling factors
-
     final scales = ResponsiveHelper.getScales(context);
     
     return Scaffold(
       appBar: CustomAppBar(),
-      drawer: AuthManager().isLoggedIn ? NewCustomDrawer() : CustomDrawer(),
+      drawer: Obx(() => controller.authController.isLoggedIn.value ? NewCustomDrawer() : CustomDrawer()),
       drawerEnableOpenDragGesture: false,
-      body: _buildHomeContent(),
-      bottomNavigationBar: AuthManager().isLoggedIn 
+      body: _buildHomeContent(context),
+      bottomNavigationBar: Obx(() => controller.authController.isLoggedIn.value 
         ? NewCustomBottomBar(
             selectedIndex: 2, // Home
-            onIndexChanged: (index) {
-              switch (index) {
-                case 0:
-                  AppRoutes.goToClientHome(context);
-                  break;
-                case 1:
-                  AppRoutes.goToContactMembership(context);
-                  break;
-                case 2:
-                  AppRoutes.goToHome(context);
-                  break;
-                case 3:
-                  AppRoutes.goToContactInvoice(context);
-                  break;
-                case 4:
-                  AppRoutes.goToContact(context);
-                  break;
-                case 5:
-                  AppRoutes.goToContactDonation(context);
-                  break;
-              }
-            },
+            onIndexChanged: controller.onBottomNavChanged,
             scales: scales,
           )
         : CustomBottomBar(
             selectedIndex: 2, // Home
-            onIndexChanged: (index) {
-              switch (index) {
-                case 0:
-                  AppRoutes.goToAbout(context);
-                  break;
-                case 1:
-                  AppRoutes.goToCalendar(context);
-                  break;
-                case 2:
-                  AppRoutes.goToHome(context);
-                  break;
-                case 3:
-                  AppRoutes.goToServices(context);
-                  break;
-                case 4:
-                  AppRoutes.goToContact(context);
-                  break;
-                case 5:
-                  AppRoutes.goToDonation(context);
-                  break;
-              }
-            },
+            onIndexChanged: controller.onBottomNavChanged,
             scales: scales,
-          ),
+          )),
     );
   }
 
-  Widget _buildHomeContent() {
+  Widget _buildHomeContent(BuildContext context) {
     final scales = ResponsiveHelper.getScales(context);
     final widthScale = scales.widthScale;
     final heightScale = scales.heightScale;
@@ -99,20 +49,21 @@ class _HomescreenState extends State<Homescreen> {
       child: Column(
         children: [
           SizedBox(height: 10 * heightScale),
-          _buildWelcomeSection(widthScale, heightScale),
+          _buildWelcomeSection(context, widthScale, heightScale),
           SizedBox(height: 15 * heightScale),
-          _buildNextAdhaanSection(widthScale, heightScale),
+          _buildNextAdhaanSection(context, widthScale, heightScale),
           SizedBox(height: 15 * heightScale),
-          _buildPrayerTimesSection(widthScale, heightScale),
+          _buildPrayerTimesSection(context, widthScale, heightScale),
           SizedBox(height: 15 * heightScale),
-          _buildOurServicesSection(widthScale, heightScale),
+          // _buildOurServicesSection(context, widthScale, heightScale),
           SizedBox(height: 20 * heightScale),
           SizedBox(height: screenHeight * 0.05 > 60 ? 60 : screenHeight * 0.05)
         ],
       ),
     );
   }
-  Widget _buildWelcomeSection(double widthScale, double heightScale) {
+
+  Widget _buildWelcomeSection(BuildContext context, double widthScale, double heightScale) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 16 * widthScale),
       width: double.infinity,
@@ -127,7 +78,7 @@ class _HomescreenState extends State<Homescreen> {
     );
   }
 
-  Widget _buildNextAdhaanSection(double widthScale, double heightScale) {
+  Widget _buildNextAdhaanSection(BuildContext context, double widthScale, double heightScale) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 20 * widthScale),
       padding: EdgeInsets.only(
@@ -170,7 +121,7 @@ class _HomescreenState extends State<Homescreen> {
     );
   }
 
-  Widget _buildPrayerTimesSection(double widthScale, double heightScale) {
+  Widget _buildPrayerTimesSection(BuildContext context, double widthScale, double heightScale) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 20 * widthScale),
       decoration: BoxDecoration(
@@ -178,68 +129,68 @@ class _HomescreenState extends State<Homescreen> {
       ),
       child: Column(
         children: [
-          _buildTabBar(widthScale, heightScale),
-          _selectedTabIndex == 0 ? _buildPrayerTimesList(widthScale, heightScale) : _buildUpcomingEvents(widthScale, heightScale),
+          _buildTabBar(context, widthScale, heightScale),
+          Obx(() => controller.tabIndex.value == 0 ? _buildPrayerTimesList(context, widthScale, heightScale) : _buildUpcomingEvents(context, widthScale, heightScale)),
         ],
       ),
     );
   }
 
-  Widget _buildTabBar(double widthScale, double heightScale) {
+  Widget _buildTabBar(BuildContext context, double widthScale, double heightScale) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 10 * heightScale),
       child: Row(
         children: [
           Expanded(
             child: GestureDetector(
-              onTap: () => setState(() => _selectedTabIndex = 0),
+              onTap: () => controller.changeTab(0),
               child: Column(
                 children: [
                   Container(
                     padding: EdgeInsets.symmetric(vertical: 10 * heightScale),
-                    child: Text(
+                    child: Obx(() => Text(
                       'Prayer Time',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: (_selectedTabIndex == 0 ? 16 : 15) * widthScale,
-                        color: _selectedTabIndex == 0 ? AppColors.textPrimary : AppColors.textMuted,
-                        fontWeight: _selectedTabIndex == 0 ? FontWeight.bold : FontWeight.normal,
+                        fontSize: (controller.tabIndex.value == 0 ? 16 : 15) * widthScale,
+                        color: controller.tabIndex.value == 0 ? AppColors.textPrimary : AppColors.textMuted,
+                        fontWeight: controller.tabIndex.value == 0 ? FontWeight.bold : FontWeight.normal,
                       ),
-                    ),
+                    )),
                   ),
                   // Underline indicator
-                  Container(
+                  Obx(() => Container(
                     height: 2 * heightScale,
                     width: 80 * widthScale,
-                    color: _selectedTabIndex == 0 ? AppColors.borderPrimary : Colors.transparent,
-                  ),
+                    color: controller.tabIndex.value == 0 ? AppColors.borderPrimary : Colors.transparent,
+                  )),
                 ],
               ),
             ),
           ),
           Expanded(
             child: GestureDetector(
-              onTap: () => setState(() => _selectedTabIndex = 1),
+              onTap: () => controller.changeTab(1),
               child: Column(
                 children: [
                   Container(
                     padding: EdgeInsets.symmetric(vertical: 10 * heightScale),
-                    child: Text(
+                    child: Obx(() => Text(
                       'Upcoming Event',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: (_selectedTabIndex == 1 ? 16 : 15) * widthScale,
-                        color: _selectedTabIndex == 1 ? AppColors.textPrimary : AppColors.textMuted,
-                        fontWeight: _selectedTabIndex == 1 ? FontWeight.bold : FontWeight.normal,
+                        fontSize: (controller.tabIndex.value == 1 ? 16 : 15) * widthScale,
+                        color: controller.tabIndex.value == 1 ? AppColors.textPrimary : AppColors.textMuted,
+                        fontWeight: controller.tabIndex.value == 1 ? FontWeight.bold : FontWeight.normal,
                       ),
-                    ),
+                    )),
                   ),
                   // Underline indicator
-                  Container(
+                  Obx(() => Container(
                     height: 2 * heightScale,
                     width: 80 * widthScale,
-                    color: _selectedTabIndex == 1 ? AppColors.borderPrimary : Colors.transparent,
-                  ),
+                    color: controller.tabIndex.value == 1 ? AppColors.borderPrimary : Colors.transparent,
+                  )),
                 ],
               ),
             ),
@@ -249,7 +200,7 @@ class _HomescreenState extends State<Homescreen> {
     );
   }
 
-  Widget _buildPrayerTimesList(double widthScale, double heightScale) {
+  Widget _buildPrayerTimesList(BuildContext context, double widthScale, double heightScale) {
     final prayers = [
       {'name': 'Imsak', 'time': '06:00:00', 'svg': '5.svg'},
       {'name': 'Fajr', 'time': '06:05:00', 'svg': '5.svg'},
@@ -330,7 +281,7 @@ class _HomescreenState extends State<Homescreen> {
     );
   }
 
-  Widget _buildUpcomingEvents(double widthScale, double heightScale) {
+  Widget _buildUpcomingEvents(BuildContext context, double widthScale, double heightScale) {
     return Container(
       child: Column(
         children: [
@@ -379,88 +330,86 @@ class _HomescreenState extends State<Homescreen> {
     );
   }
 
-  Widget _buildOurServicesSection(double widthScale, double heightScale) {
-    final services = [
-      {'name': 'Cultural Services', 'svg': '1.svg', 'route': AppRoutes.culturalService},
-      {'name': 'Youth Programs', 'svg': '2.svg', 'route': AppRoutes.youthService},
-      {'name': 'Women Services', 'svg': '3.svg', 'route': AppRoutes.womenService},
-      {'name': 'Maktab', 'svg': '4.svg', 'route': AppRoutes.educationService},
-      {'name': 'Funeral Service', 'svg': '21.svg', 'route': AppRoutes.funeralService},
-      {'name': 'Library', 'svg': '22.svg', 'route': AppRoutes.libraryService},
-    ];
-
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 20 * widthScale),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Center(
-            child: Text(
-              'OUR SERVICES',
-              style: TextStyle(
-                fontSize: 18 * widthScale,
-                fontWeight: FontWeight.bold,
-                color: AppColors.textPrimary,
-              ),
-            ),
-          ),
-          SizedBox(height: 15 * heightScale),
-          GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              crossAxisSpacing: 10 * widthScale,
-              mainAxisSpacing: 10 * heightScale,
-              childAspectRatio: 1,
-            ),
-            itemCount: services.length,
-            itemBuilder: (context, index) {
-              final service = services[index];
-              return GestureDetector(
-                onTap: () {
-                  AppRoutes.navigateTo(context, service['route'] as String);
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: AppColors.background,
-                    borderRadius: BorderRadius.circular(15 * widthScale),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.shadow,
-                        spreadRadius: 1 * widthScale,
-                        blurRadius: 5 * widthScale,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SvgPicture.asset(
-                        'assets/${service['svg']}',
-                        width: 45 * widthScale,
-                        height: 45 * widthScale,
-                      ),
-                      SizedBox(height: 8 * heightScale),
-                      Text(
-                        service['name'] as String,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 12 * widthScale,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-
+  // Widget _buildOurServicesSection(BuildContext context, double widthScale, double heightScale) {
+  //   final services = [
+  //     {'name': 'Cultural Services', 'svg': '1.svg', 'route': AppRoutes.culturalService},
+  //     {'name': 'Youth Programs', 'svg': '2.svg', 'route': AppRoutes.youthService},
+  //     {'name': 'Women Services', 'svg': '3.svg', 'route': AppRoutes.womenService},
+  //     {'name': 'Maktab', 'svg': '4.svg', 'route': AppRoutes.educationService},
+  //     {'name': 'Funeral Service', 'svg': '21.svg', 'route': AppRoutes.funeralService},
+  //     {'name': 'Library', 'svg': '22.svg', 'route': AppRoutes.libraryService},
+  //   ];
+  //
+  //   return Container(
+  //     margin: EdgeInsets.symmetric(horizontal: 20 * widthScale),
+  //     child: Column(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         Center(
+  //           child: Text(
+  //             'OUR SERVICES',
+  //             style: TextStyle(
+  //               fontSize: 18 * widthScale,
+  //               fontWeight: FontWeight.bold,
+  //               color: AppColors.textPrimary,
+  //             ),
+  //           ),
+  //         ),
+  //         SizedBox(height: 15 * heightScale),
+  //         GridView.builder(
+  //           shrinkWrap: true,
+  //           physics: const NeverScrollableScrollPhysics(),
+  //           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+  //             crossAxisCount: 3,
+  //             crossAxisSpacing: 10 * widthScale,
+  //             mainAxisSpacing: 10 * heightScale,
+  //             childAspectRatio: 1,
+  //           ),
+  //           itemCount: services.length,
+  //           itemBuilder: (context, index) {
+  //             final service = services[index];
+  //             return GestureDetector(
+  //               onTap: () {
+  //                 Get.toNamed(service['route'] as String);
+  //               },
+  //               child: Container(
+  //                 decoration: BoxDecoration(
+  //                   color: AppColors.background,
+  //                   borderRadius: BorderRadius.circular(15 * widthScale),
+  //                   boxShadow: [
+  //                     BoxShadow(
+  //                       color: AppColors.shadow,
+  //                       spreadRadius: 1 * widthScale,
+  //                       blurRadius: 5 * widthScale,
+  //                       offset: const Offset(0, 2),
+  //                     ),
+  //                   ],
+  //                 ),
+  //                 child: Column(
+  //                   mainAxisAlignment: MainAxisAlignment.center,
+  //                   children: [
+  //                     SvgPicture.asset(
+  //                       'assets/${service['svg']}',
+  //                       width: 45 * widthScale,
+  //                       height: 45 * widthScale,
+  //                     ),
+  //                     SizedBox(height: 8 * heightScale),
+  //                     Text(
+  //                       service['name'] as String,
+  //                       textAlign: TextAlign.center,
+  //                       style: TextStyle(
+  //                         fontSize: 12 * widthScale,
+  //                         fontWeight: FontWeight.w500,
+  //                       ),
+  //                     ),
+  //                   ],
+  //                 ),
+  //               ),
+  //             );
+  //           },
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 }
