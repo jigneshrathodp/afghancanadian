@@ -6,6 +6,7 @@ import 'package:afghancanadian/widgets/app_routes.dart';
 import 'package:afghancanadian/new_bottomNavScreen.dart';
 import 'package:get/get.dart';
 import '../controllers/credit_card_controller.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:flutter/material.dart';
 
@@ -186,27 +187,12 @@ class CreditCardOnFileScreen extends StatelessWidget {
                             obscureText: true,
                           ),
                           SizedBox(height: 20 * heightScale),
-                          // Credit Card Placeholder
-                          Container(
-                            width: double.infinity,
-                            height: 100 * heightScale,
-                            decoration: BoxDecoration(
-                              color: AppColors.primaryDark.withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(12 * widthScale),
-                              border: Border.all(
-                                color: AppColors.primaryDark,
-                                width: 1,
-                              ),
-                            ),
-                            child: Center(
-                              child: Text(
-                                'Credit Card Preview',
-                                style: TextStyle(
-                                  color: AppColors.primaryDark,
-                                  fontSize: 14 * widthScale,
-                                ),
-                              ),
-                            ),
+                          // Credit Card Preview
+                          SvgPicture.asset(
+                            'assets/card.svg',
+                            width: 200 * widthScale,
+                            height: 80 * heightScale,
+                            fit: BoxFit.contain,
                           ),
                           SizedBox(height: 20 * heightScale),
                           // Submit Button

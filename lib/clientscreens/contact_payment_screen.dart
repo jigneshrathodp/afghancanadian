@@ -37,7 +37,7 @@ class ContactPaymentScreen extends StatelessWidget {
           borderRadius: BorderRadius.circular(8 * widthScale),
         ),
         child: DropdownButtonHideUnderline(
-          child: Obx(() => DropdownButton<String>(
+          child: DropdownButton<String>(
             value: value,
             hint: Text(
               hint,
@@ -63,13 +63,13 @@ class ContactPaymentScreen extends StatelessWidget {
                   item,
                   style: TextStyle(
                     fontSize: 13 * widthScale,
-                    color: Colors.black87,
+                    color: Colors.black,
                   ),
                 ),
               );
             }).toList(),
             onChanged: onChanged,
-          )),
+          ),
         ),
       );
     }

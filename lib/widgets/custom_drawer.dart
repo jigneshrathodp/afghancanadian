@@ -223,7 +223,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
           _buildTile(
             icon: Icons.volunteer_activism,
             title: "Donation",
-            onTap: () => _navigateToScreen(context, AppRoutes.contactDonation),
+            onTap: () => _navigateToScreen(context, AppRoutes.donation),
             widthScale: widthScale,
             isTablet: isTablet,
           ),
@@ -251,15 +251,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
           // Logout
           _buildTile(
-            icon: Icons.logout,
-            title: "Logout",
-            onTap: () {
-              Navigator.of(context).pop();
-              // Add logout logic here if needed
-            },
+            icon: Icons.login,
+            title: "Login",
+            onTap: () => _navigateToScreen(context, AppRoutes.signin),
             widthScale: widthScale,
             isTablet: isTablet,
-            textColor: Colors.red,
+            textColor: Colors.black,
           ),
           Divider(height: 1, indent: 16 * widthScale, endIndent: 16 * widthScale),
         ],

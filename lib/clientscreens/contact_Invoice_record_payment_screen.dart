@@ -48,7 +48,7 @@ class ContactInvoiceRecordPaymentScreen extends StatelessWidget {
           borderRadius: BorderRadius.circular(8 * widthScale),
         ),
         child: DropdownButtonHideUnderline(
-          child: Obx(() => DropdownButton<String>(
+          child: DropdownButton<String>(
             value: value,
             hint: Text(
               hint,
@@ -80,7 +80,7 @@ class ContactInvoiceRecordPaymentScreen extends StatelessWidget {
               );
             }).toList(),
             onChanged: onChanged,
-          )),
+          ),
         ),
       );
     }
@@ -502,27 +502,29 @@ class ContactInvoiceRecordPaymentScreen extends StatelessWidget {
                 SizedBox(height: 24 * heightScale),
 
                 // Submit Button
-                ElevatedButton(
-                  onPressed: () {
-                    // Handle payment submission
-                    controller.submitPayment();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF1B5E20),
-                    foregroundColor: Colors.white,
-                    padding: EdgeInsets.symmetric(
-                      vertical: 14 * heightScale,
+                Container(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      controller.submitPayment();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF1B5E20),
+                      foregroundColor: Colors.white,
+                      padding: EdgeInsets.symmetric(
+                        vertical: 16 * heightScale,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8 * widthScale),
+                      ),
+                      elevation: 2,
                     ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24 * widthScale),
-                    ),
-                    elevation: 0,
-                  ),
-                  child: Text(
-                    'Submit',
-                    style: TextStyle(
-                      fontSize: 16 * widthScale,
-                      fontWeight: FontWeight.w600,
+                    child: Text(
+                      'Submit Payment',
+                      style: TextStyle(
+                        fontSize: 16 * widthScale,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ),

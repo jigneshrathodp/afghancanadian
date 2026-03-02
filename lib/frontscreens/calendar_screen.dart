@@ -146,8 +146,8 @@ class CalendarScreen extends GetView<CalendarController> {
                         ),
                         itemBuilder: (context, index) {
                           final date = days[index];
-                          final isSelected = controller.selectedDate.value != null &&
-                              date != null &&
+                          final isSelected = date != null &&
+                              controller.selectedDate.value != null &&
                               controller.isSameDay(date, controller.selectedDate.value!);
 
                           return GestureDetector(
@@ -168,8 +168,8 @@ class CalendarScreen extends GetView<CalendarController> {
                               alignment: Alignment.center,
                               child: Text(
                                 date?.day.toString() ?? '',
-                                style: const TextStyle(
-                                  color: Colors.white,
+                                style: TextStyle(
+                                  color: date == null ? Colors.transparent : Colors.white,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),

@@ -98,15 +98,19 @@ class CalendarController extends GetxController {
     return months[month - 1];
   }
   
-  List<DateTime> generateCalendarDays(DateTime month) {
+  List<DateTime?> generateCalendarDays(DateTime month) {
     final firstDay = DateTime(month.year, month.month, 1);
     final lastDay = DateTime(month.year, month.month + 1, 0);
     final startDate = firstDay.subtract(Duration(days: firstDay.weekday % 7));
     
-    final days = <DateTime>[];
+    final days = <DateTime?>[];
     for (int i = 0; i < 42; i++) {
-      days.add(startDate.add(Duration(days: i)));
-      if (days.length >= 42 && days.last.month != month.month) break;
+      final currentDate = startDate.add(Duration(days: i));
+      if (currentDate.month == month.month) {
+        days.add(currentDate);
+      } else {
+        days.add(null); // Show empty cells for dates from other months
+      }
     }
     return days;
   }
