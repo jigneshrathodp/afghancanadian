@@ -139,8 +139,10 @@ class InvoiceController extends GetxController {
   void toggleExpandedItem(int index) {
     if (expandedItems.contains(index)) {
       expandedItems.remove(index);
+      expandedItems.refresh(); // Force refresh to update UI
     } else {
       expandedItems.add(index);
+      expandedItems.refresh(); // Force refresh to update UI
     }
   }
 }

@@ -18,6 +18,29 @@ class ContactDonationScreen extends StatefulWidget {
 class _ContactDonationScreenState extends State<ContactDonationScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
+  // Dropdown state variables
+  final selectedMonth = Rxn<String>();
+  final selectedDateRange = Rxn<String>();
+
+  // Sample dropdown items
+  final List<String> months = [
+    'November 2025',
+    'October 2025', 
+    'September 2025',
+    'August 2025',
+    'July 2025',
+    'June 2025',
+  ];
+
+  final List<String> dateRanges = [
+    'Start - End Date',
+    'Last 7 Days',
+    'Last 30 Days',
+    'Last 3 Months',
+    'Last 6 Months',
+    'Last Year',
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -71,13 +94,16 @@ class _ContactDonationScreenState extends State<ContactDonationScreen> with Sing
             // Tab Bar
             Container(
               width: double.infinity,
-              margin: EdgeInsets.symmetric(horizontal: 16 * widthScale),
+              margin: EdgeInsets.only(
+                left: 0,
+                right: 16 * widthScale,
+              ),
               child: LayoutBuilder(
                 builder: (context, constraints) {
                   final isTablet = constraints.maxWidth > 600;
                   return TabBar(
                     controller: _tabController,
-                    isScrollable: false,
+                    isScrollable: true,
                     indicator: BoxDecoration(
                       color: const Color(0xFF1B5E20),
                       borderRadius: BorderRadius.circular(8 * widthScale),
@@ -85,46 +111,40 @@ class _ContactDonationScreenState extends State<ContactDonationScreen> with Sing
                     labelColor: Colors.white,
                     unselectedLabelColor: Colors.grey.shade600,
                     labelStyle: TextStyle(
-                      fontSize: isTablet ? 16 * widthScale : 13 * widthScale,
+                      fontSize: 18 * widthScale,
                       fontWeight: FontWeight.w600,
                     ),
                     unselectedLabelStyle: TextStyle(
-                      fontSize: isTablet ? 16 * widthScale : 13 * widthScale,
+                      fontSize: 16 * widthScale,
                       fontWeight: FontWeight.w500,
                     ),
                     indicatorSize: TabBarIndicatorSize.tab,
                     dividerColor: Colors.transparent,
                     tabs: [
                       Tab(
-                        height: isTablet ? 56 * heightScale : null,
-                        child: FittedBox(
-                          fit: BoxFit.scaleDown,
-                          child: Text(
-                            'Donation',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
+                        child: Text(
+                          'Donation',
+                          style: TextStyle(
+                            fontSize: 16 * widthScale,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
                       Tab(
-                        height: isTablet ? 56 * heightScale : null,
-                        child: FittedBox(
-                          fit: BoxFit.scaleDown,
-                          child: Text(
-                            'Pledge Donation',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
+                        child: Text(
+                          'Pledge Donation',
+                          style: TextStyle(
+                            fontSize: 16 * widthScale,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
                       Tab(
-                        height: isTablet ? 56 * heightScale : null,
-                        child: FittedBox(
-                          fit: BoxFit.scaleDown,
-                          child: Text(
-                            'Recurring',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
+                        child: Text(
+                          'Recurring Donation',
+                          style: TextStyle(
+                            fontSize: 16 * widthScale,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
@@ -189,15 +209,30 @@ class _ContactDonationScreenState extends State<ContactDonationScreen> with Sing
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Filters Row
+                SizedBox(height: 12 * heightScale),
+                // Filters Row - moved to top like ContactInvoiceScreen
                 Row(
                   children: [
                     Expanded(
-                      child: _buildDropdown('November 2025', widthScale, heightScale),
+                      child: Obx(() => buildDropdown(
+                        value: selectedMonth.value,
+                        hint: 'November 2025',
+                        items: months,
+                        onChanged: (value) => selectedMonth.value = value,
+                        widthScale: widthScale,
+                        heightScale: heightScale,
+                      )),
                     ),
                     SizedBox(width: 12 * widthScale),
                     Expanded(
-                      child: _buildDropdown('Start - End Date', widthScale, heightScale),
+                      child: Obx(() => buildDropdown(
+                        value: selectedDateRange.value,
+                        hint: 'Start - End Date',
+                        items: dateRanges,
+                        onChanged: (value) => selectedDateRange.value = value,
+                        widthScale: widthScale,
+                        heightScale: heightScale,
+                      )),
                     ),
                   ],
                 ),
@@ -242,13 +277,13 @@ class _ContactDonationScreenState extends State<ContactDonationScreen> with Sing
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: controller.donationData.length,
                   itemBuilder: (context, index) {
-                    return _buildDonationRow(
+                    return Obx(() => _buildDonationRow(
                       controller.donationData[index],
                       index,
                       controller,
                       widthScale,
                       heightScale,
-                    );
+                    ));
                   },
                 ),
                 SizedBox(height: 12 * heightScale),
@@ -455,59 +490,86 @@ class _ContactDonationScreenState extends State<ContactDonationScreen> with Sing
     );
   }
 
-  Widget _buildDropdown(String hint, double widthScale, double heightScale) {
+  Widget buildDropdown({
+    required String? value,
+    required String hint,
+    required List<String> items,
+    required ValueChanged<String?> onChanged,
+    required double widthScale,
+    required double heightScale,
+  }) {
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: 12 * widthScale,
-        vertical: 10 * heightScale,
+        horizontal: 10 * widthScale,
+        vertical: 4 * heightScale,
       ),
       decoration: BoxDecoration(
+        color: Colors.white,
         border: Border.all(color: Colors.grey.shade300),
         borderRadius: BorderRadius.circular(8 * widthScale),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            child: Text(
-              hint,
-              style: TextStyle(
-                fontSize: 13 * widthScale,
-                color: AppColors.textSecondary,
-              ),
-              overflow: TextOverflow.ellipsis,
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String>(
+          value: value,
+          hint: Text(
+            hint,
+            style: TextStyle(
+              fontSize: 13 * widthScale,
+              color: Colors.grey.shade600,
             ),
           ),
-          Icon(
+          isExpanded: true,
+          icon: Icon(
             Icons.keyboard_arrow_down,
+            color: Colors.grey.shade600,
             size: 20 * widthScale,
-            color: AppColors.textSecondary,
           ),
-        ],
-      ),
+          style: TextStyle(
+            fontSize: 13 * widthScale,
+            color: Colors.black87,
+          ),
+          items: items.map((String item) {
+            return DropdownMenuItem<String>(
+              value: item == hint ? null : item,
+              child: Text(
+                item,
+                style: TextStyle(
+                  fontSize: 13 * widthScale,
+                  color: Colors.black87,
+                ),
+              ),
+            );
+          }).toList(),
+          onChanged: onChanged,
+        )),
     );
   }
 
   Widget _buildSearchField(double widthScale, double heightScale) {
     return Container(
+      height: 45 * heightScale,
       padding: EdgeInsets.symmetric(
         horizontal: 12 * widthScale,
-        vertical: 10 * heightScale,
+        vertical: 8 * heightScale,
       ),
       decoration: BoxDecoration(
         border: Border.all(color: Colors.grey.shade300),
         borderRadius: BorderRadius.circular(8 * widthScale),
       ),
-      child: Row(
-        children: [
-          Text(
-            'Search',
-            style: TextStyle(
-              fontSize: 13 * widthScale,
-              color: AppColors.textHint,
-            ),
+      child: TextField(
+        decoration: InputDecoration(
+          hintText: 'Search...',
+          hintStyle: TextStyle(
+            fontSize: 13 * widthScale,
+            color: AppColors.textHint,
           ),
-        ],
+          border: InputBorder.none,
+          contentPadding: EdgeInsets.zero,
+        ),
+        style: TextStyle(
+          fontSize: 13 * widthScale,
+          color: Colors.black,
+        ),
       ),
     );
   }

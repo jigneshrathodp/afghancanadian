@@ -6,7 +6,7 @@ import '../widgets/app_routes.dart';
 class SigninController extends GetxController {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>(debugLabel: 'signin_form_key');
   
   var isLoading = false.obs;
   var rememberMe = false.obs;
@@ -16,8 +16,8 @@ class SigninController extends GetxController {
 
   @override
   void onClose() {
-    emailController.dispose();
-    passwordController.dispose();
+    // Don't dispose controllers manually - let GetX handle it
+    // This prevents "TextEditingController was used after being disposed" errors
     super.onClose();
   }
 

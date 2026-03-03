@@ -70,11 +70,19 @@ class CustomTextFormField extends StatefulWidget {
 class _CustomTextFormFieldState extends State<CustomTextFormField> {
   late bool _obscure;
   String? _errorText;
+  late FocusNode _focusNode;
 
   @override
   void initState() {
     super.initState();
     _obscure = widget.obscureText;
+    _focusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
   }
 
   @override
@@ -120,11 +128,12 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
               height: fieldHeight,
               child: TextFormField(
                 controller: widget.controller,
+                focusNode: _focusNode,
                 obscureText: _obscure,
                 keyboardType: widget.keyboardType,
                 textInputAction: widget.textInputAction,
-                autocorrect: false,
-                enableSuggestions: false,
+                autocorrect: true,
+                enableSuggestions: true,
                 onChanged: (value) {
                   field.didChange(value);
                 },

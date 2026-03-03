@@ -328,86 +328,116 @@ class EditProfileScreen extends StatelessWidget {
 
 
 
-    Widget buildDropdownField(
-
+    Widget buildDatePickerField(
         String label,
-
-        String value,
-
-        List<String> items,
-
-        Function(String?) onChanged,
-
+        TextEditingController controller,
         ) {
-
       return Column(
-
         crossAxisAlignment: CrossAxisAlignment.start,
-
         children: [
-
           Text(
-
             label,
-
             style: TextStyle(
-
               color: Colors.grey[700],
-
               fontSize: 13 * widthScale,
-
               fontWeight: FontWeight.w500,
-
             ),
-
           ),
-
           SizedBox(height: 6 * heightScale),
-
-          Container(
-
-            decoration: BoxDecoration(
-
-              color: Colors.white,
-
-              borderRadius: BorderRadius.circular(8 * widthScale),
-
-              border: Border.all(color: Colors.grey[400]!),
-
+          GestureDetector(
+            onTap: () async {
+              DateTime? pickedDate = await showDatePicker(
+                context: Get.context!,
+                initialDate: DateTime.now(),
+                firstDate: DateTime(1900),
+                lastDate: DateTime.now(),
+              );
+              if (pickedDate != null) {
+                String formattedDate = "${pickedDate.year}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}";
+                controller.text = formattedDate;
+              }
+            },
+            child: Container(
+              width: double.infinity,
+              padding: EdgeInsets.symmetric(
+                horizontal: 12 * widthScale,
+                vertical: 12 * heightScale,
+              ),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8 * widthScale),
+                border: Border.all(color: Colors.grey[400]!),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    controller.text.isEmpty ? 'Select $label' : controller.text,
+                    style: TextStyle(
+                      color: controller.text.isEmpty ? Colors.grey[500] : Colors.black,
+                      fontSize: 14 * widthScale,
+                    ),
+                  ),
+                  Icon(
+                    Icons.calendar_today,
+                    color: AppColors.primaryDark,
+                    size: 20 * widthScale,
+                  ),
+                ],
+              ),
             ),
-
-            padding: EdgeInsets.symmetric(horizontal: 12 * widthScale),
-
-            child: DropdownButtonHideUnderline(
-
-              child: Obx(() => DropdownButton<String>(
-
-                value: value.isEmpty ? null : value,
-
-                hint: Text('Select $label'),
-
-                isExpanded: true,
-
-                dropdownColor: Colors.white,
-
-                items: items
-
-                    .map((e) => DropdownMenuItem(value: e, child: Text(e)))
-
-                    .toList(),
-
-                onChanged: onChanged,
-
-              )),
-
-            ),
-
           ),
-
         ],
-
       );
+    }
 
+
+
+    Widget buildDropdownField(
+        String label,
+        String value,
+        List<String> items,
+        Function(String?) onChanged,
+        ) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              color: Colors.grey[700],
+              fontSize: 13 * widthScale,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          SizedBox(height: 6 * heightScale),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8 * widthScale),
+              border: Border.all(color: Colors.grey[400]!),
+            ),
+            padding: EdgeInsets.symmetric(horizontal: 12 * widthScale),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<String>(
+                value: value.isEmpty ? null : value,
+                hint: Text('Select $label'),
+                isExpanded: true,
+                dropdownColor: Colors.white,
+                items: items
+                    .map((e) => DropdownMenuItem(value: e, child: Text(e)))
+                    .toList(),
+                onChanged: onChanged,
+                menuMaxHeight: 200,
+                icon: Icon(
+                  Icons.keyboard_arrow_down,
+                  color: AppColors.primaryDark,
+                ),
+              )
+            ),
+          ),
+        ],
+      );
     }
 
 
@@ -464,7 +494,7 @@ class EditProfileScreen extends StatelessWidget {
 
               SizedBox(height: 12 * heightScale),
 
-              buildTextField('YY-MM-DD', dobController),
+              buildDatePickerField('Date of Birth', dobController),
 
               SizedBox(height: 12 * heightScale),
 
@@ -594,7 +624,7 @@ class EditProfileScreen extends StatelessWidget {
 
               SizedBox(height: 12 * heightScale),
 
-              buildTextField('YY-MM-DD', spouseDobController),
+              buildDatePickerField('Spouse Date of Birth', spouseDobController),
 
               SizedBox(height: 12 * heightScale),
 
@@ -802,7 +832,7 @@ class EditProfileScreen extends StatelessWidget {
 
               SizedBox(height: 10 * heightScale),
 
-              buildTextField('YY-MM-DD', childData['dob']),
+              buildDatePickerField('Child Date of Birth', childData['dob']),
 
               SizedBox(height: 10 * heightScale),
 

@@ -20,6 +20,7 @@ class DonationScreen extends GetView<MainDonationController> {
     final isTablet = ResponsiveHelper.isTablet(context);
     
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(),
       drawer: Get.find<AuthController>().isLoggedIn.value ? NewCustomDrawer() : CustomDrawer(),
       drawerEnableOpenDragGesture: false,
@@ -28,58 +29,62 @@ class DonationScreen extends GetView<MainDonationController> {
         child: Padding(
           padding: EdgeInsets.all(16 * widthScale),
           child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  margin: EdgeInsets.symmetric(
-                    horizontal: 16 * widthScale,
-                    vertical: 12 * scales.heightScale,
-                  ),
-                  padding: EdgeInsets.symmetric(vertical: 16 * scales.heightScale),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFE8F5E9),
-                    borderRadius: BorderRadius.circular(12 * widthScale),
-                  ),
-                  child: Center(
-                    child: Text(
-                      'Donation',
-                      style: TextStyle(
-                        fontSize: 20 * widthScale,
-                        fontWeight: FontWeight.w600,
-                        color: const Color(0xFF1B5E20),
+            physics: const BouncingScrollPhysics(),
+            child: Padding(
+              padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom + 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: EdgeInsets.symmetric(
+                      horizontal: 16 * widthScale,
+                      vertical: 12 * scales.heightScale,
+                    ),
+                    padding: EdgeInsets.symmetric(vertical: 16 * scales.heightScale),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFE8F5E9),
+                      borderRadius: BorderRadius.circular(12 * widthScale),
+                    ),
+                    child: Center(
+                      child: Text(
+                        'Donation',
+                        style: TextStyle(
+                          fontSize: 20 * widthScale,
+                          fontWeight: FontWeight.w600,
+                          color: const Color(0xFF1B5E20),
+                        ),
                       ),
                     ),
                   ),
-                ),
 
-                SizedBox(height: 20 * scales.heightScale),
-                _buildInputField("Full Name", isTablet, isRequired: true),
-                _buildInputField("Email Address", isTablet, isRequired: true),
-                _buildInputField("Phone Number", isTablet),
-                _buildInputField("Donation Amount", isTablet, isRequired: true),
-                _buildInputField("Message", isTablet, maxLines: 5),
-                _buildDropdownField("Payment Frequency", isTablet),
-                SizedBox(height: 20 * scales.heightScale),
-                ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primaryDark,
-                    foregroundColor: Colors.white,
-                    minimumSize: Size(double.infinity, 50 * scales.heightScale),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                  SizedBox(height: 20 * scales.heightScale),
+                  _buildInputField("Full Name", isTablet, isRequired: true),
+                  _buildInputField("Email Address", isTablet, isRequired: true),
+                  _buildInputField("Phone Number", isTablet),
+                  _buildInputField("Donation Amount", isTablet, isRequired: true),
+                  _buildInputField("Message", isTablet, maxLines: 5),
+                  _buildDropdownField("Payment Frequency", isTablet),
+                  SizedBox(height: 20 * scales.heightScale),
+                  ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primaryDark,
+                      foregroundColor: Colors.white,
+                      minimumSize: Size(double.infinity, 50 * scales.heightScale),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: Text(
+                      "Donate Now",
+                      style: TextStyle(
+                        fontSize: isTablet ? 18 : 16,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
-                  child: Text(
-                    "Donate Now",
-                    style: TextStyle(
-                      fontSize: isTablet ? 18 : 16,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

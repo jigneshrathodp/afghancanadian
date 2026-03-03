@@ -59,7 +59,7 @@ class NewCustomDrawer extends StatelessWidget {
 
     // Calculate image height based on drawer width to maintain aspect ratio
     // Original image aspect ratio approximately 1.2:1 (width:height)
-    final imageHeight = drawerWidth / 1.2;
+    final imageHeight = drawerWidth / 1;
 
     return Drawer(
       width: drawerWidth,

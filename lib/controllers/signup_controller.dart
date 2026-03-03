@@ -10,7 +10,7 @@ class SignupController extends GetxController {
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController = TextEditingController();
-  final formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>(debugLabel: 'signup_controller_form_key');
   
   var isLoading = false.obs;
   var agreeToTerms = false.obs;
@@ -21,12 +21,8 @@ class SignupController extends GetxController {
 
   @override
   void onClose() {
-    firstNameController.dispose();
-    lastNameController.dispose();
-    emailController.dispose();
-    phoneController.dispose();
-    passwordController.dispose();
-    confirmPasswordController.dispose();
+    // Don't dispose controllers manually - let GetX handle it
+    // This prevents "TextEditingController was used after being disposed" errors
     super.onClose();
   }
 

@@ -190,8 +190,8 @@ class CreditCardOnFileScreen extends StatelessWidget {
                           // Credit Card Preview
                           SvgPicture.asset(
                             'assets/card.svg',
-                            width: 200 * widthScale,
-                            height: 80 * heightScale,
+                            width: 300 * widthScale,
+                            height: 120 * heightScale,
                             fit: BoxFit.contain,
                           ),
                           SizedBox(height: 20 * heightScale),

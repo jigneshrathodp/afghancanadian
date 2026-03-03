@@ -4,13 +4,14 @@ import '../widgets/app_routes.dart';
 
 class ForgetPasswordController extends GetxController {
   final TextEditingController emailController = TextEditingController();
-  final formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>(debugLabel: 'forget_password_controller_form_key');
   
   var isLoading = false.obs;
 
   @override
   void onClose() {
-    emailController.dispose();
+    // Don't dispose controllers manually - let GetX handle it
+    // This prevents "TextEditingController was used after being disposed" errors
     super.onClose();
   }
 

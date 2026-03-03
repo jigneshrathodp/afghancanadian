@@ -71,7 +71,6 @@ class ContactInvoiceScreen extends StatelessWidget {
           )),
         );
       }
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar(),
@@ -215,274 +214,276 @@ class ContactInvoiceScreen extends StatelessWidget {
                       ),
 
                       // Invoice List Items
-                      ...List.generate(controller.invoices.length, (index) {
-                        final invoice = controller.invoices[index];
-                        final isExpanded = controller.expandedItems.contains(index);
-                        final hasDetails = invoice['invoiceType'] != null;
+                      Obx(() => Column(
+                        children: List.generate(controller.invoices.length, (index) {
+                          final invoice = controller.invoices[index];
+                          final isExpanded = controller.expandedItems.contains(index);
+                          final hasDetails = invoice['invoiceType'] != null;
 
-                        return Column(
-                          children: [
-                            // Main Row
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 8 * widthScale,
-                                vertical: 8 * heightScale,
-                              ),
-                              decoration: BoxDecoration(
-                                color: index % 2 == 0 ? Colors.white : const Color(0xFFFAFAFA),
-                                border: Border(
-                                  bottom: BorderSide(
-                                    color: Colors.grey.shade200,
-                                    width: 0.5,
-                                  ),
-                                ),
-                              ),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  // Date Column
-                                  Expanded(
-                                    flex: 2,
-                                    child: Row(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        GestureDetector(
-                                          onTap: hasDetails
-                                              ? () {
-                                                  controller.toggleExpandedItem(index);
-                                                }
-                                              : null,
-                                          child: Container(
-                                            width: 18 * widthScale,
-                                            height: 18 * widthScale,
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              border: Border.all(
-                                                color: hasDetails
-                                                    ? const Color(0xFF1B5E20)
-                                                    : Colors.grey.shade400,
-                                                width: 1.5,
-                                              ),
-                                            ),
-                                            child: Center(
-                                              child: Icon(
-                                                isExpanded
-                                                    ? Icons.remove
-                                                    : Icons.add,
-                                                size: 12 * widthScale,
-                                                color: hasDetails
-                                                    ? const Color(0xFF1B5E20)
-                                                    : Colors.grey.shade400,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(width: 4 * widthScale),
-                                        Expanded(
-                                          child: Text(
-                                            invoice['date'].toString(),
-                                            style: TextStyle(
-                                              fontSize: 11 * widthScale,
-                                              color: Colors.black87,
-                                              height: 1.3,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  // Invoice # Column
-                                  Expanded(
-                                    flex: 2,
-                                    child: Text(
-                                      invoice['invoiceNumber'].toString(),
-                                      style: TextStyle(
-                                        fontSize: 12 * widthScale,
-                                        color: Colors.black87,
-                                      ),
-                                    ),
-                                  ),
-                                  // Rep Name Column
-                                  Expanded(
-                                    flex: 2,
-                                    child: Text(
-                                      invoice['repName'].toString(),
-                                      style: TextStyle(
-                                        fontSize: 11 * widthScale,
-                                        color: Colors.black87,
-                                        height: 1.3,
-                                      ),
-                                    ),
-                                  ),
-                                  // Action Column
-                                  Expanded(
-                                    flex: 2,
-                                    child: Column(
-                                      children: [
-                                        // Copy Icon
-                                        GestureDetector(
-                                          onTap: () {
-                                            // Copy action
-                                          },
-                                          child: Icon(
-                                            Icons.content_copy,
-                                            size: 18 * widthScale,
-                                            color: const Color(0xFF1B5E20),
-                                          ),
-                                        ),
-                                        SizedBox(height: 6 * heightScale),
-                                        // Record Payment Button
-                                        GestureDetector(
-                                          onTap: () {
-                                            // Navigate to record payment
-                                            Get.toNamed(AppRoutes.contactInvoiceRecordPayment, arguments: invoice);
-                                          },
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(
-                                              horizontal: 6 * widthScale,
-                                              vertical: 4 * heightScale,
-                                            ),
-                                            decoration: BoxDecoration(
-                                              color: const Color(0xFF1B5E20),
-                                              borderRadius: BorderRadius.circular(4 * widthScale),
-                                            ),
-                                            child: Text(
-                                              'Record\nPayment',
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                fontSize: 9 * widthScale,
-                                                fontWeight: FontWeight.w500,
-                                                color: Colors.white,
-                                                height: 1.2,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-
-                            // Expanded Details
-                            if (isExpanded && hasDetails)
+                          return Column(
+                            children: [
+                              // Main Row
                               Container(
-                                width: double.infinity,
-                                margin: EdgeInsets.symmetric(
+                                padding: EdgeInsets.symmetric(
                                   horizontal: 8 * widthScale,
-                                  vertical: 6 * heightScale,
+                                  vertical: 8 * heightScale,
                                 ),
-                                padding: EdgeInsets.all(10 * widthScale),
                                 decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(8 * widthScale),
-                                  border: Border.all(color: Colors.grey.shade300),
+                                  color: index % 2 == 0 ? Colors.white : const Color(0xFFFAFAFA),
+                                  border: Border(
+                                    bottom: BorderSide(
+                                      color: Colors.grey.shade200,
+                                      width: 0.5,
+                                    ),
+                                  ),
                                 ),
-                                child: Column(
+                                child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    // Invoice Type
-                                    Row(
-                                      children: [
-                                        Text(
-                                          'Invoice Type : ',
-                                          style: TextStyle(
-                                            fontSize: 12 * widthScale,
-                                            fontWeight: FontWeight.w500,
-                                            color: const Color(0xFF1B5E20),
-                                          ),
-                                        ),
-                                        Text(
-                                          invoice['invoiceType'].toString(),
-                                          style: TextStyle(
-                                            fontSize: 12 * widthScale,
-                                            color: Colors.black87,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(height: 6 * heightScale),
-                                    // Amount
-                                    if (invoice['amount'] != null)
-                                      Row(
+                                    // Date Column
+                                    Expanded(
+                                      flex: 2,
+                                      child: Row(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Text(
-                                            'Amt.(\$)',
-                                            style: TextStyle(
-                                              fontSize: 12 * widthScale,
-                                              fontWeight: FontWeight.w500,
-                                              color: const Color(0xFF1B5E20),
+                                          GestureDetector(
+                                            onTap: hasDetails
+                                                ? () {
+                                                    controller.toggleExpandedItem(index);
+                                                  }
+                                                : null,
+                                            child: Container(
+                                              width: 18 * widthScale,
+                                              height: 18 * widthScale,
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                border: Border.all(
+                                                  color: hasDetails
+                                                      ? const Color(0xFF1B5E20)
+                                                      : Colors.grey.shade400,
+                                                  width: 1.5,
+                                                ),
+                                              ),
+                                              child: Center(
+                                                child: Icon(
+                                                  isExpanded
+                                                      ? Icons.remove
+                                                      : Icons.add,
+                                                  size: 12 * widthScale,
+                                                  color: hasDetails
+                                                      ? const Color(0xFF1B5E20)
+                                                      : Colors.grey.shade400,
+                                                ),
+                                              ),
                                             ),
                                           ),
-                                          SizedBox(width: 8 * widthScale),
-                                          Text(
-                                            ': Balance due: \$${invoice['balanceDue']}',
-                                            style: TextStyle(
-                                              fontSize: 12 * widthScale,
-                                              color: const Color(0xFFE53935),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    if (invoice['amount'] != null)
-                                      Padding(
-                                        padding: EdgeInsets.only(left: 50 * widthScale),
-                                        child: Text(
-                                          'Total Amount: \$${invoice['totalAmount']}',
-                                          style: TextStyle(
-                                            fontSize: 11 * widthScale,
-                                            color: Colors.grey.shade600,
-                                          ),
-                                        ),
-                                      ),
-                                    SizedBox(height: 6 * heightScale),
-                                    // Status
-                                    if (invoice['status'] != null)
-                                      Row(
-                                        children: [
-                                          Text(
-                                            'Status',
-                                            style: TextStyle(
-                                              fontSize: 12 * widthScale,
-                                              fontWeight: FontWeight.w500,
-                                              color: const Color(0xFF1B5E20),
-                                            ),
-                                          ),
-                                          SizedBox(width: 8 * widthScale),
-                                          Text(
-                                            ': ',
-                                            style: TextStyle(
-                                              fontSize: 12 * widthScale,
-                                              color: Colors.black87,
-                                            ),
-                                          ),
-                                          Container(
-                                            padding: EdgeInsets.symmetric(
-                                              horizontal: 8 * widthScale,
-                                              vertical: 2 * heightScale,
-                                            ),
-                                            decoration: BoxDecoration(
-                                              color: Color(invoice['statusColor'] as int),
-                                              borderRadius: BorderRadius.circular(4 * widthScale),
-                                            ),
+                                          SizedBox(width: 4 * widthScale),
+                                          Expanded(
                                             child: Text(
-                                              invoice['status'].toString(),
+                                              invoice['date'].toString(),
                                               style: TextStyle(
                                                 fontSize: 11 * widthScale,
-                                                fontWeight: FontWeight.w500,
-                                                color: Color(invoice['statusTextColor'] as int)
+                                                color: Colors.black87,
+                                                height: 1.3,
                                               ),
                                             ),
                                           ),
                                         ],
                                       ),
+                                    ),
+                                    // Invoice # Column
+                                    Expanded(
+                                      flex: 2,
+                                      child: Text(
+                                        invoice['invoiceNumber'].toString(),
+                                        style: TextStyle(
+                                          fontSize: 12 * widthScale,
+                                          color: Colors.black87,
+                                        ),
+                                      ),
+                                    ),
+                                    // Rep Name Column
+                                    Expanded(
+                                      flex: 2,
+                                      child: Text(
+                                        invoice['repName'].toString(),
+                                        style: TextStyle(
+                                          fontSize: 11 * widthScale,
+                                          color: Colors.black87,
+                                          height: 1.3,
+                                        ),
+                                      ),
+                                    ),
+                                    // Action Column
+                                    Expanded(
+                                      flex: 2,
+                                      child: Column(
+                                        children: [
+                                          // Copy Icon
+                                          GestureDetector(
+                                            onTap: () {
+                                              // Copy action
+                                            },
+                                            child: Icon(
+                                              Icons.content_copy,
+                                              size: 18 * widthScale,
+                                              color: const Color(0xFF1B5E20),
+                                            ),
+                                          ),
+                                          SizedBox(height: 6 * heightScale),
+                                          // Record Payment Button
+                                          GestureDetector(
+                                            onTap: () {
+                                              // Navigate to record payment
+                                              Get.toNamed(AppRoutes.contactInvoiceRecordPayment, arguments: invoice);
+                                            },
+                                            child: Container(
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: 6 * widthScale,
+                                                vertical: 4 * heightScale,
+                                              ),
+                                              decoration: BoxDecoration(
+                                                color: const Color(0xFF1B5E20),
+                                                borderRadius: BorderRadius.circular(4 * widthScale),
+                                              ),
+                                              child: Text(
+                                                'Record\nPayment',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontSize: 9 * widthScale,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: Colors.white,
+                                                  height: 1.2,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),
-                          ],
-                        );
-                      }),
+
+                              // Expanded Details
+                              if (isExpanded && hasDetails)
+                                Container(
+                                  width: double.infinity,
+                                  margin: EdgeInsets.symmetric(
+                                    horizontal: 8 * widthScale,
+                                    vertical: 6 * heightScale,
+                                  ),
+                                  padding: EdgeInsets.all(10 * widthScale),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(8 * widthScale),
+                                    border: Border.all(color: Colors.grey.shade300),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      // Invoice Type
+                                      Row(
+                                        children: [
+                                          Text(
+                                            'Invoice Type : ',
+                                            style: TextStyle(
+                                              fontSize: 12 * widthScale,
+                                              fontWeight: FontWeight.w500,
+                                              color: const Color(0xFF1B5E20),
+                                            ),
+                                          ),
+                                          Text(
+                                            invoice['invoiceType'].toString(),
+                                            style: TextStyle(
+                                              fontSize: 12 * widthScale,
+                                              color: Colors.black87,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(height: 6 * heightScale),
+                                      // Amount
+                                      if (invoice['amount'] != null)
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'Amt.(\$)',
+                                              style: TextStyle(
+                                                fontSize: 12 * widthScale,
+                                                fontWeight: FontWeight.w500,
+                                                color: const Color(0xFF1B5E20),
+                                              ),
+                                            ),
+                                            SizedBox(width: 8 * widthScale),
+                                            Text(
+                                              ': Balance due: \$${invoice['balanceDue']}',
+                                              style: TextStyle(
+                                                fontSize: 12 * widthScale,
+                                                color: const Color(0xFFE53935),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      if (invoice['amount'] != null)
+                                        Padding(
+                                          padding: EdgeInsets.only(left: 50 * widthScale),
+                                          child: Text(
+                                            'Total Amount: \$${invoice['totalAmount']}',
+                                            style: TextStyle(
+                                              fontSize: 11 * widthScale,
+                                              color: Colors.grey.shade600,
+                                            ),
+                                          ),
+                                        ),
+                                      SizedBox(height: 6 * heightScale),
+                                      // Status
+                                      if (invoice['status'] != null)
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'Status',
+                                              style: TextStyle(
+                                                fontSize: 12 * widthScale,
+                                                fontWeight: FontWeight.w500,
+                                                color: const Color(0xFF1B5E20),
+                                              ),
+                                            ),
+                                            SizedBox(width: 8 * widthScale),
+                                            Text(
+                                              ': ',
+                                              style: TextStyle(
+                                                fontSize: 12 * widthScale,
+                                                color: Colors.black87,
+                                              ),
+                                            ),
+                                            Container(
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: 8 * widthScale,
+                                                vertical: 2 * heightScale,
+                                              ),
+                                              decoration: BoxDecoration(
+                                                color: Color(invoice['statusColor'] as int),
+                                                borderRadius: BorderRadius.circular(4 * widthScale),
+                                              ),
+                                              child: Text(
+                                                invoice['status'].toString(),
+                                                style: TextStyle(
+                                                  fontSize: 11 * widthScale,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: Color(invoice['statusTextColor'] as int)
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                    ],
+                                  ),
+                                ),
+                            ],
+                          );
+                        }),
+                      )),
                     ],
                   ),
                 ),

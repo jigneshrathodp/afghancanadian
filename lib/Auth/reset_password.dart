@@ -3,18 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../widgets/app_routes.dart';
 import '../widgets/custom_widgets.dart';
+import '../controllers/reset_password_controller.dart';
 
-class ResetPassword extends StatelessWidget {
+class ResetPassword extends GetView<ResetPasswordController> {
   const ResetPassword({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Create reactive variables for the state
-    final newPasswordController = Get.put(TextEditingController(), tag: 'reset_new_password');
-    final confirmPasswordController = Get.put(TextEditingController(), tag: 'reset_confirm_password');
-    final formKey = GlobalKey<FormState>();
-    final isLoading = false.obs;
-
     final screenHeight = MediaQuery.of(context).size.height;
     final isSmallScreen = screenHeight < 700;
     final screenWidth = MediaQuery.of(context).size.width;
@@ -29,63 +24,7 @@ class ResetPassword extends StatelessWidget {
 
     // Adjust header height for tablets - larger height for better visibility
     final isTablet = screenWidth >= 600;
-    final headerHeight = isTablet ? screenHeight * 0.45 : screenHeight * 0.35;
-
-    Future<void> resetPassword() async {
-      if (!formKey.currentState!.validate()) {
-        return;
-      }
-
-      if (newPasswordController.text != confirmPasswordController.text) {
-        Get.snackbar(
-          'Error',
-          'Passwords do not match!',
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.orange,
-          colorText: Colors.white,
-        );
-        return;
-      }
-
-      isLoading.value = true;
-
-      try {
-        // Simulate password reset
-        await Future.delayed(const Duration(seconds: 2));
-
-        isLoading.value = false;
-
-        Get.snackbar(
-          'Success',
-          'Password reset successfully!',
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
-        );
-
-        // Show success dialog
-        Get.defaultDialog(
-          title: 'Success',
-          middleText: 'Your password has been reset successfully. You can now log in with your new password.',
-          confirm: ElevatedButton(
-            onPressed: () {
-              Get.back(); // Close dialog
-              Get.offAllNamed(AppRoutes.signin); // Navigate to sign in
-            },
-            child: const Text('OK'),
-          ),
-        );
-      } catch (e) {
-        isLoading.value = false;
-        Get.snackbar(
-          'Error',
-          'Error: $e',
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-        );
-      }
-    }
+    final headerHeight = isTablet ? screenHeight * 0.45 : screenHeight * 0.45;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -123,7 +62,7 @@ class ResetPassword extends StatelessWidget {
                               ? (isCompactWidth ? 10.0 : 12.0)
                               : (isCompactWidth ? 18.0 : 22.0),
                         ),
-                        child: Obx(() => Column(  // Using Obx to react to reactive variables
+                        child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             const StyledText(
@@ -131,7 +70,7 @@ class ResetPassword extends StatelessWidget {
                             ),
                             SizedBox(height: isSmallScreen ? 12 : 20),
                             Form(
-                              key: formKey,
+                              key: controller.formKey,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisSize: MainAxisSize.min,
@@ -147,10 +86,10 @@ class ResetPassword extends StatelessWidget {
                                     ),
                                   ),
                                   SizedBox(height: isSmallScreen ? 6 : 8),
-                                  CustomTextFormField(
-                                    controller: newPasswordController,
+                                  Obx(() => CustomTextFormField(
+                                    controller: controller.newPasswordController,
                                     hintText: 'New Password',
-                                    obscureText: true,
+                                    obscureText: controller.obscureNewPassword.value,
                                     textInputAction: TextInputAction.next,
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
@@ -161,7 +100,7 @@ class ResetPassword extends StatelessWidget {
                                       }
                                       return null;
                                     },
-                                  ),
+                                  )),
                                   SizedBox(height: isSmallScreen ? 15 : 20),
                                   Text(
                                     'Confirm Password*',
@@ -174,10 +113,10 @@ class ResetPassword extends StatelessWidget {
                                     ),
                                   ),
                                   SizedBox(height: isSmallScreen ? 6 : 8),
-                                  CustomTextFormField(
-                                    controller: confirmPasswordController,
+                                  Obx(() => CustomTextFormField(
+                                    controller: controller.confirmPasswordController,
                                     hintText: 'Confirm Password',
-                                    obscureText: true,
+                                    obscureText: controller.obscureConfirmPassword.value,
                                     textInputAction: TextInputAction.done,
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
@@ -188,13 +127,13 @@ class ResetPassword extends StatelessWidget {
                                       }
                                       return null;
                                     },
-                                  ),
+                                  )),
                                   SizedBox(height: isSmallScreen ? 20 : 30),
-                                  CustomButton(
+                                  Obx(() => CustomButton(
                                     label: 'Submit',
-                                    onPressed: isLoading.value ? null : resetPassword,
-                                    isLoading: isLoading.value,
-                                  ),
+                                    onPressed: controller.isLoading.value ? null : controller.resetPassword,
+                                    isLoading: controller.isLoading.value,
+                                  )),
                                   SizedBox(height: isSmallScreen ? 12 : 16),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -220,11 +159,12 @@ class ResetPassword extends StatelessWidget {
                               ),
                             ),
                           ],
-                        )),
+                        ),
                       ),
                     ],
                   ),
-                ));
+                ),
+              );
             },
           ),
         ],

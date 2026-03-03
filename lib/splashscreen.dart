@@ -105,101 +105,97 @@ class _SplashscreenState extends State<Splashscreen>
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            final screenWidth = constraints.maxWidth;
-            final screenHeight = constraints.maxHeight;
+        child: AnimatedBuilder(
+          animation: _controller,
+          builder: (context, child) {
+            final mediaQueryData = MediaQuery.of(context);
+            final screenWidth = mediaQueryData.size.width;
+            final screenHeight = mediaQueryData.size.height;
 
             // Base logo size
             final baseImageSize = screenWidth * 0.25;
-            final spacing = baseImageSize * 0.2;
 
             // Right side logo size (30% bigger than left)
             final rightLogoSize = baseImageSize * 1.3;
 
             // Blue logo final position (left side)
-            final blueFinalX = (screenWidth / 2) - baseImageSize - spacing;
+            final blueFinalX = (screenWidth / 2) - baseImageSize;
 
             // Red logo final position (right side) - adjusted for larger size
-            final redFinalX = (screenWidth / 2) + spacing;
+            final redFinalX = (screenWidth / 2);
 
             // Center position (Blue starts here)
             final blueStartX = (screenWidth - baseImageSize) / 2;
             final centerY = (screenHeight - baseImageSize) / 2;
 
-            return AnimatedBuilder(
-              animation: _controller,
-              builder: (context, child) {
-                final blueMoveProgress = _blueMoveAnimation.value;
-                final redProgress = _redEntryAnimation.value;
-                final blueScale = _blueScaleAnimation.value;
-                final vProg = _verticalAnimation.value;
-                final opacity = _opacityAnimation.value;
+            final blueMoveProgress = _blueMoveAnimation.value;
+            final redProgress = _redEntryAnimation.value;
+            final blueScale = _blueScaleAnimation.value;
+            final vProg = _verticalAnimation.value;
+            final opacity = _opacityAnimation.value;
 
-                // Blue logo position
-                final bluePosX = blueStartX - ((blueStartX - blueFinalX) * blueMoveProgress);
+            // Blue logo position
+            final bluePosX = blueStartX - ((blueStartX - blueFinalX) * blueMoveProgress);
 
-                // Blue logo scale (size) - up to 150%
-                final blueSize = baseImageSize * blueScale;
+            // Blue logo scale (size) - up to 150%
+            final blueSize = baseImageSize * blueScale;
 
-                // Red logo position
-                double redPosX;
-                if (redProgress > 0) {
-                  redPosX = redFinalX + (screenWidth * redProgress);
-                } else {
-                  redPosX = redFinalX;
-                }
+            // Red logo position
+            double redPosX;
+            if (redProgress > 0) {
+              redPosX = redFinalX + (screenWidth * redProgress);
+            } else {
+              redPosX = redFinalX;
+            }
 
-                // Adjust red logo position to account for larger size
-                final redPosXAdjusted = redPosX - ((rightLogoSize - baseImageSize) / 2);
+            // Adjust red logo position to account for larger size
+            final redPosXAdjusted = redPosX - ((rightLogoSize - baseImageSize) / 2);
 
-                // Vertical movement
-                final topPos = centerY - (centerY * vProg);
+            // Vertical movement
+            final topPos = centerY - (centerY * vProg);
 
-                return Stack(
-                  children: [
-                    // Blue logo (up to 150% size)
-                    Positioned(
-                      left: bluePosX + ((baseImageSize - blueSize) / 2),
-                      top: topPos + ((baseImageSize - blueSize) / 2),
-                      child: Opacity(
-                        opacity: opacity,
-                        child: _buildLogo(
-                          'assets/greenacic.png',
-                          blueSize,
-                          Colors.blue,
-                          "BLUE",
-                        ),
-                      ),
+            return Stack(
+              children: [
+                // Blue logo (up to 150% size)
+                Positioned(
+                  left: bluePosX + ((baseImageSize - blueSize) / 2),
+                  top: topPos + ((baseImageSize - blueSize) / 2),
+                  child: Opacity(
+                    opacity: opacity,
+                    child: _buildLogo(
+                      'assets/greenacic.png',
+                      blueSize,
+                      Colors.blue,
+                      "BLUE",
                     ),
+                  ),
+                ),
 
-                    // Red logo (increased size - 30% bigger)
-                    Positioned(
-                      left: redPosXAdjusted,
-                      top: topPos - ((rightLogoSize - baseImageSize) / 2),
-                      child: Opacity(
-                        opacity: opacity,
-                        child: _buildLogo(
-                          'assets/blackacic.png',
-                          rightLogoSize,
-                          Colors.red,
-                          "RED",
-                        ),
-                      ),
+                // Red logo (increased size - 30% bigger)
+                Positioned(
+                  left: redPosXAdjusted,
+                  top: topPos - ((rightLogoSize - baseImageSize) / 2),
+                  child: Opacity(
+                    opacity: opacity,
+                    child: _buildLogo(
+                      'assets/blackacic.png',
+                      rightLogoSize,
+                      Colors.red,
+                      "RED",
                     ),
-                    
-                    // Bottom spacing
-                    Positioned(
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
-                      child: SizedBox(
-                        height: mediaScreenHeight * 0.05 > 60 ? 60 : mediaScreenHeight * 0.05
-                      ),
-                    ),
-                  ],
-                );
-              },
+                  ),
+                ),
+                
+                // Bottom spacing
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  child: SizedBox(
+                    height: mediaScreenHeight * 0.05 > 60 ? 60 : mediaScreenHeight * 0.05
+                  ),
+                ),
+              ],
             );
           },
         ),

@@ -28,7 +28,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
     final drawerWidth = isTablet ? screenWidth * 0.5 : screenWidth * 0.75;
 
     // Calculate image height based on drawer width to maintain aspect ratio
-    final imageHeight = drawerWidth / 1.2;
+    final imageHeight = drawerWidth / 1;
 
     return Drawer(
       width: drawerWidth,

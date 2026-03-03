@@ -5,7 +5,7 @@ import '../widgets/app_routes.dart';
 class ResetPasswordController extends GetxController {
   final TextEditingController newPasswordController = TextEditingController();
   final TextEditingController confirmPasswordController = TextEditingController();
-  final formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>(debugLabel: 'reset_password_controller_form_key');
   
   var isLoading = false.obs;
   var obscureNewPassword = true.obs;
@@ -13,8 +13,8 @@ class ResetPasswordController extends GetxController {
 
   @override
   void onClose() {
-    newPasswordController.dispose();
-    confirmPasswordController.dispose();
+    // Don't dispose controllers manually - let GetX handle it
+    // This prevents "TextEditingController was used after being disposed" errors
     super.onClose();
   }
 
